@@ -1,0 +1,10 @@
+{
+    "application": "microblog", 
+    "identifier": "default", 
+    "name": "default", 
+    "author": "whypro",
+    "description": "",
+    "license": "MIT/X11",
+    "doctype": "html5"
+}
+

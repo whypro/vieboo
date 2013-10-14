@@ -1,0 +1,10 @@
+{
+    "application": "microblog", 
+    "identifier": "zhimin", 
+    "name": "zhimin", 
+    "author": "whypro",
+    "description": "",
+    "license": "MIT/X11",
+    "doctype": "html5"
+}
+

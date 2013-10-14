@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<body>
+    <p>欢迎，{{ g.user.get_nickname() if g.user.is_authenticated() else '游客' }}</p>
+    <ul>
+        {%- if not g.user.is_authenticated() %}
+        <li><a href="{{ url_for('register') }}">注册</a></li>
+        <li><a href="{{ url_for('login') }}">登录</a></li>
+        {%- else %}
+        <li><a href="{{ url_for('profile') }}">个人资料</a></li>
+        <li><a href="{{ url_for('password') }}">修改密码</a></li>
+        <li><a href="{{ url_for('logout') }}">注销</a></li>
+        {%- endif %}
+    </ul>
+</body>
+</html>

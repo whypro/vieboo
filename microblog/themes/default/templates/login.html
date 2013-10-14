@@ -1,0 +1,25 @@
+<form method="POST" action="">
+    <table>
+        <tr>
+            <th>{{ form.login.label }}</th>
+            <td>{{ form.login }}</td>
+            <td>{{ ', '.join(form.login.errors) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form.password.label }}</th>
+            <td>{{ form.password }}</td>
+            <td>{{ ', '.join(form.password.errors) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form.remember.label }}</th>
+            <td>{{ form.remember }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ form.submit }}</td>
+            <td></td>
+        </tr>
+    </table>
+    {{ form.hidden_tag() }}
+</form>
