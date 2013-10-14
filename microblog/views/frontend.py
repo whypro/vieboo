@@ -5,7 +5,8 @@ from flask.ext.login import login_user, login_required, logout_user
 from microblog.database import db
 from microblog.forms.accounts import ModifyProfileForm
 from microblog.models import People
-from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm
+from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, PostForm
+from microblog.models.post import Microblog
 from microblog.tools import render_template
 
 frontend = Module(__name__)
@@ -41,6 +42,7 @@ def register():
         # 将用户写入数据库
         db.session.add(people)
         db.session.commit()
+        db.session.close()
         flash(u'注册成功')
         return redirect(url_for('index'))
     return render_template('register.html', form=register_form)
@@ -78,7 +80,8 @@ def password():
         if people:
             people.change_password(change_password_form.password_new.data)
             db.session.add(people)
-            db.commit()
+            db.session.commit()
+            db.session.close()
             flash(u'密码修改成功')
             return redirect(url_for('index'))
         else:
@@ -121,6 +124,21 @@ def profile():
             people.change_mobile(new_mobile)
         db.session.add(people)
         db.session.commit()
+        db.session.close()
         flash(u'个人资料修改成功')
         return redirect(url_for('profile'))
     return render_template('profile.html', form=profile_form)
+
+
+# 发布微博
+@frontend.route('/post/', methods=['GET', 'POST'])
+@login_required
+def post():
+    post_form = PostForm()
+    if post_form.validate_on_submit():
+        microblog = Microblog(g.user.get_id(), post_form.content.data)
+        db.session.add(microblog)
+        db.session.commit()
+        flash(u'发布成功')
+        return redirect(url_for('index'))
+    return render_template('post.html', form=post_form)

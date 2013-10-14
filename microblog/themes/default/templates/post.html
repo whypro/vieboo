@@ -1,0 +1,15 @@
+<form method="POST" action="">
+    <table>
+        <tr>
+            <th>{{ form.content.label }}</th>
+            <td>{{ form.content }}</td>
+            <td>{{ ', '.join(form.content.errors) }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ form.submit }}</td>
+            <td></td>
+        </tr>
+    </table>
+    {{ form.hidden_tag() }}
+</form>

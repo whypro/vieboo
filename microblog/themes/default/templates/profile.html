@@ -2,7 +2,7 @@
     <table>
         <tr>
             <th>{{ form.email.label }}</th>
-            <td>{{ form.email(readonly_="readonly") }}</td>
+            <td>{{ form.email(readonly=True) }}</td>
             <td>{{ ', '.join(form.email.errors) }}</td>
         </tr>
         <tr>

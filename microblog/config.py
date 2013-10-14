@@ -26,6 +26,7 @@ SQLALCHEMY_DATABASE_URI = \
     host=DB_HOST, port=DB_PORT,
     database=DB_DATABASE
     )
+SQLALCHEMY_POOL_RECYCLE = 10
 DEBUG = True
 SECRET_KEY = 'hello world'
 DEFAULT_THEME = 'default'

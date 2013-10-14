@@ -33,6 +33,8 @@ class People(db.Model):
     reg_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     reg_ip = db.Column(db.String(20))
 
+    microblogs = db.relationship('Microblog', backref='people', lazy='dynamic')
+
     def __init__(self, email, password,
                  nickname=None, mobile=None,
                  reg_time=None, reg_ip=None):
