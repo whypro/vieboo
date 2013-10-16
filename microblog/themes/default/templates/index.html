@@ -4,14 +4,22 @@
     <p>欢迎，{{ g.user.get_nickname() if g.user.is_authenticated() else '游客' }}</p>
     <ul>
         {%- if not g.user.is_authenticated() %}
-        <li><a href="{{ url_for('register') }}">注册</a></li>
-        <li><a href="{{ url_for('login') }}">登录</a></li>
+        <li><a href="{{ url_for('account.register') }}">注册</a></li>
+        <li><a href="{{ url_for('account.login') }}">登录</a></li>
         {%- else %}
-        <li><a href="{{ url_for('post') }}">发布微博</a></li>
-        <li><a href="{{ url_for('profile') }}">个人资料</a></li>
-        <li><a href="{{ url_for('password') }}">修改密码</a></li>
-        <li><a href="{{ url_for('logout') }}">注销</a></li>
+        <li><a href="{{ url_for('mblog.post') }}">发布微博</a></li>
+        <li><a href="{{ url_for('account.profile') }}">个人资料</a></li>
+        <li><a href="{{ url_for('account.password') }}">修改密码</a></li>
+        <li><a href="{{ url_for('account.logout') }}">注销</a></li>
         {%- endif %}
+    </ul>
+    <ul>
+    {% for microblog in microblogs %}
+        <li><p>{{ microblog.content }}</p>
+            <p><a href="{{ url_for('people', id=microblog.people.id) }}">{{ microblog.people.nickname }}</a> {{ microblog.post_time }}</p>
+            <p><a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a></p>
+        </li>
+    {% endfor %}
     </ul>
 </body>
 </html>

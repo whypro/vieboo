@@ -7,7 +7,7 @@ sys.path.insert(0, deps_path)
 
 from flask import Flask, g
 from flask.ext.login import LoginManager, current_user
-from flask.ext.themes import setup_themes, load_themes_from
+from flask.ext.themes import setup_themes
 from microblog import views
 from microblog.database import db
 from microblog.models import People
@@ -16,14 +16,20 @@ from microblog.models import People
 def create_app(config=None):
     app = Flask(__name__)
     app.config.from_object(config)
-    app.register_module(views.frontend)
     db.init_app(app)
 
+    configure_modules(app)
     configure_theme(app)
     configure_flasklogin(app)
     config_before_request(app)
 
     return app
+
+
+def configure_modules(app):
+    app.register_module(views.frontend)
+    app.register_module(views.account)
+    app.register_module(views.mblog)
 
 
 def configure_theme(app):

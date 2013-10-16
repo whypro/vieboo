@@ -1,1 +1,2 @@
-from .accounts import People
+from .account import People
+from .mblog import Microblog

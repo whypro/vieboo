@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from microblog.database import db
 import datetime
-from microblog.models.accounts import People
+from microblog.models.account import People
 
 
 class Microblog(db.Model):
