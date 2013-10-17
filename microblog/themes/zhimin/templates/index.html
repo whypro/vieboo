@@ -1,0 +1,43 @@
+{% extends theme('layout.html') %}
+{% block content %}
+
+<div class="container">
+{% include theme('header.html') %}
+<div class="mycontainer ">
+<div class="media">
+  <a class="pull-left" href="#">
+    <img class="media-object" src="..." alt="...">
+     <h4 class="media-heading">NAME</h4>
+  </a>
+  <div class="media-body">
+
+     <div class="well well-lg">This is test.</div>
+    
+  </div>
+</div>
+
+<div class="media">
+  <a class="pull-right" href="#">
+    <img class="media-object" src="..." alt="...">
+        <h4 class="media-heading">NAME</h4>
+  </a>
+  <div class="media-body">
+
+     <div class="well well-lg">This is test.</div>
+    
+  </div>
+ </div>
+</div>
+<div class="mycontainer">
+<div class="row" >
+<div class="col-lg-12">
+    <div class="input-group" style="float:right;">
+      <input type="text" class="form-control">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">发布</button>
+      </span>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

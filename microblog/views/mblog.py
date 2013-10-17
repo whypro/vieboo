@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
-from flask import Module, g, request, url_for, redirect, flash
-from flask.ext.login import login_user, login_required, logout_user
+from flask import Module, g, url_for, redirect, flash
+from flask.ext.login import login_required
 from microblog.database import db
-from microblog.forms.account import ModifyProfileForm
-from microblog.models import People, Microblog
-from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, PostForm
+from microblog.models import Microblog, Comment
+from microblog.forms import PostForm, CommentForm
 from microblog.tools import render_template
 
 mblog = Module(__name__, url_prefix='/microblog')
@@ -16,7 +14,7 @@ mblog = Module(__name__, url_prefix='/microblog')
 def post():
     post_form = PostForm()
     if post_form.validate_on_submit():
-        microblog = Microblog(g.user.get_id(), post_form.content.data)
+        microblog = Microblog(g.user.id, post_form.content.data)
         db.session.add(microblog)
         db.session.commit()
         flash(u'发布成功')
@@ -28,12 +26,35 @@ def post():
 @login_required
 def delete(id):
     microblog = Microblog.query.get(id)
-    if unicode(microblog.people_id) == g.user.get_id():
+    if microblog.people_id == g.user.id:
         db.session.delete(microblog)
         db.session.commit()
         flash(u'删除成功')
-        print u'删除成功'
+        # print u'删除成功'
     else:
         flash(u'删除失败')
-        print u'删除失败'
+        # print u'删除失败'
     return redirect(url_for('frontend.index'))
+
+
+@mblog.route('/commnet/<int:mid>/', methods=['GET', 'POST'])
+@mblog.route('/comment/<int:mid>/<int:cid>/', methods=['GET', 'POST'])
+@login_required
+def comment(mid, cid=None):
+    microblog = Microblog.query.get(mid)
+    parent_comment = Comment.query.get(cid) if cid else None
+    comment_form = CommentForm()
+    if comment_form.validate_on_submit():
+        comment = Comment(
+            g.user.id,
+            comment_form.content.data,
+            mid,
+            cid
+        )
+        db.session.add(comment)
+        db.session.commit()
+        flash(u'评论成功')
+        return redirect(url_for('frontend.index'))
+    return render_template('comment.html', form=comment_form, microblog=microblog, parent_comment=parent_comment)
+
+

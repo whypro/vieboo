@@ -1,33 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="{{ theme_static('buttons.css') }}" rel="stylesheet" media="screen">
-<link href="{{ theme_static('bootstrap.css') }}" rel="stylesheet" media="screen">
-</head>
-<body>
-    <form class="form-inline" role="form" method="POST" action="">
-        <div class="form-group">
-            {{ form.login.label(class_='sr-only') }}
-            {{ form.login(class_='form-control', placeholder_='输入电子邮箱地址') }}
-        </div>
-        <div class="form-group">
-            {{ form.password.label(class_='sr-only') }}
-            {{ form.password(class_='form-control', placeholder_='密码') }}
-        </div>
-        <div class="checkbox">
-            {{ form.remember.label }}
-            {{ form.remember }}
-        </div>
-        {{ form.hidden_tag() }}
-        <a href="#" class="button glow button-rounded button-flat-action">登陆</a>
-    </form>
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container">
+{% include 'header.html' %}
 
-    <div class="jumbotron">
-        <h1>微博</h1>
-        <p>试试我们的微博吧！</p>
-        <a href="#" class="button button-primary">立即注册</a>
-    </div>
-
-</body>
-</html>
+<div class="jumbotron" style="text-align: center;">
+    <h1>微博</h1>
+    <p>试试我们的微博吧！</p>
+    <input type=submit class="button button-primary" value="立即注册"/>
+  </div>
+</div>
+</div>
+{% endblock %}

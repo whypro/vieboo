@@ -16,8 +16,18 @@
     <ul>
     {% for microblog in microblogs %}
         <li><p>{{ microblog.content }}</p>
-            <p><a href="{{ url_for('people', id=microblog.people.id) }}">{{ microblog.people.nickname }}</a> {{ microblog.post_time }}</p>
-            <p><a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a></p>
+            <p><a href="{{ url_for('frontend.people', id=microblog.people.id) }}">{{ microblog.people.nickname }}</a> {{ microblog.post_time }}</p>
+            <ul>
+                {% for comment in microblog.comments %}
+                <li>{{ comment.content }} <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a></li>
+                {% endfor %}
+            </ul>
+            {% if microblog.people_id==g.user.id %}
+            <p>
+                <a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
+                <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">评论</a>
+            </p>
+            {% endif %}
         </li>
     {% endfor %}
     </ul>

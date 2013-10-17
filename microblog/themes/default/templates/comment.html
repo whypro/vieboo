@@ -1,0 +1,19 @@
+<p>{{ microblog.content }} <a href="{{ url_for('frontend.people', id=microblog.people.id) }}">{{ microblog.people.nickname }}</a> {{ microblog.post_time }}</p>
+{% if parent_comment %}
+<p>回复： {{ parent_comment.content }} <a href="{{ url_for('frontend.people', id=parent_comment.people.id) }}">{{ parent_comment.people.nickname }}</a> {{ parent_comment.comment_time }}</p>
+{% endif %}
+<form method="POST" action="">
+    <table>
+        <tr>
+            <th>{{ form.content.label }}</th>
+            <td>{{ form.content }}</td>
+            <td>{{ ', '.join(form.content.errors) }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ form.submit }}</td>
+            <td></td>
+        </tr>
+    </table>
+    {{ form.hidden_tag() }}
+</form>

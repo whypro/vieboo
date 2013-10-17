@@ -8,3 +8,8 @@ class PostForm(Form):
     content = TextAreaField(u'内容', validators=[DataRequired(message=u'请输入微博内容')])
     submit = SubmitField(u'发布')
 
+
+class CommentForm(Form):
+    content = TextAreaField(u'内容', validators=[DataRequired(message=u'请输入评论内容')])
+    submit = SubmitField(u'评论')
+

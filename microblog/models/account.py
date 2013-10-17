@@ -3,7 +3,7 @@ from flask.ext.sqlalchemy import BaseQuery
 from microblog.database import db
 import datetime
 import hashlib
-
+from microblog.models.friendship import friendship
 
 class PeopleQuery(BaseQuery):
     def authenticate(self, login, password):
@@ -30,10 +30,21 @@ class People(db.Model):
     _password = db.Column('password', db.String(80), nullable=False)
     nickname = db.Column(db.String(20))
     mobile = db.Column(db.String(20))
-    reg_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    reg_time = db.Column(db.DateTime, default=datetime.datetime.now)
     reg_ip = db.Column(db.String(20))
 
     microblogs = db.relationship('Microblog', backref='people', lazy='dynamic')
+    comments = db.relationship('Comment', backref='people', lazy='dynamic')
+
+    following = db.relationship(
+        'People',
+        secondary=friendship,
+        primaryjoin=id==friendship.c.from_id,
+        secondaryjoin=id==friendship.c.to_id,
+        backref='followed',
+        lazy='dynamic'
+    )
+
 
     def __init__(self, email, password,
                  nickname=None, mobile=None,

@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-import datetime
-from flask import Module, g, request, url_for, redirect, flash
-from flask.ext.login import login_user, login_required, logout_user
+from flask import Module, url_for, redirect, flash
 from microblog.database import db
-from microblog.forms.account import ModifyProfileForm
 from microblog.models import People, Microblog
-from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, PostForm
 from microblog.tools import render_template
 
 frontend = Module(__name__)
