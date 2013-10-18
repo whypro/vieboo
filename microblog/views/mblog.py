@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, url_for, redirect, flash
+from flask import Module, g, url_for, redirect, flash, abort, request
 from flask.ext.login import login_required
 from microblog.database import db
 from microblog.models import Microblog, Comment
@@ -8,12 +8,14 @@ from microblog.tools import render_template
 
 mblog = Module(__name__, url_prefix='/microblog')
 
+
 # 发布微博
 @mblog.route('/post/', methods=['GET', 'POST'])
 @login_required
 def post():
-    post_form = PostForm()
-    if post_form.validate_on_submit():
+    post_form = PostForm(request.form)
+    print post_form.validate()
+    if request.method == 'POST' and post_form.validate():
         microblog = Microblog(g.user.id, post_form.content.data)
         db.session.add(microblog)
         db.session.commit()
@@ -37,12 +39,19 @@ def delete(id):
     return redirect(url_for('frontend.index'))
 
 
-@mblog.route('/commnet/<int:mid>/', methods=['GET', 'POST'])
+@mblog.route('/comment/<int:mid>/', methods=['GET', 'POST'])
 @mblog.route('/comment/<int:mid>/<int:cid>/', methods=['GET', 'POST'])
 @login_required
 def comment(mid, cid=None):
     microblog = Microblog.query.get(mid)
-    parent_comment = Comment.query.get(cid) if cid else None
+
+    if cid:
+        parent_comment = Comment.query.get(cid)
+        if not parent_comment:
+            abort(404)
+    else:
+        parent_comment = None
+
     comment_form = CommentForm()
     if comment_form.validate_on_submit():
         comment = Comment(

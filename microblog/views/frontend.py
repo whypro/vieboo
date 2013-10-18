@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
-from flask import Module, url_for, redirect, flash
+from flask import Module, url_for, redirect, flash, send_from_directory
 from microblog.database import db
 from microblog.models import People, Microblog
 from microblog.tools import render_template
+from microblog.forms import LoginForm, PostForm
 
 frontend = Module(__name__)
 
+@frontend.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @frontend.route('/')
 def index():
     microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
-    #print microblogs
-    return render_template('index.html', microblogs=microblogs)
+    # print microblogs
+    return render_template('index.html', microblogs=microblogs, post_form=PostForm())
 
 
 @frontend.route('/install/')

@@ -1,13 +1,25 @@
-{% extends 'layout.html' %}
-{% block content %}
-<div class="container">
-{% include 'header.html' %}
-
-<div class="jumbotron" style="text-align: center;">
-    <h1>微博</h1>
-    <p>试试我们的微博吧！</p>
-    <input type=submit class="button button-primary" value="立即注册"/>
-  </div>
-</div>
-</div>
-{% endblock %}
+<form method="POST" action="">
+    <table>
+        <tr>
+            <th>{{ form.login.label }}</th>
+            <td>{{ form.login }}</td>
+            <td>{{ ', '.join(form.login.errors) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form.password.label }}</th>
+            <td>{{ form.password }}</td>
+            <td>{{ ', '.join(form.password.errors) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form.remember.label }}</th>
+            <td>{{ form.remember }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ form.submit }}</td>
+            <td></td>
+        </tr>
+    </table>
+    {{ form.hidden_tag() }}
+</form>

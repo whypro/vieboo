@@ -1,43 +1,54 @@
 {% extends theme('layout.html') %}
 {% block content %}
-
 <div class="container">
-{% include theme('header.html') %}
-<div class="mycontainer ">
-<div class="media">
-  <a class="pull-left" href="#">
-    <img class="media-object" src="..." alt="...">
-     <h4 class="media-heading">NAME</h4>
-  </a>
-  <div class="media-body">
+    {% include theme('header.html') %}
 
-     <div class="well well-lg">This is test.</div>
-    
-  </div>
-</div>
-
-<div class="media">
-  <a class="pull-right" href="#">
-    <img class="media-object" src="..." alt="...">
-        <h4 class="media-heading">NAME</h4>
-  </a>
-  <div class="media-body">
-
-     <div class="well well-lg">This is test.</div>
-    
-  </div>
- </div>
-</div>
-<div class="mycontainer">
-<div class="row" >
-<div class="col-lg-12">
-    <div class="input-group" style="float:right;">
-      <input type="text" class="form-control">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">发布</button>
-      </span>
+    <div class="mycontainer">
+        <div class="row" >
+            <div class="col-lg-12">
+                <form method="POST" action="{{ url_for('mblog.post') }}">
+                    <div class="input-group" style="float:right;">
+                        {{ post_form.content(class_='form-control') }}
+                        <span class="input-group-btn">
+                            {{ post_form.submit(class_='btn btn-default') }}
+                        </span>
+                        {{ post_form.hidden_tag() }}
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="mycontainer ">
+        {% for microblog in microblogs %}
+        <div class="media">
+            {% if microblog.people.id == g.user.id %}
+            <a class="pull-right" href="{{ url_for('frontend.people', id=microblog.people.id) }}">
+            {% else %}
+            <a class="pull-left" href="{{ url_for('frontend.people', id=microblog.people.id) }}">
+            {% endif %}
+                <img class="media-object" src="http://tp2.sinaimg.cn/1277294185/180/40022602019/1" alt="">
+                <h4 class="media-heading">{{ microblog.people.nickname }}</h4>
+            </a>
+            <div class="media-body">
+                <div class="well well-lg">{{ microblog.content }}</div>
+                <ul>
+                    {% for comment in microblog.comments %}
+                    <li>{{ comment.content }} <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a></li>
+                    {% endfor %}
+                </ul>
+                {% if microblog.people_id==g.user.id %}
+                <p>
+                    <a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
+                    <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">评论</a>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
 </div>
-</div>
+
 {% endblock %}

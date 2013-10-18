@@ -1,42 +1,49 @@
-{% extends 'layout.html' %}
+{% extends theme('layout.html') %}
 {% block content %}
-<div class="container">
-{% include 'header.html' %}
-<div style="text-align: center;">
-<form class="form-horizontal" role="form">
-  <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">邮箱</label>
-    <div class="col-xs-3">
-      <input id="email" name="email" type="text" value="" class="form-control" placeholder="请输入邮箱地址">
+    <div class="container">
+    {% include theme('header.html') %}
+        <div style="text-align: center;">
+            <form class="form-horizontal" role="form" method="POST" action="">
+                <div class="form-group">
+                    {{ register_form.email.label(class_='col-sm-2 control-label') }}
+                        <div class="col-xs-3">
+                            {{ register_form.email(class_='form-control', placeholder='请输入邮箱地址') }}
+                        </div>
+                    {{ ','.join(register_form.email.errors) }}
+                </div>
+                <div class="form-group">
+                    {{ register_form.password.label(class_='col-sm-2 control-label') }}
+                        <div class="col-xs-3">
+                            {{ register_form.password(class_='form-control', placeholder='请输入密码') }}
+                        </div>
+                    {{ ','.join(register_form.password.errors) }}
+                </div>
+                <div class="form-group">
+                    {{ register_form.password_confirm.label(class_='col-sm-2 control-label') }}
+                        <div class="col-xs-3">
+                            {{ register_form.password_confirm(class_='form-control', placeholder='请再次输入密码') }}
+                        </div>
+                    {{ ','.join(register_form.password_confirm.errors) }}
+                </div>
+                <div class="form-group">
+                    {{ register_form.nickname.label(class_='col-sm-2 control-label') }}
+                        <div class="col-xs-3">
+                            {{ register_form.nickname(class_='form-control', placeholder='请输入昵称') }}
+                        </div>
+                    {{ ','.join(register_form.nickname.errors) }}
+                </div>
+                <div class="form-group">
+                    {{ register_form.mobile.label(class_='col-sm-2 control-label') }}
+                        <div class="col-xs-3">
+                            {{ register_form.mobile(class_='form-control', placeholder='请输入手机号码') }}
+                        </div>
+                    {{ ','.join(register_form.mobile.errors) }}
+                </div>
+                <div class="col-sm-6">
+                    {{ register_form.submit(class_='button button-primary') }}
+                </div>
+                {{ register_form.hidden_tag() }}
+            </form>
+        </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
-    <div class="col-xs-3">
-      <input id="password" name="password" type="password" value="" class="form-control"  placeholder="请输入密码">
-    </div>
-  </div>
- <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
-    <div class="col-xs-3">
-      <input id="password_confirm"name="password_confirm" type="password" value="" class="form-control"  placeholder="请再次输入密码" />
-    </div>
-  </div>
- <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">昵称</label>
-    <div class="col-xs-3">
-      <input id="nickname" name="nickname" type="text" value="" class="form-control" />
-    </div>
-  </div>
-    <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">手机</label>
-    <div class="col-xs-3">
-      <input id="mobile" name="mobile" type="text" value="" class="form-control" />
-    </div>
-</div>
-    <div class="col-sm-6">
-      <input type=submit class="button button-primary" value="注册"/>
-    </div>
-</div>
-</form>
 {% endblock %}

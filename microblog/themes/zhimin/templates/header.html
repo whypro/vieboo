@@ -1,45 +1,57 @@
 <nav class="navbar navbar-default navbar-static-top" role="navigation">
-<div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="login.htm">首页</a>
-  </div>
-<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="register.htm">注册</a></li>
-      <li><a href="#">Link</a></li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-          <li class="divider"></li>
-          <li><a href="#">One more separated link</a></li>
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('frontend.index') }}">LOGO</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            {%- if not g.user.is_authenticated() %}
+            <li><a href="{{ url_for('account.register') }}">注册</a></li>
+            <li><a href="{{ url_for('account.login') }}">登录</a></li>
+            {%- else %}
+            <li><a href="{{ url_for('mblog.post') }}">发布微博</a></li>
+            <li><a href="{{ url_for('account.profile') }}">个人资料</a></li>
+            <li><a href="{{ url_for('account.password') }}">修改密码</a></li>
+            <li><a href="{{ url_for('account.logout') }}">注销</a></li>
+            {%- endif %}
+
+            {#
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">One more separated link</a></li>
+                </ul>
+            </li>
+            #}
         </ul>
-      </li>
-    </ul>
-<form  class="navbar-form navbar-right" role="form">
-  <div class="form-group">
-    <label class="sr-only" for="exampleInputEmail2">Email address</label>
-    <input id="login" name="login" type="text" value="" class="form-control" placeholder="输入邮箱地址">
-  </div>
-  <div class="form-group">
-    <label class="sr-only" for="exampleInputPassword2">Password</label>
-    <input id="password" name="password" type="password" value="" class="form-control"  placeholder="输入密码">
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox"> 记住我
-    </label>
-  </div>
-  <input id="submit" name="submit" type=submit class="button glow button-rounded button-flat-action" value="登陆">
-</form>
-</div>
+        {#
+        <form class="navbar-form navbar-right" role="form" method="POST" action="{{ url_for('account.login') }}">
+            <div class="form-group">
+                {{ login_form.login.label(class_='sr-only') }}
+                {{ login_form.login(class_='form-control', placeholder='输入邮箱地址') }}
+            </div>
+            <div class="form-group">
+                {{ login_form.password.label(class_='sr-only') }}
+                {{ login_form.password(class_='form-control', placeholder='输入密码') }}
+            </div>
+            <div class="checkbox">
+                {{ login_form.remember }}
+                {{ login_form.remember.label }}
+            </div>
+            {{ login_form.submit(class_='button glow button-rounded button-flat-action') }}
+            {{ login_form.hidden_tag() }}
+        </form>
+        #}
+    </div>
 </nav>

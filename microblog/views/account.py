@@ -39,7 +39,7 @@ def register():
         db.session.close()
         flash(u'注册成功')
         return redirect(url_for('frontend.index'))
-    return render_template('register.html', form=register_form)
+    return render_template('register.html', register_form=register_form)
 
 
 @account.route('/login/', methods=['GET', 'POST'])
