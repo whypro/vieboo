@@ -13,9 +13,8 @@ mblog = Module(__name__, url_prefix='/microblog')
 @mblog.route('/post/', methods=['GET', 'POST'])
 @login_required
 def post():
-    post_form = PostForm(request.form)
-    print post_form.validate()
-    if request.method == 'POST' and post_form.validate():
+    post_form = PostForm()
+    if post_form.validate_on_submit():
         microblog = Microblog(g.user.id, post_form.content.data)
         db.session.add(microblog)
         db.session.commit()

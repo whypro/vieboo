@@ -30,6 +30,7 @@ def configure_modules(app):
     app.register_module(views.frontend)
     app.register_module(views.account)
     app.register_module(views.mblog)
+    app.register_module(views.friendship)
 
 
 def configure_theme(app):

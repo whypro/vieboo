@@ -3,7 +3,8 @@ from flask.ext.sqlalchemy import BaseQuery
 from microblog.database import db
 import datetime
 import hashlib
-from microblog.models.friendship import friendship
+from microblog.models.friendship import Friendship
+
 
 class PeopleQuery(BaseQuery):
     def authenticate(self, login, password):
@@ -38,9 +39,9 @@ class People(db.Model):
 
     following = db.relationship(
         'People',
-        secondary=friendship,
-        primaryjoin=id==friendship.c.from_id,
-        secondaryjoin=id==friendship.c.to_id,
+        secondary=Friendship,
+        primaryjoin=id==Friendship.c.from_id,
+        secondaryjoin=id==Friendship.c.to_id,
         backref='followed',
         lazy='dynamic'
     )
