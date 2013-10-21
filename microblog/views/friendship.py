@@ -8,27 +8,24 @@ friendship = Module(__name__, url_prefix='/friendship')
 
 @friendship.route('/follow/<int:id>/')
 def follow(id):
-    people = People.query.get(id)
-    if g.user.following.filter(
-        (Friendship.c.from_id==g.user.id) &
-        (Friendship.c.to_id==id)
-    ).first():
-        flash(u'不能重复关注')
+    if g.user.id == id:
+        flash(u'不能关注自己')
     else:
-        g.user.following.append(people)
-        db.session.add(g.user)
-        db.session.commit()
-        flash(u'关注成功')
+        people = People.query.get(id)
+        if g.user.has_following(id):
+            flash(u'不能重复关注')
+        else:
+            g.user.following.append(people)
+            db.session.add(g.user)
+            db.session.commit()
+            flash(u'关注成功')
     return redirect(url_for('frontend.index'))
 
 
 @friendship.route('/unfollow/<int:id>/')
 def unfollow(id):
     people = People.query.get(id)
-    if g.user.following.filter(
-        (Friendship.c.from_id==g.user.id) &
-        (Friendship.c.to_id==id)
-    ).first():
+    if g.user.has_following(id):
         g.user.following.remove(people)
         db.session.add(g.user)
         db.session.commit()

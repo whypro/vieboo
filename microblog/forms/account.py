@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import g
 from flask_wtf import Form
-from wtforms import TextField, PasswordField, BooleanField, HiddenField, SubmitField
+from wtforms import TextField, PasswordField, BooleanField, HiddenField, SubmitField, FileField
 from wtforms.validators import DataRequired, ValidationError, EqualTo, Email
 from microblog.models import People
 
@@ -92,3 +92,8 @@ class ModifyProfileForm(Form):
     def validate_email(self, field):
         if g.user.get_email() != field.data:
             raise ValidationError(u'邮箱不能修改')
+
+
+class AvatarForm(Form):
+    avatar = FileField(u'头像')
+    submit = SubmitField(u'上传')

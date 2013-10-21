@@ -20,6 +20,7 @@ else:
     DB_PASSWORD = 'whypro'
     DB_PORT = int(3306)
 
+# FLASK-SQLALCHEMY
 SQLALCHEMY_DATABASE_URI = \
     'mysql://{username}:{password}@{host}:{port}/{database}'.format(
     username=DB_USERNAME, password=DB_PASSWORD,
@@ -27,6 +28,16 @@ SQLALCHEMY_DATABASE_URI = \
     database=DB_DATABASE
     )
 SQLALCHEMY_POOL_RECYCLE = 10
+
+# FLASK-THEMES
+DEFAULT_THEME = 'zhimin'
+
+# FLASK-UPLOADS
+UPLOADED_PHOTOS_DEST = 'D:/uploads/photos'
+UPLOADED_PHOTOS_URL = 'D:/uploads/photos/'
+UPLOADED_PHOTOS_ALLOW = ['jpg', 'jpeg', 'png', 'gif']
+UPLOADS_DEFAULT_DEST = 'D:/uploads'
+UPLOADS_DEFAULT_URL = 'D:/uploads/'
+
 DEBUG = True
 SECRET_KEY = 'hello world'
-DEFAULT_THEME = 'zhimin'

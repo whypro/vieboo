@@ -33,6 +33,7 @@ class People(db.Model):
     mobile = db.Column(db.String(20))
     reg_time = db.Column(db.DateTime, default=datetime.datetime.now)
     reg_ip = db.Column(db.String(20))
+    avatar = db.Column(db.String())
 
     microblogs = db.relationship('Microblog', backref='people', lazy='dynamic')
     comments = db.relationship('Comment', backref='people', lazy='dynamic')
@@ -45,7 +46,6 @@ class People(db.Model):
         backref='followed',
         lazy='dynamic'
     )
-
 
     def __init__(self, email, password,
                  nickname=None, mobile=None,
@@ -80,6 +80,9 @@ class People(db.Model):
     def get_email(self):
         return self.email
 
+    def get_avatar(self):
+        return self.avatar
+
     def change_password(self, password):
         self._password = hashlib.md5(password).hexdigest()
 
@@ -88,3 +91,16 @@ class People(db.Model):
 
     def change_mobile(self, mobile):
         self.mobile = mobile
+
+    def change_avatar(self, avatar):
+        self.avatar = avatar
+
+    def has_following(self, id):
+        people = self.following.filter(
+            (Friendship.c.from_id==self.id) &
+            (Friendship.c.to_id==id)
+        ).first()
+        return True if people else False
+
+    def __repr__(self):
+        return self.email

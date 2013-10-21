@@ -27,7 +27,7 @@
             {% else %}
             <a class="pull-left" href="{{ url_for('frontend.people', id=microblog.people.id) }}">
             {% endif %}
-                <img class="media-object" src="http://tp2.sinaimg.cn/1277294185/180/40022602019/1" alt="">
+                <img class="media-object" style="width: 120px; height: 120px;" src="{{ 'http://tp2.sinaimg.cn/1277294185/180/40022602019/1' if not microblog.people.avatar else url_for('uploads', filename=microblog.people.avatar) }}" alt="">
                 <h4 class="media-heading">{{ microblog.people.nickname }}</h4>
             </a>
             <div class="media-body">

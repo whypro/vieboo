@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, url_for, redirect, flash, send_from_directory
+from flask import Module, url_for, redirect, flash, send_from_directory, current_app
 from microblog.database import db
 from microblog.models import People, Microblog
 from microblog.tools import render_template
@@ -29,3 +29,11 @@ def install():
 def people(id):
     people = People.query.get(id)
     return render_template('people.html', people=people)
+
+
+@frontend.route('/uploads/photos/<filename>')
+def uploads(filename):
+    return send_from_directory(
+        current_app.config['UPLOADED_PHOTOS_DEST'],
+        filename
+    )

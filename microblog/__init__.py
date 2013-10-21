@@ -8,8 +8,9 @@ sys.path.insert(0, deps_path)
 from flask import Flask, g
 from flask.ext.login import LoginManager, current_user
 from flask.ext.themes import setup_themes
+from flask.ext.uploads import configure_uploads, patch_request_class
 from microblog import views
-from microblog.database import db
+from microblog.database import db, photos
 from microblog.models import People
 
 
@@ -22,6 +23,8 @@ def create_app(config=None):
     configure_theme(app)
     configure_flasklogin(app)
     config_before_request(app)
+    configure_uploads(app, (photos, ))
+    patch_request_class(app)    # 16M limit
 
     return app
 

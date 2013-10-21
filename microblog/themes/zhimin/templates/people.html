@@ -11,4 +11,16 @@
         <th>手机</th>
         <td>{{ people.mobile }}</td>
     </tr>
+    {% if g.user.id != people.id %}
+    <tr>
+        <th></th>
+        <td>
+            {% if g.user.has_following(people.id) %}
+            <a href="{{ url_for('friendship.unfollow', id=people.id) }}">取消关注</a>
+            {% else %}
+            <a href="{{ url_for('friendship.follow', id=people.id) }}">关注</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
 </table>

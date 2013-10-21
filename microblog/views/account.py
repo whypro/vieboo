@@ -2,8 +2,9 @@
 import datetime
 from flask import Module, g, request, url_for, redirect, flash
 from flask.ext.login import login_user, login_required, logout_user
-from microblog.database import db
-from microblog.forms.account import ModifyProfileForm
+from flask.ext.uploads import UploadSet
+from microblog.database import db, photos
+from microblog.forms.account import ModifyProfileForm, AvatarForm
 from microblog.models import People, Microblog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, PostForm
 from microblog.tools import render_template
@@ -100,6 +101,7 @@ def logout():
 def profile():
     people = g.user
     profile_form = ModifyProfileForm(obj=people)
+    avatar_filename = people.get_avatar()
     if profile_form.validate_on_submit():
         new_password = profile_form.password.data
         new_nickname = profile_form.nickname.data
@@ -115,5 +117,26 @@ def profile():
         db.session.close()
         flash(u'个人资料修改成功')
         return redirect(url_for('account.profile'))
-    return render_template('profile.html', form=profile_form)
+    return render_template('profile.html', form=profile_form, avatar=avatar_filename)
+
+
+@account.route('/avatar/', methods=['GET', 'POST'])
+@login_required
+def avatar():
+    avatar_form = AvatarForm()
+    if avatar_form.validate_on_submit():
+        if avatar_form.avatar.data:
+            # 上传头像
+            avatar_data = request.files[avatar_form.avatar.name]
+            avatar_filename = photos.save(avatar_data)
+            print avatar_filename
+            url = photos.url(avatar_filename)
+            print url
+            people = g.user
+            g.user.change_avatar(avatar_filename)
+            db.session.add(g.user)
+            db.session.commit()
+            return u'上传成功'
+    avatar_filename = g.user.get_avatar()
+    return render_template('avatar.html', avatar_form=avatar_form, avatar=avatar_filename)
 
