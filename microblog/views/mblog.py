@@ -66,3 +66,22 @@ def comment(mid, cid=None):
     return render_template('comment.html', form=comment_form, microblog=microblog, parent_comment=parent_comment)
 
 
+@mblog.route('/comment/delete/<int:id>/')
+@login_required
+def delete_comment(id):
+    comment = Comment.query.get(id)
+    if comment.people_id == g.user.id:
+        db.session.delete(comment)
+        db.session.commit()
+        flash(u'删除成功')
+        # print u'删除成功'
+    else:
+        flash(u'删除失败')
+        # print u'删除失败'
+    return redirect(url_for('frontend.index'))
+
+
+@mblog.route('/repost/<int:id>/')
+@login_required
+def repost(id):
+    return u'未完成'

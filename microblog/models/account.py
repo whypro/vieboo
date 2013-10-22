@@ -3,7 +3,7 @@ from flask.ext.sqlalchemy import BaseQuery
 from microblog.database import db
 import datetime
 import hashlib
-from microblog.models.friendship import Friendship
+from microblog.models.friendship import Friendship, Blackship
 
 
 class PeopleQuery(BaseQuery):
@@ -44,6 +44,14 @@ class People(db.Model):
         primaryjoin=id==Friendship.c.from_id,
         secondaryjoin=id==Friendship.c.to_id,
         backref='followed',
+        lazy='dynamic'
+    )
+    blocking = db.relationship(
+        'People',
+        secondary=Blackship,
+        primaryjoin=id==Blackship.c.from_id,
+        secondaryjoin=id==Blackship.c.to_id,
+        backref='blocked',
         lazy='dynamic'
     )
 
@@ -95,10 +103,17 @@ class People(db.Model):
     def change_avatar(self, avatar):
         self.avatar = avatar
 
-    def has_following(self, id):
+    def is_following(self, id):
         people = self.following.filter(
             (Friendship.c.from_id==self.id) &
             (Friendship.c.to_id==id)
+        ).first()
+        return True if people else False
+
+    def is_blocking(self, id):
+        people = self.blocking.filter(
+            (Blackship.c.from_id==self.id) &
+            (Blackship.c.to_id==id)
         ).first()
         return True if people else False
 

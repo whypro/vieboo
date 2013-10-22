@@ -13,12 +13,22 @@
     </tr>
     {% if g.user.id != people.id %}
     <tr>
-        <th></th>
         <td>
-            {% if g.user.has_following(people.id) %}
+            {% if g.user.is_authenticated() %}
+            {% if g.user.is_following(people.id) %}
             <a href="{{ url_for('friendship.unfollow', id=people.id) }}">取消关注</a>
             {% else %}
             <a href="{{ url_for('friendship.follow', id=people.id) }}">关注</a>
+            {% endif %}
+            {% endif %}
+        </td>
+        <td>
+            {% if g.user.is_authenticated() %}
+            {% if g.user.is_blocking(people.id) %}
+            <a href="{{ url_for('friendship.unblock', id=people.id) }}">移出黑名单</a>
+            {% else %}
+            <a href="{{ url_for('friendship.block', id=people.id) }}">加入黑名单</a>
+            {% endif %}
             {% endif %}
         </td>
     </tr>

@@ -124,6 +124,8 @@ def profile():
 @login_required
 def avatar():
     avatar_form = AvatarForm()
+    people = g.user
+    avatar_filename = people.get_avatar()
     if avatar_form.validate_on_submit():
         if avatar_form.avatar.data:
             # 上传头像
@@ -132,11 +134,10 @@ def avatar():
             print avatar_filename
             url = photos.url(avatar_filename)
             print url
-            people = g.user
-            g.user.change_avatar(avatar_filename)
-            db.session.add(g.user)
+            people.change_avatar(avatar_filename)
+            db.session.add(people)
             db.session.commit()
-            return u'上传成功'
-    avatar_filename = g.user.get_avatar()
+            flash(u'上传成功')
+            return redirect(url_for('account.profile'))
     return render_template('avatar.html', avatar_form=avatar_form, avatar=avatar_filename)
 

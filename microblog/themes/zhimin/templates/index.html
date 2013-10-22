@@ -31,24 +31,31 @@
                 <h4 class="media-heading">{{ microblog.people.nickname }}</h4>
             </a>
             <div class="media-body">
-                <div class="well well-lg">{{ microblog.content }}</div>
+                <div class="well well-lg">
+                    {{ microblog.content }}
+                    <p style="padding-top: 20px;">
+                        <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">评论</a>
+                        <a href="{{ url_for('mblog.repost', id=microblog.id) }}">转发</a>
+                        {% if microblog.people_id==g.user.id %}
+                        <a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
+                        {% endif %}
+                    </p>
+                </div>
                 <ul>
                     {% for comment in microblog.comments %}
-                    <li>{{ comment.content }} <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a></li>
+                    <li>
+                        {{ comment.content }}
+                        <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a>
+                        {% if microblog.people_id==g.user.id %}
+                        <a href="{{ url_for('mblog.delete_comment', id=comment.id) }}">删除</a>
+                        {% endif %}
+                    </li>
                     {% endfor %}
                 </ul>
-                {% if microblog.people_id==g.user.id %}
-                <p>
-                    <a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
-                    <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">评论</a>
-                </p>
-                {% endif %}
             </div>
         </div>
         {% endfor %}
     </div>
-
-
 </div>
 
 {% endblock %}

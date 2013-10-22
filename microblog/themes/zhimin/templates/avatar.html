@@ -3,8 +3,8 @@
         <tr>
             <th></th>
             <td>
-                <a href="{{ url_for('frontend.uploads', filename=avatar) }}">
-                    <img src="{{ url_for('frontend.uploads', filename=avatar) }}" style="width: 200px; height: 200px;" />
+                <a href="{{ url_for('frontend.uploads', filename=avatar) if avatar else '' }}">
+                    <img src="{{ url_for('frontend.uploads', filename=avatar) if avatar else '' }}" style="width: 200px; height: 200px;" />
                 </a>
             </td>
             <td></td>
