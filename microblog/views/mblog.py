@@ -81,7 +81,15 @@ def delete_comment(id):
     return redirect(url_for('frontend.index'))
 
 
-@mblog.route('/repost/<int:id>/')
+@mblog.route('/repost/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def repost(id):
-    return u'未完成'
+    microblog = Microblog.query.get(id)
+    repost_form = PostForm()
+    if repost_form.validate_on_submit():
+        rp_microblog = Microblog(g.user.id, repost_form.content.data, parent_microblog_id=id)
+        db.session.add(rp_microblog)
+        db.session.commit()
+        flash(u'转发成功')
+        return redirect(url_for('frontend.index'))
+    return render_template('repost.html', repost_form=repost_form, microblog=microblog)

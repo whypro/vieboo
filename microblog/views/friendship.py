@@ -62,5 +62,11 @@ def unblock(id):
         flash(u'取消黑名单成功')
     return redirect(url_for('frontend.index'))
 
+
+@friendship.route('/chat/')
+def chat():
+    return u'未完成'
+
+
 # TODO:
 # dynamic, joined

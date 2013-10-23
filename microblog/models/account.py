@@ -55,6 +55,8 @@ class People(db.Model):
         lazy='dynamic'
     )
 
+    groups = db.relationship('Group', backref='people', lazy='dynamic', passive_deletes=True)
+
     def __init__(self, email, password,
                  nickname=None, mobile=None,
                  reg_time=None, reg_ip=None):
@@ -119,3 +121,15 @@ class People(db.Model):
 
     def __repr__(self):
         return self.email
+
+
+class LoginLog(db.Model):
+    __tablename__ = 'login_log'
+    id = db.Column(db.Integer, primary_key=True)
+    people_id = db.Column(db.Integer, nullable=True)
+    login_time = db.Column(db.DateTime, default=datetime.datetime.now)
+    login_ip = db.Column(db.String(20))
+
+    def __init__(self, people_id, login_ip):
+        self.people_id = people_id
+        self.login_ip = login_ip

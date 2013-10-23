@@ -7,6 +7,7 @@ from microblog.database import db, photos
 from microblog.forms.account import ModifyProfileForm, AvatarForm
 from microblog.models import People, Microblog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, PostForm
+from microblog.models.account import LoginLog
 from microblog.tools import render_template
 
 account = Module(__name__, url_prefix='/account')
@@ -21,11 +22,7 @@ def register():
 
     register_form = RegisterForm()
     if register_form.validate_on_submit():
-        # 获取 ip 地址
-        if 'x-forwarded-for' in request.headers:
-            ip = request.headers['x-forwarded-for'].split(', ')[0]
-        else:
-            ip = request.remote_addr
+        ip = get_client_ip(request)
         people = People(
             email=register_form.email.data,
             password=register_form.password.data,
@@ -43,6 +40,15 @@ def register():
     return render_template('register.html', register_form=register_form)
 
 
+def get_client_ip(request):
+    # 获取 ip 地址
+    if 'x-forwarded-for' in request.headers:
+        ip = request.headers['x-forwarded-for'].split(', ')[0]
+    else:
+        ip = request.remote_addr
+    return ip
+
+
 @account.route('/login/', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
@@ -54,6 +60,10 @@ def login():
 
         if people:
             login_user(people, remember=login_form.remember.data)
+            ip = get_client_ip(request)
+            login_log = LoginLog(people.id, ip)
+            db.session.add(login_log)
+            db.session.commit()
             flash(u'登录成功')
             return redirect(url_for('frontend.index'))
         else:
