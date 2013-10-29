@@ -18,7 +18,7 @@ def post():
         microblog = Microblog(g.user.id, post_form.content.data)
         db.session.add(microblog)
         db.session.commit()
-        flash(u'发布成功')
+        flash(u'发布成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('post.html', form=post_form)
 
@@ -30,10 +30,10 @@ def delete(id):
     if microblog.people_id == g.user.id:
         db.session.delete(microblog)
         db.session.commit()
-        flash(u'删除成功')
+        flash(u'删除成功', 'success')
         # print u'删除成功'
     else:
-        flash(u'删除失败')
+        flash(u'删除失败', 'error')
         # print u'删除失败'
     return redirect(url_for('frontend.index'))
 
@@ -61,7 +61,7 @@ def comment(mid, cid=None):
         )
         db.session.add(comment)
         db.session.commit()
-        flash(u'评论成功')
+        flash(u'评论成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('comment.html', form=comment_form, microblog=microblog, parent_comment=parent_comment)
 
@@ -73,10 +73,10 @@ def delete_comment(id):
     if comment.people_id == g.user.id:
         db.session.delete(comment)
         db.session.commit()
-        flash(u'删除成功')
+        flash(u'删除成功', 'success')
         # print u'删除成功'
     else:
-        flash(u'删除失败')
+        flash(u'删除失败', 'error')
         # print u'删除失败'
     return redirect(url_for('frontend.index'))
 
@@ -90,6 +90,6 @@ def repost(id):
         rp_microblog = Microblog(g.user.id, repost_form.content.data, parent_microblog_id=id)
         db.session.add(rp_microblog)
         db.session.commit()
-        flash(u'转发成功')
+        flash(u'转发成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('repost.html', repost_form=repost_form, microblog=microblog)

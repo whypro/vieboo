@@ -1,0 +1,25 @@
+<form method="POST" action="">
+    <table>
+        <tr>
+            <th>发送者</th>
+            <td>{{ from_people.nickname }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>接收者</th>
+            <td>{{ to_people.nickname }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th>{{ chat_form.content.label }}</th>
+            <td>{{ chat_form.content }}</td>
+            <td>{{ ', '.join(chat_form.content.errors) }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ chat_form.submit }}</td>
+            <td></td>
+        </tr>
+    </table>
+    {{ chat_form.hidden_tag() }}
+</form>

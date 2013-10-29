@@ -35,7 +35,7 @@ def register():
         db.session.add(people)
         db.session.commit()
         db.session.close()
-        flash(u'注册成功')
+        flash(u'注册成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('register.html', register_form=register_form)
 
@@ -64,10 +64,10 @@ def login():
             login_log = LoginLog(people.id, ip)
             db.session.add(login_log)
             db.session.commit()
-            flash(u'登录成功')
+            flash(u'登录成功', 'success')
             return redirect(url_for('frontend.index'))
         else:
-            flash(u'登录失败')
+            flash(u'登录失败', 'error')
 
     return render_template('login.html', form=login_form)
 
@@ -87,10 +87,10 @@ def password():
             db.session.add(people)
             db.session.commit()
             db.session.close()
-            flash(u'密码修改成功')
+            flash(u'密码修改成功', 'success')
             return redirect(url_for('frontend.index'))
         else:
-            flash(u'原密码不正确')
+            flash(u'原密码不正确', 'error')
             return redirect(url_for('account.password'))
 
     return render_template('password.html', form=change_password_form)
@@ -101,7 +101,7 @@ def password():
 @login_required
 def logout():
     logout_user()
-    flash(u'已注销')
+    flash(u'已注销', 'success')
     return redirect(url_for('frontend.index'))
 
 
@@ -125,7 +125,7 @@ def profile():
         db.session.add(people)
         db.session.commit()
         db.session.close()
-        flash(u'个人资料修改成功')
+        flash(u'个人资料修改成功', 'success')
         return redirect(url_for('account.profile'))
     return render_template('profile.html', form=profile_form, avatar=avatar_filename)
 
@@ -147,7 +147,7 @@ def avatar():
             people.change_avatar(avatar_filename)
             db.session.add(people)
             db.session.commit()
-            flash(u'上传成功')
+            flash(u'上传成功', 'success')
             return redirect(url_for('account.profile'))
     return render_template('avatar.html', avatar_form=avatar_form, avatar=avatar_filename)
 

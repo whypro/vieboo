@@ -31,6 +31,13 @@
             {% endif %}
             {% endif %}
         </td>
+        <td>
+            {% if g.user.is_authenticated() %}
+            {# {% if g.user.is_blocked(people.id) %} #}
+            <a href="{{ url_for('friendship.chat', id=people.id) }}">发私信</a>
+            {# {% endif %} #}
+            {% endif %}
+        </td>
     </tr>
     {% endif %}
 </table>

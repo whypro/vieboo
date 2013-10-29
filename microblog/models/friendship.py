@@ -11,6 +11,7 @@ Friendship = db.Table(
     db.Column('group_id', db.Integer, db.ForeignKey('group.id'))
 )
 
+
 Blackship = db.Table(
     'blackship',
     db.Column('from_id', db.Integer, db.ForeignKey('people.id'), primary_key=True),
