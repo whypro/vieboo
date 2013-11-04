@@ -25,7 +25,8 @@ class Microblog(db.Model):
 
         if parent_microblog_id:
             self.parent_microblog_id = parent_microblog_id
-            self.content = content + u' [转]: ' + Microblog.query.get(parent_microblog_id).content
+            parent_microblog = Microblog.query.get(parent_microblog_id)
+            self.content = content + ' //' + parent_microblog.people.nickname + ': ' + parent_microblog.content
         else:
             self.content = content
 

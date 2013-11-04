@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 from flask import Module, g, redirect, url_for, flash
+from flask.ext.login import login_required
 from microblog.forms.friendship import ChatForm
 from microblog.models import People, Friendship
 from microblog.database import db
 from microblog.models.friendship import Chatting
 from microblog.tools import render_template
 
+
 friendship = Module(__name__, url_prefix='/friendship')
 
 
 @friendship.route('/follow/<int:id>/')
+@login_required
 def follow(id):
     if g.user.id == id:
         flash(u'不能关注自己', 'error')
@@ -17,6 +20,8 @@ def follow(id):
         people = People.query.get(id)
         if g.user.is_following(id):
             flash(u'不能重复关注', 'error')
+        elif g.user.is_blocking(id):
+            flash(u'不能关注黑名单中的人，请先移出黑名单', 'error')
         else:
             g.user.following.append(people)
             db.session.add(g.user)
@@ -26,6 +31,7 @@ def follow(id):
 
 
 @friendship.route('/unfollow/<int:id>/')
+@login_required
 def unfollow(id):
     people = People.query.get(id)
     if g.user.is_following(id):
@@ -37,18 +43,23 @@ def unfollow(id):
 
 
 @friendship.route('/following/')
+@login_required
 def show_following():
-    followings = g.user.followed.all()
-    return '未完成'
-    # return render_template('index.html', people=followings)
+    """查看我关注的人"""
+    followings = g.user.following.all()
+    return render_template('friendship.html', people=followings)
 
 
 @friendship.route('/followed/')
+@login_required
 def show_followed():
-    pass
+    """查看关注我的人"""
+    followeds = g.user.followed.all()
+    return render_template('friendship.html', people=followeds)
 
 
 @friendship.route('/block/<int:id>/')
+@login_required
 def block(id):
     if g.user.id == id:
         flash(u'不能将自己加入黑名单', 'error')
@@ -68,6 +79,7 @@ def block(id):
 
 
 @friendship.route('/unblock/<int:id>/')
+@login_required
 def unblock(id):
     people = People.query.get(id)
     if g.user.is_blocking(id):
@@ -79,11 +91,15 @@ def unblock(id):
 
 
 @friendship.route('/blocking/')
+@login_required
 def show_blocking():
-    pass
+    """查看黑名单"""
+    blockings = g.user.blocking.all()
+    return render_template('friendship.html', people=blockings)
 
 
 @friendship.route('/chat/<int:id>/', methods=['GET', 'POST'])
+@login_required
 def chat(id):
     chat_form = ChatForm()
     from_people = g.user

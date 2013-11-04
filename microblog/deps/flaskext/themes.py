@@ -330,7 +330,8 @@ class ThemeTemplateLoader(BaseLoader):
     def list_templates(self):
         res = []
         ctx = _request_ctx_stack.top
-        if USING_BLUEPRINTS and not self.as_blueprint:
+        # if USING_BLUEPRINTS and not self.as_blueprint:
+        if USING_BLUEPRINTS and self.as_blueprint:
             fmt = '_themes/%s/%s'
         else:
             fmt = '%s/%s'
