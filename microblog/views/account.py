@@ -18,6 +18,7 @@ account = Module(__name__, url_prefix='/account')
 def register():
     # 已登录用户则返回首页
     if g.user.is_authenticated():
+
         return redirect(url_for('frontend.index'))
 
     register_form = RegisterForm()

@@ -22,6 +22,8 @@ def follow(id):
             flash(u'不能重复关注', 'error')
         elif g.user.is_blocking(id):
             flash(u'不能关注黑名单中的人，请先移出黑名单', 'error')
+        elif g.user.is_blocked(id):
+            flash(u'对方拒绝了您的关注请求', 'error')
         else:
             g.user.following.append(people)
             db.session.add(g.user)
