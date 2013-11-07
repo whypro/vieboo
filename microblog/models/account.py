@@ -3,7 +3,7 @@ from flask.ext.sqlalchemy import BaseQuery
 from microblog.database import db
 import datetime
 import hashlib
-from microblog.models.friendship import Friendship, Blackship
+from microblog.models.friendship import Friendship, Blackship, Chatting
 
 
 class PeopleQuery(BaseQuery):
@@ -56,6 +56,17 @@ class People(db.Model):
     )
 
     groups = db.relationship('Group', backref='people', lazy='dynamic', passive_deletes=True)
+
+    sent_chattings = db.relationship(
+        'Chatting', backref='from_people',
+        primaryjoin=id==Chatting.from_id,
+        lazy='dynamic')
+    received_chattings = db.relationship(
+        'Chatting',
+        backref='to_people',
+        primaryjoin=id==Chatting.to_id,
+        lazy='dynamic')
+
 
     def __init__(self, email, password,
                  nickname=None, mobile=None,

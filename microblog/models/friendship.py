@@ -39,9 +39,6 @@ class Chatting(db.Model):
     chat_time = db.Column(db.DateTime, default=datetime.datetime.now)
     has_read = db.Column(db.Boolean, default=False)
 
-    # from_people = db.relationship()
-    # to_people = db.relationship()
-
     def __init__(self, from_id, to_id, content):
         self.from_id = from_id
         self.to_id = to_id

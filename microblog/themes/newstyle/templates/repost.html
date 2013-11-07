@@ -1,0 +1,16 @@
+<p>{{ microblog.content }} <a href="{{ url_for('frontend.people', id=microblog.people.id) }}">{{ microblog.people.nickname }}</a> {{ microblog.post_time }}</p>
+<form method="POST" action="">
+    <table>
+        <tr>
+            <th>{{ repost_form.content.label }}</th>
+            <td>{{ repost_form.content }}</td>
+            <td>{{ ', '.join(repost_form.content.errors) }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ repost_form.submit }}</td>
+            <td></td>
+        </tr>
+    </table>
+    {{ repost_form.hidden_tag() }}
+</form>

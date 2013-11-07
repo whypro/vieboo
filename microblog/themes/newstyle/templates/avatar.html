@@ -1,0 +1,24 @@
+<form method="POST" action="" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <th></th>
+            <td>
+                <a href="{{ url_for('frontend.uploads', filename=avatar) if avatar else '' }}">
+                    <img src="{{ url_for('frontend.uploads', filename=avatar) if avatar else '' }}" style="width: 200px; height: 200px;" />
+                </a>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ avatar_form.avatar }}</td>
+            <td>{{ ', '.join(avatar_form.avatar.errors) }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>{{ avatar_form.submit }}</td>
+            <td></td>
+        </tr>
+    </table>
+    {{ avatar_form.hidden_tag() }}
+</form>

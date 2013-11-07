@@ -1,0 +1,10 @@
+{
+    "application": "microblog", 
+    "identifier": "newstyle",
+    "name": "newstyle",
+    "author": "whypro",
+    "description": "",
+    "license": "MIT/X11",
+    "doctype": "html5"
+}
+

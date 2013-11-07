@@ -102,7 +102,7 @@ def show_blocking():
 
 @friendship.route('/chat/<int:id>/', methods=['GET', 'POST'])
 @login_required
-def chat(id):
+def send_chatting(id):
     chat_form = ChatForm()
     from_people = g.user
     to_people = People.query.get(id)
@@ -115,11 +115,29 @@ def chat(id):
         return redirect(url_for('frontend.index'))
 
     return render_template(
-        'chat.html',
+        'chatting-new.html',
         chat_form=chat_form,
         from_people=from_people,
         to_people=to_people
     )
+
+
+@friendship.route('/chat/inbox/', methods=['GET'])
+@login_required
+def show_inbox():
+    chattings = Chatting.query.filter(
+        (Chatting.to_id==g.user.id)
+    )
+    return render_template('chatting-inbox.html', chattings=chattings)
+
+
+@friendship.route('/chat/outbox/', methods=['GET'])
+@login_required
+def show_outbox():
+    chattings = Chatting.query.filter(
+        (Chatting.from_id==g.user.id)
+    )
+    return render_template('chatting-outbox.html', chattings=chattings)
 
 
 # TODO:

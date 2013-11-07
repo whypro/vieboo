@@ -1,0 +1,72 @@
+<meta charset="utf-8">
+<link href="{{ theme_static('css/bootstrap.css') }}" rel="stylesheet" />
+<script type="text/javascript" src="{{ theme_static('js/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ theme_static('js/bootstrap.js') }}"></script>
+
+
+
+<hr />
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            
+            <div class="input-group">
+                <input type="text" class="form-control" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">搜索</button>
+                </span>
+            </div>
+            <hr />
+            <ul class="nav nav-pills nav-stacked">
+                <li><a class="disabled">写私信</a></li>
+                <li><a href="{{ url_for('friendship.show_inbox') }}"><span class="badge pull-right">104</span>收件箱</a></li>
+                <li class="active"><a><span class="badge pull-right">12</span>发件箱</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#">全部私信</a></li>
+                <li><a href="#">未读私信</a></li>
+                <li><a href="#">已读私信</a></li>
+            </ul>
+            <div id="people" style="padding: 20px 10px;">
+
+                <ul class="media-list">
+                    {% for chatting in chattings %}
+                    <li class="media">
+                        <div class="row">
+                            <a class="col-lg-2" href="{{ url_for('frontend.people', id=chatting.to_people.id) }}">
+                                <img src="{{ url_for('frontend.uploads', filename=chatting.to_people.avatar) if chatting.to_people.avatar else '' }}" alt="{{ chatting.to_people.nickname }}" class="media-object img-circle img-responsive">
+                            </a>
+                            <div class="media-body col-lg-10">
+                                <div style="padding-top: 5px; padding-bottom: 5px;">
+                                    <a href="{{ url_for('frontend.people', id=chatting.to_people.id) }}"><span class="media-heading">{{ chatting.to_people.nickname }}</span></a>
+                                </div>
+                                <p {{ 'class="text-muted"' if chatting.has_read }}>
+                                    {{ chatting.content }} &emsp;
+                                    <a href="chatting-detail.html" class="text-primary">[详细阅读]</a></p>
+                                <p class="{{ 'text-muted' if chatting.has_read }} text-right">{{ chatting.chat_time }}</p>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <ul class="pagination pull-right">
+                  <li><a href="#">&laquo;</a></li>
+                  <li class="active"><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">&raquo;</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr />
