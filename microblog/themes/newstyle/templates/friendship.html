@@ -1,15 +1,88 @@
-<ul>
-{% for p in people %}
-    <li>
-        <p><a href="{{ url_for('frontend.people', id=p.id) }}">{{ p.nickname }}</a></p>
-        {#
-        {% if microblog.people_id==g.user.id %}
-        <p>
-            <a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
-            <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">评论</a>
-        </p>
-        {% endif %}
-        #}
-    </li>
-{% endfor %}
-</ul>
+<meta charset="utf-8">
+<link href="{{ theme_static('css/bootstrap.css') }}" rel="stylesheet" />
+<script type="text/javascript" src="{{ theme_static('js/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ theme_static('js/bootstrap.js') }}"></script>
+
+
+<hr />
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="input-group">
+                <input type="text" class="form-control" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">搜索</button>
+                </span>
+            </div>
+            <hr />
+            <div class="divider"></div>
+            <ul class="nav nav-pills nav-stacked">
+                <li{%- if active_page == 'show_following' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_following') }}"><span class="badge pull-right">{{ g.user.following.count() }}</span>我关注的人</a></li>
+                <li{%- if active_page == 'show_followed' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_followed') }}"><span class="badge pull-right">{{ g.user.followed.count() }}</span>关注我的人</a></li>
+                <li{%- if active_page == 'show_mutual' %} class="active"{% endif -%}><a><span class="badge pull-right">3</span>互相关注</a></li>
+                <li{%- if active_page == 'show_blocking' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_blocking') }}"><span class="badge pull-right">{{ g.user.blocking.count() }}</span>黑名单</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="">全部</a></li>
+                <li><a href="#">分组</a></li>
+                <li><a href="#">分组</a></li>
+                <li><a>&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;</a></li>
+            </ul>
+            <div id="people" style="padding: 20px 10px;">
+
+                <ul class="media-list">
+                    {% for p in people %}
+                    <li class="media">
+                        <div class="row">
+                            <a class="col-lg-2">
+                                <img src="{{ url_for('frontend.uploads', filename=p.avatar) if p.avatar else '' }}" alt="{{ p.nickname }}" class="media-object img-circle img-responsive">
+                            </a>
+                            <div class="media-body col-lg-8">
+                                <div style="padding-top: 5px; padding-bottom: 5px;">
+                                    <a><span class="media-heading">{{ p.nickname }}</span></a>
+                                    <span><small>&nbsp;男</small></span>
+                                    <span><small>&nbsp;陕西西安</small></span>
+                                </div>
+                                <p>个人简介在这里。</p>
+                            </div>
+                            <div class="btn-group-vertical col-lg-2">
+                                {% if g.user.is_blocking(p.id) %}
+                                <a class="btn btn-default" href="{{ url_for('friendship.unblock', id=p.id) }}">移出黑名单</a>
+                                {% else %}
+                                {% if g.user.is_following(p.id) %}
+                                <a class="btn btn-default" href="{{ url_for('friendship.unfollow', id=p.id) }}">取消关注</a>
+                                {% else %}
+                                <a class="btn btn-default" href="{{ url_for('friendship.follow', id=p.id) }}">加关注</a>
+                                {% endif %}
+                                <a class="btn btn-default" href="{{ url_for('friendship.block', id=p.id) }}">加入黑名单</a>
+                                <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=p.id) }}">私信</a>
+
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <ul class="pagination pull-right">
+                  <li><a href="#">&laquo;</a></li>
+                  <li class="active"><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">&raquo;</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<hr />

@@ -22,7 +22,7 @@ def follow(id):
             flash(u'不能重复关注', 'error')
         elif g.user.is_blocking(id):
             flash(u'不能关注黑名单中的人，请先移出黑名单', 'error')
-        elif g.user.is_blocked(id):
+        elif people.is_blocking(g.user.id):
             flash(u'对方拒绝了您的关注请求', 'error')
         else:
             g.user.following.append(people)
@@ -49,7 +49,7 @@ def unfollow(id):
 def show_following():
     """查看我关注的人"""
     followings = g.user.following.all()
-    return render_template('friendship.html', people=followings)
+    return render_template('friendship.html', people=followings, active_page='show_following')
 
 
 @friendship.route('/followed/')
@@ -57,7 +57,7 @@ def show_following():
 def show_followed():
     """查看关注我的人"""
     followeds = g.user.followed.all()
-    return render_template('friendship.html', people=followeds)
+    return render_template('friendship.html', people=followeds, active_page='show_followed')
 
 
 @friendship.route('/block/<int:id>/')
@@ -97,7 +97,7 @@ def unblock(id):
 def show_blocking():
     """查看黑名单"""
     blockings = g.user.blocking.all()
-    return render_template('friendship.html', people=blockings)
+    return render_template('friendship.html', people=blockings, active_page='show_blocking')
 
 
 @friendship.route('/chat/<int:id>/', methods=['GET', 'POST'])
