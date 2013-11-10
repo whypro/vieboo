@@ -18,7 +18,6 @@ account = Module(__name__, url_prefix='/account')
 def register():
     # 已登录用户则返回首页
     if g.user.is_authenticated():
-
         return redirect(url_for('frontend.index'))
 
     register_form = RegisterForm()
@@ -52,6 +51,10 @@ def get_client_ip(request):
 
 @account.route('/login/', methods=['GET', 'POST'])
 def login():
+    # 已登录用户则返回首页
+    if g.user.is_authenticated():
+        return redirect(url_for('frontend.index'))
+
     login_form = LoginForm()
     if login_form.validate_on_submit():
         people = People.query.authenticate(
@@ -68,7 +71,7 @@ def login():
             flash(u'登录成功', 'success')
             return redirect(url_for('frontend.index'))
         else:
-            flash(u'登录失败', 'error')
+            flash(u'登录失败', 'warning')
 
     return render_template('login.html', form=login_form)
 
@@ -91,7 +94,7 @@ def password():
             flash(u'密码修改成功', 'success')
             return redirect(url_for('frontend.index'))
         else:
-            flash(u'原密码不正确', 'error')
+            flash(u'原密码不正确', 'warning')
             return redirect(url_for('account.password'))
 
     return render_template('password.html', form=change_password_form)
@@ -112,13 +115,12 @@ def logout():
 def profile():
     people = g.user
     profile_form = ModifyProfileForm(obj=people)
-    avatar_filename = people.get_avatar()
     if profile_form.validate_on_submit():
-        new_password = profile_form.password.data
+        #new_password = profile_form.password.data
         new_nickname = profile_form.nickname.data
         new_mobile = profile_form.mobile.data
-        if new_password:
-            people.change_password(new_password)
+        #if new_password:
+        #    people.change_password(new_password)
         if new_nickname:
             people.change_nickname(new_nickname)
         if new_mobile:
@@ -128,7 +130,7 @@ def profile():
         db.session.close()
         flash(u'个人资料修改成功', 'success')
         return redirect(url_for('account.profile'))
-    return render_template('profile.html', form=profile_form, avatar=avatar_filename)
+    return render_template('profile.html', form=profile_form, title=u'修改资料')
 
 
 @account.route('/avatar/', methods=['GET', 'POST'])

@@ -3,11 +3,18 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
     <link href="{{ theme_static('css/bootstrap.css') }}" rel="stylesheet" media="screen" />
     <script src="{{ theme_static('js/jquery.js') }}"></script>
-<script src="{{ theme_static('js/bootstrap.js') }}"></script>
+    <script src="{{ theme_static('js/bootstrap.js') }}"></script>
+    <style>
+        html { overflow-y: scroll; }
+    </style>
 </head>
 <body>
+{% include theme('header.html') %}
+{% include theme('flash.html') %}
 {% block content %}{% endblock %}
+{% include theme('footer.html') %}
 </body>
 </html>

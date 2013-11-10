@@ -21,7 +21,7 @@ def index():
 @frontend.route('/install/')
 def install():
     db.create_all()
-    flash(u'创建成功')
+    flash(u'创建成功', 'success')
     return redirect(url_for('index'))
 
 

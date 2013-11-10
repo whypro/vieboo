@@ -72,16 +72,12 @@ class ChangePasswordForm(Form):
 
 
 class ModifyProfileForm(Form):
-    email = TextField(
-        u'邮箱',
-        validators=[Email(message=u'请输入一个合法的邮箱')],
-    )
-    password = PasswordField(
-        u'密码',
-    )
+    # email = TextField(u'邮箱', validators=[Email(message=u'请输入一个合法的邮箱')],)
+    # password = PasswordField(u'密码',)
 
     nickname = TextField(
         u'昵称',
+        validators=[DataRequired(message=u'请输入昵称')],
     )
     mobile = TextField(
         u'手机',
@@ -89,9 +85,9 @@ class ModifyProfileForm(Form):
     next = HiddenField()
     submit = SubmitField(u'修改')
 
-    def validate_email(self, field):
-        if g.user.get_email() != field.data:
-            raise ValidationError(u'邮箱不能修改')
+    # def validate_email(self, field):
+    #    if g.user.get_email() != field.data:
+    #        raise ValidationError(u'邮箱不能修改')
 
 
 class AvatarForm(Form):

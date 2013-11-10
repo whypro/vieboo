@@ -1,10 +1,6 @@
-<meta charset="utf-8">
-<link href="{{ theme_static('css/bootstrap.css') }}" rel="stylesheet" />
-<script type="text/javascript" src="{{ theme_static('js/jquery.js') }}"></script>
-<script type="text/javascript" src="{{ theme_static('js/bootstrap.js') }}"></script>
-
-
-<hr />
+{% extends theme('layout.html') %}
+{% block title %}私信 | 写私信{% endblock %}
+{% block content %}
 <div class="container">
     <div class="row">  
         <div class="col-lg-3">
@@ -48,6 +44,4 @@
         </div>
     </div>
 </div>
-
-
-<hr />
+{% endblock %}

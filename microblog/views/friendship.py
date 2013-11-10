@@ -14,6 +14,7 @@ friendship = Module(__name__, url_prefix='/friendship')
 @friendship.route('/follow/<int:id>/')
 @login_required
 def follow(id):
+    """关注"""
     if g.user.id == id:
         flash(u'不能关注自己', 'error')
     else:
@@ -35,6 +36,7 @@ def follow(id):
 @friendship.route('/unfollow/<int:id>/')
 @login_required
 def unfollow(id):
+    """取消关注"""
     people = People.query.get(id)
     if g.user.is_following(id):
         g.user.following.remove(people)
@@ -48,27 +50,35 @@ def unfollow(id):
 @login_required
 def show_following():
     """查看我关注的人"""
-    followings = g.user.following.all()
-    return render_template('friendship.html', people=followings, active_page='show_following')
+    following = g.user.following.all()
+    return render_template('friendship.html', people=following, active_page='show_following')
 
 
 @friendship.route('/followed/')
 @login_required
 def show_followed():
     """查看关注我的人"""
-    followeds = g.user.followed.all()
-    return render_template('friendship.html', people=followeds, active_page='show_followed')
+    followed = g.user.followed.all()
+    return render_template('friendship.html', people=followed, active_page='show_followed')
+
+
+@friendship.route('/mutual/')
+@login_required
+def show_mutual():
+    """查看互相关注的人"""
+    mutual = g.user.following.all()
+    return render_template('friendship.html', people=mutual, active_page='show_mutual')
 
 
 @friendship.route('/block/<int:id>/')
 @login_required
 def block(id):
     if g.user.id == id:
-        flash(u'不能将自己加入黑名单', 'error')
+        flash(u'不能将自己加入黑名单', 'warning')
     else:
         people = People.query.get(id)
         if g.user.is_blocking(id):
-            flash(u'不能重复加入黑名单', 'error')
+            flash(u'不能重复加入黑名单', 'warning')
         else:
             g.user.blocking.append(people)
             # 取消关注
@@ -111,7 +121,7 @@ def send_chatting(id):
         chatting = Chatting(from_people.id, to_people.id, content=chat_form.content.data)
         db.session.add(chatting)
         db.session.commit()
-        flash(u'发送成功')
+        flash(u'发送成功', 'success')
         return redirect(url_for('frontend.index'))
 
     return render_template(

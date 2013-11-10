@@ -33,7 +33,7 @@ def delete(id):
         flash(u'删除成功', 'success')
         # print u'删除成功'
     else:
-        flash(u'删除失败', 'error')
+        flash(u'删除失败', 'warning')
         # print u'删除失败'
     return redirect(url_for('frontend.index'))
 
@@ -76,7 +76,7 @@ def delete_comment(id):
         flash(u'删除成功', 'success')
         # print u'删除成功'
     else:
-        flash(u'删除失败', 'error')
+        flash(u'删除失败', 'warning')
         # print u'删除失败'
     return redirect(url_for('frontend.index'))
 

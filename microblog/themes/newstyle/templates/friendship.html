@@ -1,11 +1,6 @@
-<meta charset="utf-8">
-<link href="{{ theme_static('css/bootstrap.css') }}" rel="stylesheet" />
-<script type="text/javascript" src="{{ theme_static('js/jquery.js') }}"></script>
-<script type="text/javascript" src="{{ theme_static('js/bootstrap.js') }}"></script>
-
-
-<hr />
-
+{% extends theme('layout.html') %}
+{% block title %}好友 | {{ title }}{% endblock %}
+{% block content %}
 
 <div class="container">
     <div class="row">
@@ -21,7 +16,7 @@
             <ul class="nav nav-pills nav-stacked">
                 <li{%- if active_page == 'show_following' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_following') }}"><span class="badge pull-right">{{ g.user.following.count() }}</span>我关注的人</a></li>
                 <li{%- if active_page == 'show_followed' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_followed') }}"><span class="badge pull-right">{{ g.user.followed.count() }}</span>关注我的人</a></li>
-                <li{%- if active_page == 'show_mutual' %} class="active"{% endif -%}><a><span class="badge pull-right">3</span>互相关注</a></li>
+                <li{%- if active_page == 'show_mutual' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_mutual') }}"><span class="badge pull-right">N/A</span>互相关注</a></li>
                 <li{%- if active_page == 'show_blocking' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_blocking') }}"><span class="badge pull-right">{{ g.user.blocking.count() }}</span>黑名单</a></li>
             </ul>
         </div>
@@ -82,7 +77,4 @@
     </div>
 </div>
 
-
-
-
-<hr />
+{% endblock %}
