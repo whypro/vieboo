@@ -92,4 +92,4 @@ def repost(id):
         db.session.commit()
         flash(u'转发成功', 'success')
         return redirect(url_for('frontend.index'))
-    return render_template('repost.html', repost_form=repost_form, microblog=microblog)
+    return render_template('repost.html', form=repost_form, microblog=microblog)

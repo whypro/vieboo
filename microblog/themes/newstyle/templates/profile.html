@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
-            <img src="{{ url_for('frontend.uploads', filename=g.user.avatar) if g.user.avatar else '' }}" alt="{{ g.user.nickname }}" class="img-thumbnail img-responsive">
+            {{ img_avatar(g.user) }}
             <hr />
             <div class="divider"></div>
             <ul class="nav nav-pills nav-stacked">

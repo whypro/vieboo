@@ -1,43 +1,85 @@
-<table>
-    <tr>
-        <th>邮箱</th>
-        <td>{{ people.email }}</td>
-    </tr>
-    <tr>
-        <th>昵称</th>
-        <td>{{ people.nickname }}</td>
-    </tr>
-    <tr>
-        <th>手机</th>
-        <td>{{ people.mobile }}</td>
-    </tr>
-    {% if g.user.id != people.id %}
-    <tr>
-        <td>
-            {% if g.user.is_authenticated() %}
-            {% if g.user.is_following(people.id) %}
-            <a href="{{ url_for('friendship.unfollow', id=people.id) }}">取消关注</a>
-            {% else %}
-            <a href="{{ url_for('friendship.follow', id=people.id) }}">关注</a>
-            {% endif %}
-            {% endif %}
-        </td>
-        <td>
-            {% if g.user.is_authenticated() %}
-            {% if g.user.is_blocking(people.id) %}
-            <a href="{{ url_for('friendship.unblock', id=people.id) }}">移出黑名单</a>
-            {% else %}
-            <a href="{{ url_for('friendship.block', id=people.id) }}">加入黑名单</a>
-            {% endif %}
-            {% endif %}
-        </td>
-        <td>
-            {% if g.user.is_authenticated() %}
-            {# {% if g.user.is_blocked(people.id) %} #}
-            <a href="{{ url_for('friendship.send_chatting', id=people.id) }}">发私信</a>
-            {# {% endif %} #}
-            {% endif %}
-        </td>
-    </tr>
-    {% endif %}
-</table>
+
+{% extends theme('layout.html') %}
+{% block title %}{{ people.nickname }}{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            {{ img_avatar(people) }}
+            <hr />
+            <div class="btn-group ">
+                {% if g.user.is_authenticated() %}
+                {% if g.user.is_blocking(people.id) %}
+                <a class="btn btn-default" href="{{ url_for('friendship.unblock', id=people.id) }}">移出黑名单</a>
+                {% else %}
+                {% if g.user.is_following(people.id) %}
+                <a class="btn btn-default" href="{{ url_for('friendship.unfollow', id=people.id) }}">取消关注</a>
+                {% else %}
+                <a class="btn btn-default" href="{{ url_for('friendship.follow', id=people.id) }}">关注</a>
+                {% endif %}
+                <a class="btn btn-default" href="{{ url_for('friendship.block', id=people.id) }}">加入黑名单</a>
+                <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=people.id) }}">私信</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <ul class="media-list">
+                {% for microblog in people.microblogs %}
+                <li class="media">
+                    <div class="row">
+                        <div class="media-body col-lg-12">
+                            <div style="padding-top: 5px; padding-bottom: 5px;">
+                                <a href="{{ url_for('frontend.people', id=people.id) }}"><span class="media-heading">{{ people.nickname }}</span></a>
+                                {# <span><small>&nbsp;男</small></span>
+                                <span><small>&nbsp;陕西西安</small></span> #}
+                            </div>
+                            <div class="well well-lg">
+                                <p>{{ microblog.content }}</p>
+                                <div>
+                                    <span class="text-muted pull-left"><small>{{ microblog.post_time }}</small></span>
+                                    <span class="pull-right">
+                                        <small>
+                                        <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">回复</a>&emsp;
+                                        <a href="{{ url_for('mblog.repost', id=microblog.id) }}">转发</a>&emsp;
+                                        <a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
+                                        </small>
+                                    </span>
+                                </div>
+                            </div>
+
+                            {% for comment in microblog.comments %}
+                            <div class="row">
+                                <div class="meida col-lg-1">
+                                    <a class="pull-left" href="#">
+                                        {{ img_avatar(comment.people) }}
+                                    </a>
+                                </div>
+                                <div class="media-body col-lg-11">
+                                    <div class="well">
+                                        <p><small><a>{{ comment.people.nickname }}</a>：{{ comment.content }}</small>
+                                        </p>
+                                        <div>
+                                            <span class="text-muted pull-left"><small>{{ comment.comment_time }}</small></span>
+                                            <span class="pull-right">
+                                                <small>
+                                                <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a>&emsp;
+                                                <a href="{{ url_for('mblog.delete_comment', id=comment.id) }}">删除</a>
+                                                </small>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

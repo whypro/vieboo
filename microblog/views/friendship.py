@@ -16,15 +16,15 @@ friendship = Module(__name__, url_prefix='/friendship')
 def follow(id):
     """关注"""
     if g.user.id == id:
-        flash(u'不能关注自己', 'error')
+        flash(u'不能关注自己', 'warning')
     else:
         people = People.query.get(id)
         if g.user.is_following(id):
-            flash(u'不能重复关注', 'error')
+            flash(u'不能重复关注', 'warning')
         elif g.user.is_blocking(id):
-            flash(u'不能关注黑名单中的人，请先移出黑名单', 'error')
+            flash(u'不能关注黑名单中的人，请先移出黑名单', 'warning')
         elif people.is_blocking(g.user.id):
-            flash(u'对方拒绝了您的关注请求', 'error')
+            flash(u'对方拒绝了您的关注请求', 'warning')
         else:
             g.user.following.append(people)
             db.session.add(g.user)
@@ -113,6 +113,9 @@ def show_blocking():
 @friendship.route('/chat/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def send_chatting(id):
+    if g.user.id == id:
+        flash(u'不能给自己发送私信', 'warning')
+        return redirect(url_for('frontend.index'))
     chat_form = ChatForm()
     from_people = g.user
     to_people = People.query.get(id)
@@ -139,6 +142,14 @@ def show_inbox():
         (Chatting.to_id==g.user.id)
     )
     return render_template('chatting-inbox.html', chattings=chattings)
+
+
+@friendship.route('/chat/detail/<int:id>/')
+@login_required
+def show_chatting_detail(id):
+    chatting = Chatting.query.get(id)
+    return render_template('chatting-detail.html', chatting=chatting)
+    pass
 
 
 @friendship.route('/chat/outbox/', methods=['GET'])

@@ -1,5 +1,5 @@
 {% extends theme('layout.html') %}
-{% block title %}私信 | 写私信{% endblock %}
+{% block title %}私信 | 详情{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">  
@@ -12,36 +12,42 @@
             </div>
             <hr />
             <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a>写私信</a></li>
+                <li><a class="disabled">写私信</a></li>
                 <li><a href="{{ url_for('friendship.show_inbox') }}"><span class="badge pull-right">{{ g.user.received_chattings.count() }}</span>收件箱</a></li>
                 <li><a href="{{ url_for('friendship.show_outbox') }}"><span class="badge pull-right">{{ g.user.sent_chattings.count() }}</span>发件箱</a></li>
-            </ul>
+              </ul>
         </div>
         <div class="col-lg-9">
             <form class="form-horizontal" role="form" action="" method="POST">
                 <div class="form-group">
+                    <label for="people" class="col-lg-2 control-label">发信人</label>
+                    <div class="col-lg-6">
+                        <p class="form-control-static">{{ chatting.from_people.nickname }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="people" class="col-lg-2 control-label">收信人</label>
                     <div class="col-lg-6">
-                        <p class="form-control-static">{{ to_people.nickname }}</p>
+                        <p class="form-control-static">{{ chatting.to_people.nickname }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="send-time" class="col-lg-2 control-label">发送时间</label>
+                    <div class="col-lg-6">
+                        <p class="form-control-static">{{ chatting.chat_time }}</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="content" class="col-lg-2 control-label">私信内容</label>
                     <div class="col-lg-6">
-                        {{ chat_form.content(class_='form-control', rows=6, id='content', placeholder='请输入私信内容……') }}
-                    </div>
-                    <div class="col-lg-4">
-                        <p class="text-danger">{{ ', '.join(chat_form.content.errors) }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-6">
-                        {{ chat_form.submit(class_='btn btn-primary') }}
+                        <p class="form-control-static">
+                            {{ chatting.content }}
+                        </p>
                     </div>
                 </div>
-                {{ chat_form.hidden_tag() }}
             </form>
         </div>
     </div>
 </div>
+
 {% endblock %}

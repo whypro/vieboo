@@ -34,7 +34,7 @@
                     <li class="media">
                         <div class="row">
                             <a class="col-lg-2">
-                                <img src="{{ url_for('frontend.uploads', filename=p.avatar) if p.avatar else '' }}" alt="{{ p.nickname }}" class="media-object img-circle img-responsive">
+                                {{ img_avatar(p) }}
                             </a>
                             <div class="media-body col-lg-8">
                                 <div style="padding-top: 5px; padding-bottom: 5px;">
@@ -55,7 +55,6 @@
                                 {% endif %}
                                 <a class="btn btn-default" href="{{ url_for('friendship.block', id=p.id) }}">加入黑名单</a>
                                 <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=p.id) }}">私信</a>
-
                                 {% endif %}
                             </div>
 

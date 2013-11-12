@@ -14,8 +14,8 @@
             <hr />
             <ul class="nav nav-pills nav-stacked">
                 <li><a class="disabled">写私信</a></li>
-                <li class="active"><a><span class="badge pull-right">104</span>收件箱</a></li>
-                <li><a href="{{ url_for('friendship.show_outbox') }}"><span class="badge pull-right">12</span>发件箱</a></li>
+                <li class="active"><a href="{{ url_for('friendship.show_inbox') }}"><span class="badge pull-right">{{ g.user.received_chattings.count() }}</span>收件箱</a></li>
+                <li><a href="{{ url_for('friendship.show_outbox') }}"><span class="badge pull-right">{{ g.user.sent_chattings.count() }}</span>发件箱</a></li>
             </ul>
         </div>
         <div class="col-lg-9">
@@ -31,7 +31,7 @@
                     <li class="media">
                         <div class="row">
                             <a class="col-lg-2" href="{{ url_for('frontend.people', id=chatting.from_people.id) }}">
-                                <img src="{{ url_for('frontend.uploads', filename=chatting.from_people.avatar) if chatting.from_people.avatar else '' }}" alt="{{ chatting.from_people.nickname }}" class="media-object img-circle img-responsive">
+                                {{ img_avatar(chatting.from_people) }}
                             </a>
                             <div class="media-body col-lg-10">
                                 <div style="padding-top: 5px; padding-bottom: 5px;">
@@ -39,7 +39,7 @@
                                 </div>
                                 <p {{ 'class="text-muted"' if chatting.has_read }}>
                                     {{ chatting.content }} &emsp;
-                                    <a href="chatting-detail.html" class="text-primary">[详细阅读]</a></p>
+                                    <a href="{{ url_for('friendship.show_chatting_detail', id=chatting.id) }}" class="text-primary"><small>[详情]</small></a></p>
                                 <p class="{{ 'text-muted' if chatting.has_read }} text-right">{{ chatting.chat_time }}</p>
                             </div>
                         </div>
