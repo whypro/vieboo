@@ -35,8 +35,8 @@ class People(db.Model):
     reg_ip = db.Column(db.String(20))
     avatar = db.Column(db.String(255))
 
-    microblogs = db.relationship('Microblog', backref='people', lazy='dynamic')
-    comments = db.relationship('Comment', backref='people', lazy='dynamic')
+    microblogs = db.relationship('Microblog', backref='people', lazy='dynamic', order_by='Microblog.post_time.desc()')
+    comments = db.relationship('Comment', backref='people', lazy='dynamic', order_by='Comment.comment_time')
 
     following = db.relationship(
         'People',
@@ -44,7 +44,7 @@ class People(db.Model):
         primaryjoin=id==Friendship.c.from_id,
         secondaryjoin=id==Friendship.c.to_id,
         backref=db.backref('followed', lazy='dynamic'),
-        lazy='dynamic'
+        lazy='dynamic',
     )
     blocking = db.relationship(
         'People',
@@ -66,7 +66,6 @@ class People(db.Model):
         backref='to_people',
         primaryjoin=id==Chatting.to_id,
         lazy='dynamic')
-
 
     def __init__(self, email, password,
                  nickname=None, mobile=None,

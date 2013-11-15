@@ -1,4 +1,5 @@
 {% extends theme('layout.html') %}
+{% set active = 'chatting' %}
 {% block title %}私信 | 详情{% endblock %}
 {% block content %}
 <div class="container">
@@ -45,6 +46,13 @@
                         </p>
                     </div>
                 </div>
+                {% if g.user.id == chatting.to_id %}
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-6">
+                        <a class="btn btn-primary" href="{{ url_for('friendship.send_chatting', id=chatting.from_id) }}">回复</a>
+                    </div>
+                </div>
+                {% endif %}
             </form>
         </div>
     </div>

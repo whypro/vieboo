@@ -12,7 +12,8 @@
     </style>
 </head>
 <body>
-{% from theme('_macro.html') import img_avatar %}
+{% from theme('_macro.html') import img_avatar, show_microblog, show_comment_box %}
+{% set active = active|default('index') %}
 {% include theme('header.html') %}
 {% include theme('flash.html') %}
 {% block content %}{% endblock %}

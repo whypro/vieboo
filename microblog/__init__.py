@@ -5,7 +5,7 @@ import sys
 deps_path = os.path.join(os.path.split(os.path.realpath(__file__))[0],'deps')
 sys.path.insert(0, deps_path)
 
-from flask import Flask, g
+from flask import Flask, g, flash, redirect, url_for
 from flask.ext.login import LoginManager, current_user
 from flask.ext.themes import setup_themes
 from flask.ext.uploads import configure_uploads, patch_request_class
@@ -55,7 +55,8 @@ def configure_flasklogin(app):
 
     @login_manager.unauthorized_handler
     def unauthorized():
-        return '请先登录'
+        flash(u'请先登录', 'warning')
+        return redirect(url_for('frontend.index'))
 
 
 def config_before_request(app):

@@ -3,7 +3,7 @@ from flask import Module, g, url_for, redirect, flash, abort, request
 from flask.ext.login import login_required
 from microblog.database import db
 from microblog.models import Microblog, Comment
-from microblog.forms import PostForm, CommentForm
+from microblog.forms import PostForm, CommentForm, RepostForm
 from microblog.tools import render_template
 
 mblog = Module(__name__, url_prefix='/microblog')
@@ -85,7 +85,7 @@ def delete_comment(id):
 @login_required
 def repost(id):
     microblog = Microblog.query.get(id)
-    repost_form = PostForm()
+    repost_form = RepostForm()
     if repost_form.validate_on_submit():
         rp_microblog = Microblog(g.user.id, repost_form.content.data, parent_microblog_id=id)
         db.session.add(rp_microblog)

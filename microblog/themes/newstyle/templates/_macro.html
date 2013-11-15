@@ -1,3 +1,118 @@
-{% macro img_avatar(user) -%}
+{%- macro img_avatar(user) %}
 <img src="{{ url_for('frontend.uploads', filename=user.avatar) if user.avatar else theme_static('image/default-avatar.jpg') }}" alt="{{ user.nickname }}" class="img-thumbnail img-responsive">
-{%- endmacro %}
+{% endmacro -%}
+
+
+{#
+microblogs: 微博，前置条件：可迭代类型
+show_author_avatar: 显示发布者头像，True or False
+show_comments: 显示评论，True or False
+show_comment_avatar: 显示评论者头像，True or False，前置条件：show_comments=True
+show_comment_box: 显示评论框，True or False
+form: 评论框 Form，前置条件：show_comment_box=True
+#}
+{%- macro show_microblog(microblogs, show_author_avatar=True, show_comments=True, show_comment_avatar=True, show_comment_box=False, form=None) %}
+<ul class="media-list">
+    {%- for microblog in microblogs %}
+    <li class="media">
+        <div class="row">
+            {% if show_author_avatar %}
+            <div class="col-lg-2">
+                <a class="pull-left" href="{{ url_for('frontend.people', id=microblog.people.id) }}">
+                    {{ img_avatar(microblog.people) }}
+                </a>
+            </div>
+            <div class="media-body col-lg-10">
+            {% else %}
+            <div class="media-body col-lg-12">
+            {% endif %}
+                <div style="padding-top: 5px; padding-bottom: 5px;">
+                    <a href="{{ url_for('frontend.people', id=microblog.people.id) }}"><span class="media-heading">{{ microblog.people.nickname }}</span></a>
+                    {# <span><small>&nbsp;男</small></span>
+                    <span><small>&nbsp;陕西西安</small></span> #}
+                </div>
+                <div class="well well-lg">
+                    <p>{{ microblog.content }}</p>
+                    <div>
+                        <span class="text-muted pull-left"><small>{{ microblog.post_time }}</small></span>
+                        <span class="pull-right">
+                            <small>
+                            <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">回复({{ microblog.comments.count() }})</a>
+                            &emsp;<a href="{{ url_for('mblog.repost', id=microblog.id) }}">转发</a>
+                            {%- if g.user.id == microblog.people.id %}
+                            &emsp;<a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
+                            {% endif -%}
+                            </small>
+                        </span>
+                    </div>
+                </div>
+                {% if show_comments %}
+                {%- for comment in microblog.comments %}
+                <div class="row">
+                    {% if show_comment_avatar %}
+                    <div class="meida col-lg-1">
+                        <a class="pull-left" href="{{ url_for('frontend.people', id=comment.people.id) }}">
+                            {{ img_avatar(comment.people) }}
+                        </a>
+                    </div>
+                    <div class="media-body col-lg-11">
+                    {% else %}
+                    <div class="media-body col-lg-12">
+                    {% endif %}
+                        <div class="well well-lg">
+                            <p><small><a href="{{ url_for('frontend.people', id=comment.people.id) }}">{{ comment.people.nickname }}</a>：{{ comment.content }}</small>
+                            </p>
+                            <div>
+                                <span class="text-muted pull-left"><small>{{ comment.comment_time }}</small></span>
+                                <span class="pull-right">
+                                    <small>
+                                    <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a>
+                                    {%- if g.user.id == microblog.people.id %}
+                                    &emsp;<a href="{{ url_for('mblog.delete_comment', id=comment.id) }}">删除</a>
+                                    {% endif -%}
+                                    </small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor -%}
+                {% endif %}
+                {% if show_comment_box %}
+                <div class="row">
+                    <div class="meida col-lg-1">
+                        <a class="pull-left" href="{{ url_for('frontend.people', id=g.user.id) }}">
+                            {{ img_avatar(g.user) }}
+                        </a>
+                    </div>
+                    <div class="col-lg-11">
+                        <form class="form-horizontal" role="form" action="" method="POST">
+                            <div class="form-group">
+                                {{ form.content.label(class_='sr-only') }}
+                                <div class="col-lg-12">
+                                {% if parent_comment %}
+                                    {{ form.content(class_='form-control', value=parent_comment.people.nickname) }}
+                                {% else %}
+                                    {{ form.content(class_='form-control') }}
+                                {% endif %}
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right">
+                                    <div class="col-lg-1">
+                                        {{ form.submit(class_='btn btn-sm btn-primary') }}
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form.hidden_tag() }}
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </li>
+    {% endfor -%}
+</ul>
+{% endmacro -%}

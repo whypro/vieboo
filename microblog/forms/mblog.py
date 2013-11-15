@@ -13,3 +13,7 @@ class CommentForm(Form):
     content = TextAreaField(u'内容', validators=[DataRequired(message=u'请输入评论内容')])
     submit = SubmitField(u'评论')
 
+
+class RepostForm(PostForm):
+    content = TextAreaField(u'内容', validators=[DataRequired(message=u'请输入评论内容')])
+    submit = SubmitField(u'转发')

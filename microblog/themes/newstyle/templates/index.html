@@ -1,4 +1,5 @@
 {% extends theme('layout.html') %}
+{% set active = 'index' %}
 {% block title %}首页{% endblock %}
 {% block content %}
 
@@ -36,64 +37,7 @@
         <hr />
         {% endif %}
         <div class="col-lg-12">
-            <ul class="media-list">
-                {% for microblog in microblogs %}
-                <li class="media">
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <a class="pull-left" href="{{ url_for('frontend.people', id=microblog.people.id) }}">
-                                {{ img_avatar(microblog.people) }}
-                            </a>
-                        </div>
-                        <div class="media-body col-lg-10">
-                            <div style="padding-top: 5px; padding-bottom: 5px;">
-                                <a href="{{ url_for('frontend.people', id=microblog.people.id) }}"><span class="media-heading">{{ microblog.people.nickname }}</span></a>
-                                {# <span><small>&nbsp;男</small></span>
-                                <span><small>&nbsp;陕西西安</small></span> #}
-                            </div>
-                            <div class="well well-lg">
-                                <p>{{ microblog.content }}</p>
-                                <div>
-                                    <span class="text-muted pull-left"><small>{{ microblog.post_time }}</small></span>
-                                    <span class="pull-right">
-                                        <small>
-                                        <a href="{{ url_for('mblog.comment', mid=microblog.id) }}">回复</a>&emsp;
-                                        <a href="{{ url_for('mblog.repost', id=microblog.id) }}">转发</a>&emsp;
-                                        <a href="{{ url_for('mblog.delete', id=microblog.id) }}">删除</a>
-                                        </small>
-                                    </span>
-                                </div>
-                            </div>
-
-                            {% for comment in microblog.comments %}
-                            <div class="row">
-                                <div class="meida col-lg-1">
-                                    <a class="pull-left" href="#">
-                                        {{ img_avatar(comment.people) }}
-                                    </a>
-                                </div>
-                                <div class="media-body col-lg-11">
-                                    <div class="well">
-                                        <p><small><a>{{ comment.people.nickname }}</a>：{{ comment.content }}</small>
-                                        </p>
-                                        <div>
-                                            <span class="text-muted pull-left"><small>{{ comment.comment_time }}</small></span>
-                                            <span class="pull-right">
-                                                <small>
-                                                <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a>&emsp;
-                                                <a href="{{ url_for('mblog.delete_comment', id=comment.id) }}">删除</a>
-                                                </small>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+        {{ show_microblog(microblogs, show_author_avatar=True, show_comments=False) }}
         </div>
     </div>
 </div>
