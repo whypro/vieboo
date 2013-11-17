@@ -23,6 +23,7 @@ def create_app(config=None):
     db.init_app(app)
 
     configure_modules(app)
+    config_error_handlers(app)
     configure_theme(app)
     configure_flasklogin(app)
     config_before_request(app)
@@ -63,3 +64,15 @@ def config_before_request(app):
     @app.before_request
     def before_request():
         g.user = current_user
+
+
+def config_error_handlers(app):
+    @app.errorhandler(404)
+    def page_not_found(e):
+        flash(u'页面未找到', 'danger')
+        return redirect(url_for('frontend.index'))
+
+    @app.errorhandler(500)
+    def page_not_found(e):
+        flash(u'服务器开小差了', 'danger')
+        return redirect(url_for('frontend.index'))

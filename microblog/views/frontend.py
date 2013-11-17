@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, url_for, redirect, flash, send_from_directory, current_app
+from flask import Module, url_for, redirect, flash, send_from_directory, current_app, abort
 from microblog.database import db
 from microblog.models import People, Microblog
 from microblog.tools import render_template
@@ -40,7 +40,10 @@ def uploads(filename):
     )
 
 
-
-@frontend.route('/test/')
-def test():
-    return render_template('test.html')
+@frontend.route('/test/<int:error>/')
+def test(error):
+    """HTTP 错误测试"""
+    if error in (404, 500):
+        abort(error)
+    else:
+        return redirect(url_for('frontend.index'))

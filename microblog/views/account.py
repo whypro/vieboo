@@ -97,7 +97,7 @@ def password():
             flash(u'原密码不正确', 'warning')
             return redirect(url_for('account.password'))
 
-    return render_template('password.html', form=change_password_form)
+    return render_template('password.html', form=change_password_form, title=u'修改密码')
 
 
 # 注销
@@ -152,5 +152,5 @@ def avatar():
             db.session.commit()
             flash(u'上传成功', 'success')
             return redirect(url_for('account.profile'))
-    return render_template('avatar.html', avatar_form=avatar_form, avatar=avatar_filename)
+    return render_template('avatar.html', avatar_form=avatar_form, title=u'修改头像')
 

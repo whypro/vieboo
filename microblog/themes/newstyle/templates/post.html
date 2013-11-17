@@ -1,15 +1,39 @@
-<form method="POST" action="">
-    <table>
-        <tr>
-            <th>{{ form.content.label }}</th>
-            <td>{{ form.content }}</td>
-            <td>{{ ', '.join(form.content.errors) }}</td>
-        </tr>
-        <tr>
-            <th></th>
-            <td>{{ form.submit }}</td>
-            <td></td>
-        </tr>
-    </table>
-    {{ form.hidden_tag() }}
-</form>
+{% extends theme('layout.html') %}
+{% block title %}发微博{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-2">
+                    <a class="pull-left" href="{{ url_for('frontend.people', id=g.user.id) }}">
+                        {{ img_avatar(g.user) }}
+                    </a>
+                </div>
+
+                <div class="col-lg-10">
+                    <form class="form-horizontal" role="form" action="{{ url_for('mblog.post') }}" method="POST">
+                        <div class="form-group">
+                            {{ form.content.label(class_='sr-only') }}
+                            <div class="col-lg-12">
+                                <p class="text-danger">{{ ', '.join(form.content.errors) }}</p>
+                                {{ form.content(class_='form-control', rows=6) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="pull-right">
+                                <div class="col-lg-1">
+                                    {{ form.submit(class_='btn btn-sm btn-primary') }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {{ form.hidden_tag() }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

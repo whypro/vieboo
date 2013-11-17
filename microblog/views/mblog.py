@@ -48,10 +48,12 @@ def comment(mid, cid=None):
         parent_comment = Comment.query.get(cid)
         if not parent_comment:
             abort(404)
+        content = u'回复 ' + parent_comment.people.nickname + ': '
     else:
         parent_comment = None
+        content = None
 
-    comment_form = CommentForm()
+    comment_form = CommentForm(content=content)
     if comment_form.validate_on_submit():
         comment = Comment(
             g.user.id,

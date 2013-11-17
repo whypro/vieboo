@@ -22,12 +22,19 @@
             </ul>
         </div>
         <div class="col-lg-9">
+            {% if active_page == 'show_following' %}
             <ul class="nav nav-tabs">
-                <li class="active"><a href="">全部</a></li>
-                <li><a href="#">分组</a></li>
-                <li><a href="#">分组</a></li>
-                <li><a>&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;</a></li>
+                <li{%- if not active_gid %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_following') }}">全部</a></li>
+                {% for group in g.user.groups %}
+                <li{%- if active_gid == group.id %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_following', gid=group.id) }}">{{ group.name }}</a></li>
+                {% endfor %}
+                <li><a data-toggle="modal" data-target="#add-group">&nbsp;<span class="glyphicon glyphicon-plus"></span>&nbsp;</a></li>
             </ul>
+            {% else %}
+            <ul class="nav nav-tabs">
+                <li class="active"><a>全部</a></li>
+            </ul>
+            {% endif %}
             <div id="people" style="padding: 20px 10px;">
 
                 <ul class="media-list">
@@ -43,7 +50,7 @@
                                     <span><small>&nbsp;男</small></span>
                                     <span><small>&nbsp;陕西西安</small></span>
                                 </div>
-                                <p>个人简介在这里。</p>
+                                <p>个人简介在这里~</p>
                             </div>
                             <div class="btn-group-vertical col-lg-2">
                                 {% if g.user.is_blocking(p.id) %}
@@ -63,18 +70,37 @@
                     </li>
                     {% endfor %}
                 </ul>
-                <ul class="pagination pull-right">
-                  <li><a href="#">&laquo;</a></li>
-                  <li class="active"><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li><a href="#">&raquo;</a></li>
-                </ul>
+                {{ render_pagination(pagination, 'friendship.'~active_page ) }}
             </div>
         </div>
     </div>
 </div>
 
+
+
+{% if active_page == 'show_following' %}
+<div class="modal fade" id="add-group" tabindex="-1" role="dialog" aria-labelledby="add-group-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="add-group-label">新建分组</h4>
+            </div>
+            <form action="{{ url_for('friendship.add_group') }}" method="POST">
+                <div class="modal-body text-center">
+                    <div class="row">
+                    {{ add_group_form.name(class_='form-control', placeholder='请输入分组名称……') }}
+                    </div>
+                </div>
+
+            <div class="modal-footer">
+                {{ add_group_form.submit(class_='btn btn-primary') }}
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+            {{ add_group_form.hidden_tag() }}
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
 {% endblock %}

@@ -18,7 +18,7 @@ form: 评论框 Form，前置条件：show_comment_box=True
         <div class="row">
             {% if show_author_avatar %}
             <div class="col-lg-2">
-                <a class="pull-left" href="{{ url_for('frontend.people', id=microblog.people.id) }}">
+                <a href="{{ url_for('frontend.people', id=microblog.people.id) }}">
                     {{ img_avatar(microblog.people) }}
                 </a>
             </div>
@@ -67,7 +67,7 @@ form: 评论框 Form，前置条件：show_comment_box=True
                                 <span class="pull-right">
                                     <small>
                                     <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a>
-                                    {%- if g.user.id == microblog.people.id %}
+                                    {%- if g.user.id == comment.people.id %}
                                     &emsp;<a href="{{ url_for('mblog.delete_comment', id=comment.id) }}">删除</a>
                                     {% endif -%}
                                     </small>
@@ -116,3 +116,20 @@ form: 评论框 Form，前置条件：show_comment_box=True
     {% endfor -%}
 </ul>
 {% endmacro -%}
+
+
+
+
+{% macro render_pagination(pagination, endpoint) %}
+    {% if pagination.pages < 2 %}
+    {% else %}
+    <ul class="pagination pull-right">
+        <li><a href="{{ url_for(endpoint, page=pagination.page-1) if pagination.page > 1 }}">&laquo;</a></li>
+        {% for page in pagination.iter_pages() %}
+        <li{%- if page == pagination.page %} class="active"{% endif -%}><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+        {% endfor %}
+        <li><a href="{{ url_for(endpoint, page=pagination.page+1) if pagination.page < pagination.pages }}">&raquo;</a></li>
+    </ul>
+    {% endif %}
+{% endmacro %}
+

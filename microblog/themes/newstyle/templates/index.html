@@ -2,14 +2,13 @@
 {% set active = 'index' %}
 {% block title %}首页{% endblock %}
 {% block content %}
-
 <div class="container">
     <div class="row">
         {% if g.user.is_authenticated() %}
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-lg-2">
-                    <a class="pull-left" href="{{ url_for('frontend.people', id=g.user.id) }}">
+                    <a href="{{ url_for('frontend.people', id=g.user.id) }}">
                         {{ img_avatar(g.user) }}
                     </a>
                 </div>

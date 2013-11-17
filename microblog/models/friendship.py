@@ -24,9 +24,8 @@ class Group(db.Model):
     __tablename__ = 'group'
 
     id = db.Column(db.Integer, primary_key=True)
-    people_id = db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
     name = db.Column(db.String(80), nullable=False)
-    visibility = db.Column(db.Integer, default=0)
+    people_id = db.Column(db.Integer, db.ForeignKey('people.id'), nullable=False)
 
 
 class Chatting(db.Model):
