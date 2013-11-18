@@ -11,7 +11,8 @@
     </style>
 </head>
 <body>
-{% from theme('_macro.html') import img_avatar, show_microblog, show_comment_box, render_pagination %}
+{% from theme('_macro.html') import img_avatar, show_microblog, show_comment_box%}
+{% from theme('_macro.html') import render_pagination, group_modal %}
 {% set active = active|default('index') %}
 {% include theme('header.html') %}
 {% include theme('flash.html') %}

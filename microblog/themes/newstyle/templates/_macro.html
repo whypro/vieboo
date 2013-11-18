@@ -118,8 +118,6 @@ form: 评论框 Form，前置条件：show_comment_box=True
 {% endmacro -%}
 
 
-
-
 {% macro render_pagination(pagination, endpoint) %}
     {% if pagination.pages < 2 %}
     {% else %}
@@ -132,4 +130,5 @@ form: 评论框 Form，前置条件：show_comment_box=True
     </ul>
     {% endif %}
 {% endmacro %}
+
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, redirect, url_for, flash
+from flask import Module, g, redirect, url_for, flash, abort
 from flask.ext.login import login_required
-from microblog.forms import ChatForm, GroupForm
+from microblog.forms import ChatForm, AddGroupForm, RenameGroupForm
 from microblog.models import People, Friendship, Chatting, Group, Blackship
 from microblog.database import db
 from microblog.tools import render_template
@@ -55,17 +55,21 @@ def show_following(page, gid=None):
     if not gid:
         pagination = g.user.following.order_by(Friendship.c.follow_time).paginate(page, per_page=10)
         following = pagination.items
+        rename_group_form = None
     else:
         pagination = g.user.following.filter(Friendship.c.group_id==gid).order_by(Friendship.c.follow_time).paginate(page, per_page=10)
         following = pagination.items
+        group = Group.query.get(gid)
+        rename_group_form = RenameGroupForm(obj=group)
 
-    add_group_form = GroupForm()
+    add_group_form = AddGroupForm()
     return render_template('friendship.html',
                            people=following,
                            pagination=pagination,
                            active_page='show_following',
                            active_gid=gid,
                            add_group_form=add_group_form,
+                           rename_group_form=rename_group_form,
                            title=u'我关注的')
 
 
@@ -171,18 +175,36 @@ def send_chatting(id):
 
 @friendship.route('/chat/inbox/', defaults={'page': 1})
 @friendship.route('/chat/inbox/page/<int:page>/')
+@friendship.route('/chat/inbox/<flag>/', defaults={'page': 1})
+@friendship.route('/chat/inbox/<flag>/page/<int:page>/')
 @login_required
-def show_inbox(page):
-    pagination = Chatting.query.filter_by(to_id=g.user.id).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
-    chatting = pagination.items
-    return render_template('chatting-inbox.html', chattings=chatting, pagination=pagination)
+def show_inbox(page, flag=None):
+    if flag in ('hasread', 'unread'):
+        has_read = False if flag == 'unread' else True
+        pagination = Chatting.query.filter_by(to_id=g.user.id, has_read=has_read).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
+    else:
+        pagination = Chatting.query.filter_by(to_id=g.user.id).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
+    chattings = pagination.items
+
+    return render_template('chatting-box.html',
+                           box='inbox',
+                           flag=flag,
+                           chattings=chattings,
+                           pagination=pagination)
 
 
-@friendship.route('/chat/detail/<int:id>/')
+@friendship.route('/chat/<box>/<int:id>/')
 @login_required
-def show_chatting_detail(id):
-    chattings = Chatting.query.get(id)
-    return render_template('chatting-detail.html', chatting=chattings)
+def show_chatting_detail(box, id):
+    if box not in ('inbox', 'outbox'):
+        abort(404)
+    chatting = Chatting.query.get(id)
+    if box == 'inbox' and chatting.to_id == g.user.id:
+        chatting.has_read = True
+        db.session.add(chatting)
+        db.session.commit()
+        # 标记为已读
+    return render_template('chatting-detail.html', chatting=chatting)
 
 
 @friendship.route('/chat/outbox/', defaults={'page': 1})
@@ -191,19 +213,23 @@ def show_chatting_detail(id):
 def show_outbox(page):
     pagination = Chatting.query.filter_by(from_id=g.user.id).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
     chattings = pagination.items
-    return render_template('chatting-outbox.html', chattings=chattings, pagination=pagination)
+    return render_template('chatting-box.html',
+                           box='outbox',
+                           chattings=chattings,
+                           pagination=pagination)
 
 
 @friendship.route('/following/group/add/', methods=['GET', 'POST'])
 @login_required
 def add_group():
-    group_form = GroupForm()
+    group_form = AddGroupForm()
     if group_form.validate_on_submit():
         group = Group(name=group_form.name.data, people_id=g.user.id)
         db.session.add(group)
         db.session.commit()
         flash(u'新建成功', 'success')
-    return redirect(url_for('frontend.index'))
+        return redirect(url_for('frontend.index'))
+    return render_template('group.html', form=group_form)
 
 
 @friendship.route('/following/group/delete/<int:id>/')
@@ -211,10 +237,38 @@ def add_group():
 def delete_group(id):
     group = Group.query.get(id)
     if group in g.user.groups:
-        g.user.groups.remove(group)
-        db.session.add(g.user)
+        db.session.delete(group)
         db.session.commit()
         flash(u'删除成功', 'success')
     return redirect(url_for('frontend.index'))
 
 
+@friendship.route('/following/group/rename/<int:id>/', methods=['GET', 'POST'])
+@login_required
+def rename_group(id):
+    group = Group.query.get(id)
+    group_form = RenameGroupForm()
+    if group.people_id == g.user.id:
+        if group_form.validate_on_submit():
+            group.name = group_form.name.data
+            db.session.add(group)
+            db.session.commit()
+            flash(u'重命名成功', 'success')
+            return redirect(url_for('frontend.index'))
+    else:
+        flash(u'权限不足', 'warning')
+    return render_template('group.html', form=group_form)
+
+
+
+@friendship.route('/move/<int:pid>/group/<int:gid>/')
+@login_required
+def move_to_group(pid, gid):
+    return u'未完成'
+    friendship = Friendship.query.filter(
+        (Friendship.c.from_id==g.user.id),
+        (Friendship.c.to_id==pid))
+    friendship.c.group_id = gid
+    db.session.add(friendship)
+    db.session.commit()
+    return 'wer'

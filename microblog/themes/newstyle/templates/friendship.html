@@ -21,6 +21,7 @@
                 <li{%- if active_page == 'show_blocking' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_blocking') }}"><span class="badge pull-right">{{ g.user.blocking.count() }}</span>黑名单</a></li>
             </ul>
         </div>
+
         <div class="col-lg-9">
             {% if active_page == 'show_following' %}
             <ul class="nav nav-tabs">
@@ -39,20 +40,20 @@
 
                 <ul class="media-list">
                     {% for p in people %}
-                    <li class="media">
+                    <li>
                         <div class="row">
-                            <a class="col-lg-2">
+                            <a class="col-lg-2" href="{{ url_for('frontend.people', id=p.id) }}">
                                 {{ img_avatar(p) }}
                             </a>
                             <div class="media-body col-lg-8">
                                 <div style="padding-top: 5px; padding-bottom: 5px;">
-                                    <a><span class="media-heading">{{ p.nickname }}</span></a>
+                                    <a href="{{ url_for('frontend.people', id=p.id) }}"><span class="media-heading">{{ p.nickname }}</span></a>
                                     <span><small>&nbsp;男</small></span>
                                     <span><small>&nbsp;陕西西安</small></span>
                                 </div>
                                 <p>个人简介在这里~</p>
                             </div>
-                            <div class="btn-group-vertical col-lg-2">
+                            <div class="btn-group-vertical">
                                 {% if g.user.is_blocking(p.id) %}
                                 <a class="btn btn-default" href="{{ url_for('friendship.unblock', id=p.id) }}">移出黑名单</a>
                                 {% else %}
@@ -64,6 +65,17 @@
                                 <a class="btn btn-default" href="{{ url_for('friendship.block', id=p.id) }}">加入黑名单</a>
                                 <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=p.id) }}">私信</a>
                                 {% endif %}
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    &nbsp;选择分组&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        {% for group in g.user.groups %}
+                                        <li><a href="{{ url_for('friendship.move_to_group', pid=p.id, gid=group.id) }}">{{ group.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
                             </div>
 
                         </div>
@@ -71,11 +83,18 @@
                     {% endfor %}
                 </ul>
                 {{ render_pagination(pagination, 'friendship.'~active_page ) }}
+
+                {% if active_page == 'show_following' and active_gid %}
+                <hr />
+                <div class="btn-group pull-right">
+                    <a data-toggle="modal" data-target="#rename-group" class="btn btn-primary btn-xs">重命名</a>
+                    <a href="{{ url_for('friendship.delete_group', id=active_gid) }}" class="btn btn-danger btn-xs">删除分组</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
-
 
 
 {% if active_page == 'show_following' %}
@@ -102,5 +121,31 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+{% if active_gid %}
+<div class="modal fade" id="rename-group" tabindex="-1" role="dialog" aria-labelledby="rename-group-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center" id="rename-group-label">重命名分组</h4>
+            </div>
+            <form action="{{ url_for('friendship.rename_group', id=active_gid) }}" method="POST">
+                <div class="modal-body text-center">
+                    <div class="row">
+                    {{ rename_group_form.name(class_='form-control', placeholder='请输入分组名称……') }}
+                    </div>
+                </div>
+
+            <div class="modal-footer">
+                {{ rename_group_form.submit(class_='btn btn-primary') }}
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+            {{ rename_group_form.hidden_tag() }}
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}
 {% endif %}
 {% endblock %}

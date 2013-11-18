@@ -13,7 +13,7 @@ class Microblog(db.Model):
         db.ForeignKey(People.id, ondelete='CASCADE'),
         nullable=False
     )
-    parent_microblog_id = db.Column(db.Integer, db.ForeignKey('microblog.id'))
+    parent_microblog_id = db.Column(db.Integer, db.ForeignKey('microblog.id', ondelete='CASCADE'))
     content = db.Column(db.Text, nullable=False)
     post_time = db.Column(db.DateTime, default=datetime.datetime.now)
     comments = db.relationship(

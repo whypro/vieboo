@@ -1,0 +1,63 @@
+{% extends theme('layout.html') %}
+{% set active = 'chatting' %}
+{% set box_title = {'inbox': '收件箱', 'outbox': '发件箱'} %}
+{% block title %}私信 | {{ box_title[box] }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+
+            <div class="input-group">
+                <input type="text" class="form-control" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">搜索</button>
+                </span>
+            </div>
+            <hr />
+            <ul class="nav nav-pills nav-stacked">
+                <li><a class="disabled">写私信</a></li>
+                <li{%- if box == 'inbox' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_inbox') }}"><span class="badge pull-right">{{ g.user.received_chattings.count() }}</span>收件箱</a></li>
+                <li{%- if box == 'outbox' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_outbox') }}"><span class="badge pull-right">{{ g.user.sent_chattings.count() }}</span>发件箱</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <ul class="nav nav-tabs">
+                <li{% if not flag %} class="active"{% endif %}><a href="{{ url_for('friendship.show_'~box) }}">全部私信</a></li>
+                {% if box == 'inbox' %}
+                <li{% if flag == 'unread' %} class="active"{% endif %}><a href="{{ url_for('friendship.show_inbox', flag='unread') }}">未读私信</a></li>
+                <li{% if flag == 'hasread' %} class="active"{% endif %}><a href="{{ url_for('friendship.show_inbox', flag='hasread') }}">已读私信</a></li>
+                {% endif %}
+            </ul>
+            <div id="people" style="padding: 20px 10px;">
+                <ul class="media-list">
+                    {% for chatting in chattings %}
+                    <li class="media">
+                        <div class="row">
+                            {% if box == 'inbox' %}
+                            {% set people = chatting.from_people %}
+                            {% elif box == 'outbox' %}
+                            {% set people = chatting.to_people %}
+                            {% endif %}
+                            <a class="col-lg-2" href="{{ url_for('frontend.people', id=people.id) }}">
+                                {{ img_avatar(people) }}
+                            </a>
+                            <div class="media-body col-lg-10">
+                                <div style="padding-top: 5px; padding-bottom: 5px;">
+                                    <a href="{{ url_for('frontend.people', id=people.id) }}"><span class="media-heading">{{ people.nickname }}</span></a>
+                                </div>
+                                <p{%- if chatting.has_read %} class="text-muted"{% endif -%}>
+                                    {{ chatting.content }} &emsp;
+                                    <a href="{{ url_for('friendship.show_chatting_detail', id=chatting.id, box=box) }}" class="text-primary"><small>[详情]</small></a>
+                                </p>
+                                <p class="{{ 'text-muted' if chatting.has_read }} text-right">{{ chatting.chat_time }}</p>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {{ render_pagination(pagination, 'friendship.show_'~box ) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
