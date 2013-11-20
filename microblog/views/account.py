@@ -92,11 +92,9 @@ def password():
             db.session.commit()
             db.session.close()
             flash(u'密码修改成功', 'success')
-            return redirect(url_for('frontend.index'))
+            return redirect(url_for('account.password'))
         else:
             flash(u'原密码不正确', 'warning')
-            return redirect(url_for('account.password'))
-
     return render_template('password.html', form=change_password_form, title=u'修改密码')
 
 
@@ -151,6 +149,6 @@ def avatar():
             db.session.add(people)
             db.session.commit()
             flash(u'上传成功', 'success')
-            return redirect(url_for('account.profile'))
+            return redirect(url_for('account.avatar'))
     return render_template('avatar.html', avatar_form=avatar_form, title=u'修改头像')
 

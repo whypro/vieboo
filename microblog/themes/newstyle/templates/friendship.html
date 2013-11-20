@@ -59,12 +59,7 @@
                                 {% else %}
                                 {% if g.user.is_following(p.id) %}
                                 <a class="btn btn-default" href="{{ url_for('friendship.unfollow', id=p.id) }}">取消关注</a>
-                                {% else %}
-                                <a class="btn btn-default" href="{{ url_for('friendship.follow', id=p.id) }}">加关注</a>
-                                {% endif %}
-                                <a class="btn btn-default" href="{{ url_for('friendship.block', id=p.id) }}">加入黑名单</a>
-                                <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=p.id) }}">私信</a>
-                                {% endif %}
+                                {% if g.user.groups.count() %}
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                     &nbsp;选择分组&nbsp;<span class="caret"></span>
@@ -75,6 +70,14 @@
                                         {% endfor %}
                                     </ul>
                                 </div>
+                                {% endif %}
+                                {% else %}
+                                <a class="btn btn-default" href="{{ url_for('friendship.follow', id=p.id) }}">加关注</a>
+                                {% endif %}
+                                <a class="btn btn-default" href="{{ url_for('friendship.block', id=p.id) }}">加入黑名单</a>
+                                <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=p.id) }}">私信</a>
+                                {% endif %}
+
 
                             </div>
 

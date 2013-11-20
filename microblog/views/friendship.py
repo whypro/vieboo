@@ -228,7 +228,7 @@ def add_group():
         db.session.add(group)
         db.session.commit()
         flash(u'新建成功', 'success')
-        return redirect(url_for('frontend.index'))
+        return redirect(url_for('friendship.show_following'))
     return render_template('group.html', form=group_form)
 
 
@@ -240,7 +240,7 @@ def delete_group(id):
         db.session.delete(group)
         db.session.commit()
         flash(u'删除成功', 'success')
-    return redirect(url_for('frontend.index'))
+    return redirect(url_for('friendship.show_following'))
 
 
 @friendship.route('/following/group/rename/<int:id>/', methods=['GET', 'POST'])
@@ -254,7 +254,7 @@ def rename_group(id):
             db.session.add(group)
             db.session.commit()
             flash(u'重命名成功', 'success')
-            return redirect(url_for('frontend.index'))
+            return redirect(url_for('friendship.show_following', gid=id))
     else:
         flash(u'权限不足', 'warning')
     return render_template('group.html', form=group_form)
@@ -265,9 +265,11 @@ def rename_group(id):
 @login_required
 def move_to_group(pid, gid):
     return u'未完成'
-    friendship = Friendship.query.filter(
-        (Friendship.c.from_id==g.user.id),
-        (Friendship.c.to_id==pid))
+    #people = People.query.get(pid)
+    #People.following.any(pid)
+    friendship = db.session.query(Friendship).filter(
+        (Friendship.c.from_id == g.user.id),
+        (Friendship.c.to_id == pid)).first()
     friendship.c.group_id = gid
     db.session.add(friendship)
     db.session.commit()
