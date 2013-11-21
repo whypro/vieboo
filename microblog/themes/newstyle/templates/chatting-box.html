@@ -31,7 +31,7 @@
             <div id="people" style="padding: 20px 10px;">
                 <ul class="media-list">
                     {% for chatting in chattings %}
-                    <li class="media">
+                    <li>
                         <div class="row">
                             {% if box == 'inbox' %}
                             {% set people = chatting.from_people %}
@@ -53,6 +53,7 @@
                             </div>
                         </div>
                     </li>
+                    {% if not loop.last %}<hr class="invisible" />{% endif %}
                     {% endfor %}
                 </ul>
                 {{ render_pagination(pagination, 'friendship.show_'~box ) }}

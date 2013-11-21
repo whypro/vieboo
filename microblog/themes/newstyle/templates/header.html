@@ -32,7 +32,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="{{ url_for('friendship.show_following') }}">我关注的</a></li>
                     <li><a href="{{ url_for('friendship.show_followed') }}">关注我的</a></li>
-                    <li><a href="">互相关注</a></li>
+                    <li><a href="{{ url_for('friendship.show_mutual') }}">互相关注</a></li>
                     <li class="divider"></li>
                     <li><a href="{{ url_for('friendship.show_blocking') }}">黑名单</a></li>
                 </ul>

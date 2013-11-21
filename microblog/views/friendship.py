@@ -117,6 +117,8 @@ def block(id):
             # 取消关注
             if g.user.is_following(id):
                 g.user.following.remove(people)
+            if people.is_following(g.user.id):
+                g.user.followed.remove(people)
             db.session.add(g.user)
             db.session.commit()
             flash(u'加入黑名单成功', 'success')
@@ -183,8 +185,10 @@ def show_inbox(page, flag=None):
     if flag in ('hasread', 'unread'):
         has_read = False if flag == 'unread' else True
         pagination = Chatting.query.filter_by(to_id=g.user.id, has_read=has_read).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
-    else:
+    elif not flag:
         pagination = Chatting.query.filter_by(to_id=g.user.id).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
+    else:
+        abort(404)
     chattings = pagination.items
 
     return render_template('chatting-box.html',
@@ -194,7 +198,7 @@ def show_inbox(page, flag=None):
                            pagination=pagination)
 
 
-@friendship.route('/chat/<box>/<int:id>/')
+@friendship.route('/chat/detail/<box>/<int:id>/')
 @login_required
 def show_chatting_detail(box, id):
     if box not in ('inbox', 'outbox'):
@@ -278,4 +282,4 @@ def move_to_group(pid, gid=None):
             flash(u'分组不存在', 'info')
     else:
         flash(u'没有关注此好友', 'info')
-    return redirect(url_for('friendship.show_following'))
+    return redirect(url_for('friendship.show_following', gid=gid))
