@@ -66,8 +66,13 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         {% for group in g.user.groups %}
+                                        {% if group.id != active_gid %}
                                         <li><a href="{{ url_for('friendship.move_to_group', pid=p.id, gid=group.id) }}">{{ group.name }}</a></li>
+                                        {% endif %}
                                         {% endfor %}
+                                        {% if active_gid %}
+                                        <li><a href="{{ url_for('friendship.move_to_group', pid=p.id) }}">默认分组</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                                 {% endif %}
@@ -77,12 +82,10 @@
                                 <a class="btn btn-default" href="{{ url_for('friendship.block', id=p.id) }}">加入黑名单</a>
                                 <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=p.id) }}">私信</a>
                                 {% endif %}
-
-
                             </div>
-
                         </div>
                     </li>
+                    {% if not loop.last %}<hr class="invisible"/>{% endif %}
                     {% endfor %}
                 </ul>
                 {{ render_pagination(pagination, 'friendship.'~active_page ) }}

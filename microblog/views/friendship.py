@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Module, g, redirect, url_for, flash, abort
 from flask.ext.login import login_required
+from sqlalchemy import and_
 from microblog.forms import ChatForm, AddGroupForm, RenameGroupForm
 from microblog.models import People, Friendship, Chatting, Group, Blackship
 from microblog.database import db
@@ -260,17 +261,21 @@ def rename_group(id):
     return render_template('group.html', form=group_form)
 
 
-
+@friendship.route('/move/<int:pid>/group/default/')
 @friendship.route('/move/<int:pid>/group/<int:gid>/')
 @login_required
-def move_to_group(pid, gid):
-    return u'未完成'
+def move_to_group(pid, gid=None):
     #people = People.query.get(pid)
     #People.following.any(pid)
-    friendship = db.session.query(Friendship).filter(
-        (Friendship.c.from_id == g.user.id),
-        (Friendship.c.to_id == pid)).first()
-    friendship.c.group_id = gid
-    db.session.add(friendship)
-    db.session.commit()
-    return 'wer'
+    if g.user.is_following(pid):
+        if not gid or g.user.has_group(gid):
+            db.session.execute(
+                Friendship.update().
+                where(and_(Friendship.c.from_id == g.user.id, Friendship.c.to_id == pid)).
+                values(group_id=gid))
+            db.session.commit()
+        else:
+            flash(u'分组不存在', 'info')
+    else:
+        flash(u'没有关注此好友', 'info')
+    return redirect(url_for('friendship.show_following'))
