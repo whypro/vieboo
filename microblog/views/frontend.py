@@ -14,6 +14,7 @@ def favicon():
 @frontend.route('/')
 def index():
     # TODO: 黑名单不显示
+    # db.session.execute('SELECT * FROM microblog WHERE microblog.people_id != (SELECT to_id from blackship WHERE from_id = 5)')
     microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
     # print microblogs
     return render_template('index.html', microblogs=microblogs, post_form=PostForm())

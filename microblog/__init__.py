@@ -16,7 +16,6 @@ from microblog.database import db, photos
 from microblog.models import People
 
 
-
 def create_app(config=None):
     app = Flask(__name__)
     app.config.from_object(config)
@@ -40,6 +39,7 @@ def configure_modules(app):
     app.register_module(views.account)
     app.register_module(views.mblog)
     app.register_module(views.friendship)
+    app.register_module(views.admin)
 
 
 def configure_theme(app):

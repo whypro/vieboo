@@ -1,0 +1,18 @@
+<table>
+    <tr>
+        <th>邮箱</th>
+        <th>昵称</th>
+        <th>手机</th>
+        <th>注册时间</th>
+        <th>注册 IP</th>
+    </tr>
+    {% for p in people %}
+    <tr>
+        <td>{{ p.email }}</td>
+        <td>{{ p.nickname }}</td>
+        <td>{{ p.mobile }}</td>
+        <td>{{ p.reg_time }}</td>
+        <td>{{ p.reg_ip }}</td>
+    </tr>
+    {% endfor %}
+</table>
