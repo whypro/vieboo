@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from microblog.database import db
+from microblog.extensions import db
 import datetime
 from microblog.models.account import People
 

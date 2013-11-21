@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import Module, url_for, redirect, flash, send_from_directory, current_app, abort
-from microblog.database import db
+from flask import Module, g, url_for, redirect, flash, send_from_directory, current_app, abort
+from microblog.extensions import db
 from microblog.models import People, Microblog
-from microblog.tools import render_template
+from microblog.helpers import render_template
 from microblog.forms import LoginForm, PostForm
 
 frontend = Module(__name__)
@@ -13,17 +13,13 @@ def favicon():
 
 @frontend.route('/')
 def index():
-    # TODO: 黑名单不显示
-    microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
+    if g.user.is_authenticated():
+        # 黑名单不显示
+        microblogs = Microblog.query.filter(~Microblog.people_id.in_([p.id for p in g.user.blocking])).order_by(Microblog.post_time.desc()).limit(10).all()
+    else:
+        microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
     # print microblogs
     return render_template('index.html', microblogs=microblogs, post_form=PostForm())
-
-
-@frontend.route('/install/')
-def install():
-    db.create_all()
-    flash(u'创建成功', 'success')
-    return redirect(url_for('index'))
 
 
 @frontend.route('/people/<int:id>/')
