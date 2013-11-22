@@ -12,7 +12,7 @@ from flask.ext.uploads import configure_uploads, patch_request_class
 from flask_wtf import CsrfProtect
 
 from microblog import views
-from microblog.database import db, photos
+from microblog.extensions import db, photos
 from microblog.models import People
 
 

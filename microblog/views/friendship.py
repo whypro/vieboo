@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from flask import Module, g, redirect, url_for, flash, abort
 from flask.ext.login import login_required
+from sqlalchemy import and_
 from microblog.forms import ChatForm, AddGroupForm, RenameGroupForm
 from microblog.models import People, Friendship, Chatting, Group, Blackship
-from microblog.database import db
-from microblog.tools import render_template
+from microblog.extensions import db
+from microblog.helpers import render_template
 
 
 friendship = Module(__name__, url_prefix='/friendship')
@@ -92,8 +93,9 @@ def show_followed(page):
 @login_required
 def show_mutual(page):
     """查看互相关注的人"""
-    # TODO:
-    pagination = g.user.following.order_by(Friendship.c.follow_time).paginate(page, per_page=10)
+    pagination = g.user.get_mutual().order_by(Friendship.c.follow_time).paginate(page, per_page=10)
+    # pagination = g.user.followed.filter(Friendship.c.to_id==g.user.id).\
+    #     order_by(Friendship.c.follow_time).paginate(page, per_page=10)
     mutual = pagination.items
     return render_template('friendship.html',
                            people=mutual,
@@ -116,6 +118,8 @@ def block(id):
             # 取消关注
             if g.user.is_following(id):
                 g.user.following.remove(people)
+            if people.is_following(g.user.id):
+                g.user.followed.remove(people)
             db.session.add(g.user)
             db.session.commit()
             flash(u'加入黑名单成功', 'success')
@@ -182,8 +186,10 @@ def show_inbox(page, flag=None):
     if flag in ('hasread', 'unread'):
         has_read = False if flag == 'unread' else True
         pagination = Chatting.query.filter_by(to_id=g.user.id, has_read=has_read).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
-    else:
+    elif not flag:
         pagination = Chatting.query.filter_by(to_id=g.user.id).order_by(Chatting.chat_time.desc()).paginate(page, per_page=10)
+    else:
+        abort(404)
     chattings = pagination.items
 
     return render_template('chatting-box.html',
@@ -193,7 +199,7 @@ def show_inbox(page, flag=None):
                            pagination=pagination)
 
 
-@friendship.route('/chat/<box>/<int:id>/')
+@friendship.route('/chat/detail/<box>/<int:id>/')
 @login_required
 def show_chatting_detail(box, id):
     if box not in ('inbox', 'outbox'):
@@ -260,17 +266,21 @@ def rename_group(id):
     return render_template('group.html', form=group_form)
 
 
-
+@friendship.route('/move/<int:pid>/group/default/')
 @friendship.route('/move/<int:pid>/group/<int:gid>/')
 @login_required
-def move_to_group(pid, gid):
-    return u'未完成'
+def move_to_group(pid, gid=None):
     #people = People.query.get(pid)
     #People.following.any(pid)
-    friendship = db.session.query(Friendship).filter(
-        (Friendship.c.from_id == g.user.id),
-        (Friendship.c.to_id == pid)).first()
-    friendship.c.group_id = gid
-    db.session.add(friendship)
-    db.session.commit()
-    return 'wer'
+    if g.user.is_following(pid):
+        if not gid or g.user.has_group(gid):
+            db.session.execute(
+                Friendship.update().
+                where(and_(Friendship.c.from_id == g.user.id, Friendship.c.to_id == pid)).
+                values(group_id=gid))
+            db.session.commit()
+        else:
+            flash(u'分组不存在', 'info')
+    else:
+        flash(u'没有关注此好友', 'info')
+    return redirect(url_for('friendship.show_following', gid=gid))

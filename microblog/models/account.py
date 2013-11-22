@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask.ext.sqlalchemy import BaseQuery
-from microblog.database import db
+from microblog.extensions import db
 import datetime
 import hashlib
 from microblog.models.friendship import Friendship, Blackship, Chatting
@@ -117,20 +117,27 @@ class People(db.Model):
 
     def is_following(self, id):
         people = self.following.filter(
-            (Friendship.c.from_id==self.id) &
-            (Friendship.c.to_id==id)
+            (Friendship.c.from_id == self.id) &
+            (Friendship.c.to_id == id)
         ).first()
         return True if people else False
 
     def is_blocking(self, id):
         people = self.blocking.filter(
-            (Blackship.c.from_id==self.id) &
-            (Blackship.c.to_id==id)
+            (Blackship.c.from_id == self.id) &
+            (Blackship.c.to_id == id)
         ).first()
         return True if people else False
 
+    def has_group(self, id):
+        group = self.groups.filter_by(id=id).first()
+        return True if group else False
+
     def __repr__(self):
         return self.email
+
+    def get_mutual(self):
+        return self.followed.filter(Friendship.c.to_id==self.id)
 
 
 class LoginLog(db.Model):

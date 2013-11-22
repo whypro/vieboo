@@ -17,7 +17,7 @@
             <ul class="nav nav-pills nav-stacked">
                 <li{%- if active_page == 'show_following' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_following') }}"><span class="badge pull-right">{{ g.user.following.count() }}</span>我关注的人</a></li>
                 <li{%- if active_page == 'show_followed' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_followed') }}"><span class="badge pull-right">{{ g.user.followed.count() }}</span>关注我的人</a></li>
-                <li{%- if active_page == 'show_mutual' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_mutual') }}"><span class="badge pull-right">N/A</span>互相关注</a></li>
+                <li{%- if active_page == 'show_mutual' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_mutual') }}"><span class="badge pull-right">{{ g.user.get_mutual().count() }}</span>互相关注</a></li>
                 <li{%- if active_page == 'show_blocking' %} class="active"{% endif -%}><a href="{{ url_for('friendship.show_blocking') }}"><span class="badge pull-right">{{ g.user.blocking.count() }}</span>黑名单</a></li>
             </ul>
         </div>
@@ -66,8 +66,13 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         {% for group in g.user.groups %}
+                                        {% if group.id != active_gid %}
                                         <li><a href="{{ url_for('friendship.move_to_group', pid=p.id, gid=group.id) }}">{{ group.name }}</a></li>
+                                        {% endif %}
                                         {% endfor %}
+                                        {% if active_gid %}
+                                        <li><a href="{{ url_for('friendship.move_to_group', pid=p.id) }}">默认分组</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                                 {% endif %}
@@ -77,12 +82,10 @@
                                 <a class="btn btn-default" href="{{ url_for('friendship.block', id=p.id) }}">加入黑名单</a>
                                 <a class="btn btn-default" href="{{ url_for('friendship.send_chatting', id=p.id) }}">私信</a>
                                 {% endif %}
-
-
                             </div>
-
                         </div>
                     </li>
+                    {% if not loop.last %}<hr class="invisible"/>{% endif %}
                     {% endfor %}
                 </ul>
                 {{ render_pagination(pagination, 'friendship.'~active_page ) }}
