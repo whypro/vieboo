@@ -3,12 +3,12 @@ import datetime
 from flask import Module, g, request, url_for, redirect, flash
 from flask.ext.login import login_user, login_required, logout_user
 from flask.ext.uploads import UploadSet
-from microblog.database import db, photos
+from microblog.extensions import db, photos
 from microblog.forms.account import ModifyProfileForm, AvatarForm
 from microblog.models import People, Microblog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, PostForm
 from microblog.models.account import LoginLog
-from microblog.tools import render_template
+from microblog.helpers import render_template
 
 account = Module(__name__, url_prefix='/account')
 

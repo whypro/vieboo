@@ -4,8 +4,8 @@ from flask.ext.login import login_required
 from sqlalchemy import and_
 from microblog.forms import ChatForm, AddGroupForm, RenameGroupForm
 from microblog.models import People, Friendship, Chatting, Group, Blackship
-from microblog.database import db
-from microblog.tools import render_template
+from microblog.extensions import db
+from microblog.helpers import render_template
 
 
 friendship = Module(__name__, url_prefix='/friendship')
@@ -93,8 +93,9 @@ def show_followed(page):
 @login_required
 def show_mutual(page):
     """查看互相关注的人"""
-    # TODO:
-    pagination = g.user.following.order_by(Friendship.c.follow_time).paginate(page, per_page=10)
+    pagination = g.user.get_mutual().order_by(Friendship.c.follow_time).paginate(page, per_page=10)
+    # pagination = g.user.followed.filter(Friendship.c.to_id==g.user.id).\
+    #     order_by(Friendship.c.follow_time).paginate(page, per_page=10)
     mutual = pagination.items
     return render_template('friendship.html',
                            people=mutual,

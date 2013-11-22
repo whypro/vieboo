@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
+
 from flask import Module, g, redirect, url_for, request, flash
-from flask.ext.login import login_user
-from microblog.database import db
-from microblog.forms import LoginForm
-from microblog.models import People, LoginLog, Microblog
+from microblog.extensions import db
+from microblog.models import People, Microblog
 from microblog.tools import render_template
-from microblog.views.account import get_client_ip
 
 admin = Module(__name__, url_prefix='/admin')
 
@@ -25,3 +23,10 @@ def show_people():
 def show_microblog():
     microblogs = Microblog.query.all()
     return render_template('admin/microblog.html', microblogs=microblogs)
+
+
+@admin.route('/install/')
+def install():
+    db.create_all()
+    flash(u'创建成功', 'success')
+    return redirect(url_for('index'))

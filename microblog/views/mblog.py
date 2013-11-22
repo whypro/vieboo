@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from flask import Module, g, url_for, redirect, flash, abort, request
 from flask.ext.login import login_required
-from microblog.database import db
+from microblog.extensions import db
 from microblog.models import Microblog, Comment
 from microblog.forms import PostForm, CommentForm, RepostForm
-from microblog.tools import render_template
+from microblog.helpers import render_template
 
 mblog = Module(__name__, url_prefix='/microblog')
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask.ext.sqlalchemy import BaseQuery
-from microblog.database import db
+from microblog.extensions import db
 import datetime
 import hashlib
 from microblog.models.friendship import Friendship, Blackship, Chatting
@@ -135,6 +135,9 @@ class People(db.Model):
 
     def __repr__(self):
         return self.email
+
+    def get_mutual(self):
+        return self.followed.filter(Friendship.c.to_id==self.id)
 
 
 class LoginLog(db.Model):

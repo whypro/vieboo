@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from microblog.database import db
+from microblog.extensions import db
 
 
 Friendship = db.Table(
