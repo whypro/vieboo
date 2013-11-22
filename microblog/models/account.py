@@ -137,12 +137,7 @@ class People(db.Model):
         return self.email
 
     def get_mutual(self):
-        f1 = Friendship.alias()
-        f2 = Friendship.alias()
-        people_id = db.session.query(f1.c.to_id).\
-            filter(f1.c.from_id==self.id).join(f2, f1.c.to_id==f2.c.from_id).\
-            filter(f1.c.from_id==f2.c.to_id)
-        return People.query.filter(People.id.in_(people_id))
+        return self.followed.filter(Friendship.c.to_id==self.id)
 
 
 class LoginLog(db.Model):
