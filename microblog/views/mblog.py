@@ -44,27 +44,32 @@ def delete(id):
 def comment(mid, cid=None):
     microblog = Microblog.query.get(mid)
 
+    # 如果是对评论的评论，则在表单中显示回复的目标（字符串）
+    # 并在提交时使用切片运算忽略该字符串
     if cid:
         parent_comment = Comment.query.get(cid)
         if not parent_comment:
             abort(404)
+        # 不能回复自己
+        if g.user.id == parent_comment.people.id:
+            flash(u'不能回复自己', 'warning')
+            return redirect(url_for('mblog.comment', mid=mid))
         content = u'回复 ' + parent_comment.people.nickname + ': '
     else:
         parent_comment = None
-        content = None
-
+        content = ''
     comment_form = CommentForm(content=content)
     if comment_form.validate_on_submit():
         comment = Comment(
             g.user.id,
-            comment_form.content.data,
+            comment_form.content.data[len(content):],
             mid,
             cid
         )
         db.session.add(comment)
         db.session.commit()
         flash(u'评论成功', 'success')
-        return redirect(url_for('frontend.index'))
+        return redirect(url_for('mblog.comment', mid=mid))
     return render_template('comment.html', form=comment_form, microblog=microblog, parent_comment=parent_comment)
 
 
@@ -72,6 +77,7 @@ def comment(mid, cid=None):
 @login_required
 def delete_comment(id):
     comment = Comment.query.get(id)
+    mid = comment.microblog_id
     if comment.people_id == g.user.id:
         db.session.delete(comment)
         db.session.commit()
@@ -80,7 +86,7 @@ def delete_comment(id):
     else:
         flash(u'删除失败', 'warning')
         # print u'删除失败'
-    return redirect(url_for('frontend.index'))
+    return redirect(url_for('mblog.comment', mid=mid))
 
 
 @mblog.route('/repost/<int:id>/', methods=['GET', 'POST'])

@@ -60,14 +60,20 @@ form: 评论框 Form，前置条件：show_comment_box=True
                     <div class="media-body col-lg-12">
                     {% endif %}
                         <div class="well well-lg">
-                            <p><small><a href="{{ url_for('frontend.people', id=comment.people.id) }}">{{ comment.people.nickname }}</a>：{{ comment.content }}</small>
-                            </p>
+                            <p><small>
+                                <a href="{{ url_for('frontend.people', id=comment.people.id) }}">{{ comment.people.nickname }}</a>
+                                {%- if comment.parent_comment %}
+                                回复 <a href="{{ url_for('frontend.people', id=comment.parent_comment.people.id) }}">{{ comment.parent_comment.people.nickname }}</a>
+                                {% endif -%}
+                                : {{ comment.content }}
+                            </small></p>
                             <div>
                                 <span class="text-muted pull-left"><small>{{ comment.comment_time }}</small></span>
                                 <span class="pull-right">
                                     <small>
+                                    {%- if g.user.id != comment.people.id %}
                                     <a href="{{ url_for('mblog.comment', mid=microblog.id, cid=comment.id) }}">回复</a>
-                                    {%- if g.user.id == comment.people.id %}
+                                    {% else %}
                                     &emsp;<a href="{{ url_for('mblog.delete_comment', id=comment.id) }}">删除</a>
                                     {% endif -%}
                                     </small>
