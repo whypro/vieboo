@@ -52,7 +52,12 @@ def configure_flasklogin(app):
 
     @login_manager.user_loader
     def load_user(_id):
-        return People.query.get(_id)
+        try:
+            people = People.query.get(_id)
+        except:
+            people = None
+        print people
+        return people
 
     @login_manager.unauthorized_handler
     def unauthorized():

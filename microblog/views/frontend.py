@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import Module, g, url_for, redirect, flash, send_from_directory, current_app, abort
-from microblog.extensions import db
 from microblog.models import People, Microblog
 from microblog.helpers import render_template
-from microblog.forms import LoginForm, PostForm
+from microblog.forms import PostForm
 
 frontend = Module(__name__)
 

@@ -1,0 +1,21 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+{% endwith %}
+<ul>
+    <li>
+        <a href="{{ url_for('admin.show_people') }}">用户管理</a>
+    </li>
+    <li>
+        <a href="{{ url_for('admin.show_microblog') }}">微博管理</a>
+    </li>
+    <li>
+        <a href="{{ url_for('admin.show_login_log') }}">登录管理</a>
+    </li>
+    <li>
+        <a href="{{ url_for('admin.install') }}">初始化数据库</a>
+    </li>
+</ul>

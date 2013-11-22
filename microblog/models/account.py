@@ -33,6 +33,7 @@ class People(db.Model):
     mobile = db.Column(db.String(20))
     reg_time = db.Column(db.DateTime, default=datetime.datetime.now)
     reg_ip = db.Column(db.String(20))
+    status = db.Column(db.String(10), default='active')
     avatar = db.Column(db.String(255))
 
     microblogs = db.relationship('Microblog', backref='people', lazy='dynamic', order_by='Microblog.post_time.desc()')
@@ -55,7 +56,12 @@ class People(db.Model):
         lazy='dynamic'
     )
 
-    groups = db.relationship('Group', backref='people', lazy='dynamic', passive_deletes=True)
+    groups = db.relationship(
+        'Group',
+        backref='people',
+        lazy='dynamic',
+        passive_deletes=True
+    )
 
     sent_chattings = db.relationship(
         'Chatting', backref='from_people',
@@ -66,6 +72,13 @@ class People(db.Model):
         backref='to_people',
         primaryjoin=id==Chatting.to_id,
         lazy='dynamic')
+
+    login_logs = db.relationship(
+        'LoginLog',
+        backref='people',
+        lazy='dynamic',
+        passive_deletes=True,
+    )
 
     def __init__(self, email, password,
                  nickname=None, mobile=None,
@@ -143,7 +156,11 @@ class People(db.Model):
 class LoginLog(db.Model):
     __tablename__ = 'login_log'
     id = db.Column(db.Integer, primary_key=True)
-    people_id = db.Column(db.Integer, nullable=True)
+    people_id = db.Column(
+        db.Integer,
+        db.ForeignKey(People.id, ondelete='CASCADE'),
+        nullable=True
+    )
     login_time = db.Column(db.DateTime, default=datetime.datetime.now)
     login_ip = db.Column(db.String(20))
 

@@ -1,3 +1,10 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+{% endwith %}
 <table>
     <tr>
         <th>邮箱</th>
@@ -5,6 +12,7 @@
         <th>手机</th>
         <th>注册时间</th>
         <th>注册 IP</th>
+        <th><th>
     </tr>
     {% for p in people %}
     <tr>
@@ -13,6 +21,14 @@
         <td>{{ p.mobile }}</td>
         <td>{{ p.reg_time }}</td>
         <td>{{ p.reg_ip }}</td>
+        <td>
+            {% if p.status == 'active' %}
+            <a href="{{ url_for('admin.block_people', id=p.id) }}">禁言</a>
+            {% elif p.status == 'blocked' %}
+            <a href="{{ url_for('admin.unblock_people', id=p.id) }}">取消禁言</a>
+            {% endif %}
+            <a href="{{ url_for('admin.delete_people', id=p.id) }}">删除</a>
+        </td>
     </tr>
     {% endfor %}
 </table>

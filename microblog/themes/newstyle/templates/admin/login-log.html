@@ -1,0 +1,23 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+{% endwith %}
+<table>
+    <tr>
+        <th>登录记录 ID</th>
+        <th>登录者</th>
+        <th>登录时间</th>
+        <th>登录 IP</th>
+    </tr>
+    {% for login_log in login_logs %}
+    <tr>
+        <td>{{ login_log.id }}</td>
+        <td>{{ login_log.people.nickname }}</td>
+        <td>{{ login_log.login_time }}</td>
+        <td>{{ login_log.login_ip }}</td>
+    </tr>
+    {% endfor %}
+</table>
