@@ -36,7 +36,12 @@ class People(db.Model):
     avatar = db.Column(db.String(255))
 
     microblogs = db.relationship('Microblog', backref='people', lazy='dynamic', order_by='Microblog.post_time.desc()')
-    comments = db.relationship('Comment', backref='people', lazy='dynamic', order_by='Comment.comment_time')
+    comments = db.relationship(
+        'Comment',
+        backref='people',
+        lazy='dynamic',
+        order_by='Comment.comment_time'
+    )
 
     following = db.relationship(
         'People',
