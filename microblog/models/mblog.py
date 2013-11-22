@@ -52,6 +52,12 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     comment_time = db.Column(db.DateTime, default=datetime.datetime.now)
 
+    child_comments = db.relationship(
+        'Comment',
+        backref=db.backref('parent_comment', remote_side=id),
+        lazy='dynamic',
+    )
+
     def __init__(self, people_id, content, microblog_id, parent_commnet_id=None):
         self.people_id = people_id
         self.content = content
