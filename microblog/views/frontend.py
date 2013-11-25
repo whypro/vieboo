@@ -13,12 +13,21 @@ def favicon():
 @frontend.route('/')
 def index():
     if g.user.is_authenticated():
-        # 黑名单不显示
-        microblogs = Microblog.query.filter(~Microblog.people_id.in_([p.id for p in g.user.blocking])).order_by(Microblog.post_time.desc()).limit(10).all()
+        # 只显示关注的人
+        microblogs = Microblog.query.\
+            filter(Microblog.people_id.in_([p.id for p in g.user.following]+[g.user.id])).\
+            order_by(Microblog.post_time.desc()).limit(10).all()
     else:
         microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
     # print microblogs
     return render_template('index.html', microblogs=microblogs, post_form=PostForm())
+
+
+@frontend.route('/square/')
+def square():
+    microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
+    # print microblogs
+    return render_template('square.html', microblogs=microblogs, post_form=PostForm())
 
 
 @frontend.route('/people/<int:id>/')
