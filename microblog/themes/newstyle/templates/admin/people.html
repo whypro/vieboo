@@ -15,6 +15,7 @@
         <th><th>
     </tr>
     {% for p in people %}
+    {% if p.status != 'deleted' %}
     <tr>
         <td>{{ p.email }}</td>
         <td>{{ p.nickname }}</td>
@@ -30,5 +31,6 @@
             <a href="{{ url_for('admin.delete_people', id=p.id) }}">删除</a>
         </td>
     </tr>
+    {% endif %}
     {% endfor %}
 </table>

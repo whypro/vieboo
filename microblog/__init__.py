@@ -56,7 +56,6 @@ def configure_flasklogin(app):
             people = People.query.get(_id)
         except:
             people = None
-        print people
         return people
 
     @login_manager.unauthorized_handler

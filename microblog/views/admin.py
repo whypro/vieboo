@@ -21,7 +21,7 @@ def show_people():
 
 @admin.route('/people/block/<int:id>/')
 def block_people(id):
-    people = People.query.get(id)
+    people = People.query.get_or_404(id)
     people.status = 'blocked'
     db.session.add(people)
     db.session.commit()
@@ -31,7 +31,7 @@ def block_people(id):
 
 @admin.route('/people/unblock/<int:id>/')
 def unblock_people(id):
-    people = People.query.get(id)
+    people = People.query.get_or_404(id)
     people.status = 'active'
     db.session.add(people)
     db.session.commit()
@@ -41,7 +41,7 @@ def unblock_people(id):
 
 @admin.route('/people/delete/<int:id>/')
 def delete_people(id):
-    people = People.query.get(id)
+    people = People.query.get_or_404(id)
     people.status = 'deleted'
     db.session.add(people)
     db.session.commit()
@@ -57,7 +57,7 @@ def show_microblog():
 
 @admin.route('/microblog/delete/<int:id>/')
 def delete_microblog(id):
-    microblog = Microblog.query.get(id)
+    microblog = Microblog.query.get_or_404(id)
     db.session.delete(microblog)
     db.session.commit()
     flash(u'微博已删除', 'success')

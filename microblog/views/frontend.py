@@ -23,7 +23,7 @@ def index():
 
 @frontend.route('/people/<int:id>/')
 def people(id):
-    people = People.query.get(id)
+    people = People.query.get_or_404(id)
     return render_template('people.html', people=people)
 
 
