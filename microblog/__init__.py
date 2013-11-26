@@ -10,6 +10,7 @@ from flask.ext.login import LoginManager, current_user
 from flask.ext.themes import setup_themes
 from flask.ext.uploads import configure_uploads, patch_request_class
 from flask_wtf import CsrfProtect
+from flask.ext.principal import Principal, identity_loaded, RoleNeed, UserNeed, identity_changed
 
 from microblog import views
 from microblog.extensions import db, photos
@@ -30,6 +31,7 @@ def create_app(config=None):
     patch_request_class(app)    # 16M limit
 
     CsrfProtect(app)
+    configure_identity(app)
 
     return app
 
@@ -76,7 +78,28 @@ def config_error_handlers(app):
         flash(u'页面未找到', 'danger')
         return redirect(url_for('frontend.index'))
 
+    @app.errorhandler(401)
+    def unauthorized(e):
+        flash(u'未经授权', 'danger')
+        return redirect(url_for('frontend.index'))
+
     @app.errorhandler(500)
     def page_not_found(e):
         flash(u'服务器开小差了', 'danger')
         return redirect(url_for('frontend.index'))
+
+
+def configure_identity(app):
+    principal = Principal(app)
+
+    @identity_loaded.connect_via(app)
+    # @identity_changed.connect_via(app)
+    def on_identity_loaded(sender, identity):
+        print 'received from', str(sender)
+        identity.user = g.user
+        if hasattr(g.user, 'id'):
+            identity.provides.add(UserNeed(g.user.id))
+        if hasattr(g.user, 'roles'):
+            for role in g.user.roles:
+                print role.name
+                identity.provides.add(RoleNeed(role.name))

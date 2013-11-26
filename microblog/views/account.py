@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import datetime
-from flask import Module, g, request, url_for, redirect, flash
+from flask import Module, g, request, url_for, redirect, flash, current_app, session
 from flask.ext.login import login_user, login_required, logout_user
+from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 from microblog.extensions import db, photos
 from microblog.models import People, LoginLog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, ModifyProfileForm, AvatarForm
@@ -61,16 +62,35 @@ def login():
 
         if people:
             login_user(people, remember=login_form.remember.data)
+            # Flask-Principal 发送信号
+            identity_changed.send(current_app._get_current_object(), identity=Identity(people.id))
+            print 'sent by login'
             ip = get_client_ip(request)
             login_log = LoginLog(people.id, ip)
             db.session.add(login_log)
             db.session.commit()
+
             flash(u'登录成功', 'success')
             return redirect(url_for('frontend.index'))
         else:
             flash(u'登录失败', 'warning')
 
     return render_template('login.html', form=login_form)
+
+
+# 注销
+@account.route('/logout/')
+@login_required
+def logout():
+    logout_user()
+    # Remove session keys set by Flask-Principal
+    for key in ('identity.name', 'identity.auth_type'):
+        session.pop(key, None)
+    # Tell Flask-Principal the user is anonymous
+    identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
+    print 'sent by logout'
+    flash(u'已注销', 'success')
+    return redirect(url_for('frontend.index'))
 
 
 # 修改密码
@@ -93,15 +113,6 @@ def password():
         else:
             flash(u'原密码不正确', 'warning')
     return render_template('password.html', form=change_password_form, title=u'修改密码')
-
-
-# 注销
-@account.route('/logout/')
-@login_required
-def logout():
-    logout_user()
-    flash(u'已注销', 'success')
-    return redirect(url_for('frontend.index'))
 
 
 # 显示与修改个人资料

@@ -85,6 +85,8 @@ class People(db.Model):
         passive_deletes=True,
     )
 
+    roles = db.relationship('Role', secondary='people_roles')
+
     def __init__(self, email, password,
                  nickname=None, mobile=None,
                  reg_time=None, reg_ip=None):
@@ -172,3 +174,16 @@ class LoginLog(db.Model):
     def __init__(self, people_id, login_ip):
         self.people_id = people_id
         self.login_ip = login_ip
+
+
+class Role(db.Model):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(10))
+
+
+people_roles = db.Table(
+    'people_roles',
+    db.Column('people_id', db.Integer, db.ForeignKey('people.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'), primary_key=True),
+)

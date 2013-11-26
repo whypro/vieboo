@@ -10,6 +10,7 @@ frontend = Module(__name__)
 def favicon():
     return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+
 @frontend.route('/')
 def index():
     if g.user.is_authenticated():

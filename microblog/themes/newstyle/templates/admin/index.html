@@ -1,10 +1,7 @@
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <p>{{ message }}</p>
-    {% endfor %}
-    {% endif %}
-{% endwith %}
+{% extends theme('admin/layout.html') %}
+{% set active = 'index' %}
+{% block title %}首页{% endblock %}
+{% block content %}
 <ul>
     <li>
         <a href="{{ url_for('admin.show_people') }}">用户管理</a>
@@ -19,3 +16,5 @@
         <a href="{{ url_for('admin.install') }}">初始化数据库</a>
     </li>
 </ul>
+
+{% endblock %}

@@ -4,11 +4,13 @@ from flask import Module, g, redirect, url_for, request, flash
 from microblog.extensions import db
 from microblog.models import People, Microblog, LoginLog
 from microblog.helpers import render_template
+from microblog.permission import admin as admin_permission
 
 admin = Module(__name__, url_prefix='/admin')
 
 
 @admin.route('/')
+@admin_permission.require(401)
 def index():
     return render_template('admin/index.html')
 
