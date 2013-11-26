@@ -142,3 +142,30 @@ form: 评论框 Form，前置条件：show_comment_box=True
 {% endmacro %}
 
 
+{% macro render_table(headers, rows) %}
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr>
+            {% for header in headers %}
+            <th>{{ header }}</th>
+            {% endfor %}
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            {% for a in row.items() %}
+            <td>{{ a }}</td>
+            {% endfor %}
+            <td>
+                <a class="btn btn-primary btn-xs">查看</a> |
+                <a class="btn btn-primary btn-xs">禁言</a> |
+                <a class="btn btn-info btn-xs">删除</a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}
