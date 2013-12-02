@@ -1,19 +1,19 @@
 {% extends theme('admin/layout.html') %}
-{% set active = 'people' %}
+{% set active = 'index' %}
 {% block title %}用户管理{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
             <ul class="nav nav-pills nav-stacked">
-
-                <li class="active"><a href="">用户管理</a></li>
-                <li><a>微博管理</a></li>
-                <li><a>登陆管理</a></li>
+                <li class="active"><a href="{{ url_for('admin.show_people') }}">用户管理</a></li>
+                <li><a href="{{ url_for('admin.show_microblog') }}">微博管理</a></li>
+                <li><a href="{{ url_for('admin.show_login_log') }}">登陆管理</a></li>
+                <li><a href="{{ url_for('admin.show_visit_log') }}">访问管理</a></li>
             </ul>
         </div>
         <div class="col-lg-9">
-            {% set headers = ('用户名', '邮箱', '手机', '注册时间', '注册 IP', ' ') %}
+            {% set headers = ('ID', '用户名', '邮箱', '手机', '注册时间', '注册 IP', ' ') %}
 
             <table class="table table-hover table-responsive">
                 <thead>
@@ -26,7 +26,8 @@
                 </thead>
                 <tbody>
                     {% for p in people %}
-                    <tr>
+                    <tr id="{{ p.id }}">
+                        <td>{{ p.id }}</td>
                         <td>{{ p.email }}</td>
                         <td>{{ p.nickname }}</td>
                         <td>{{ p.mobile }}</td>
@@ -49,15 +50,5 @@
     </div>
 </div>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
 
 
