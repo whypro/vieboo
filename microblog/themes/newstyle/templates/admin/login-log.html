@@ -1,23 +1,41 @@
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <p>{{ message }}</p>
-    {% endfor %}
-    {% endif %}
-{% endwith %}
-<table>
-    <tr>
-        <th>登录记录 ID</th>
-        <th>登录者</th>
-        <th>登录时间</th>
-        <th>登录 IP</th>
-    </tr>
-    {% for login_log in login_logs %}
-    <tr>
-        <td>{{ login_log.id }}</td>
-        <td>{{ login_log.people.nickname }}</td>
-        <td>{{ login_log.login_time }}</td>
-        <td>{{ login_log.login_ip }}</td>
-    </tr>
-    {% endfor %}
-</table>
+{% extends theme('admin/layout.html') %}
+{% set active = 'index' %}
+{% block title %}登陆管理{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ url_for('admin.show_people') }}">用户管理</a></li>
+                <li><a href="{{ url_for('admin.show_microblog') }}">微博管理</a></li>
+                <li class="active"><a href="{{ url_for('admin.show_login_log') }}">登陆管理</a></li>
+                <li><a href="{{ url_for('admin.show_visit_log') }}">访问管理</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <table class="table table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>登录时间</th>
+                        <th>登录 IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for login_log in login_logs %}
+                    <tr id="{{ login_log.id }}">
+                        <td>{{ login_log.id }}</td>
+                        <td>{{ login_log.people.nickname }}</td>
+                        <td>{{ login_log.login_time }}</td>
+                        <td>{{ login_log.login_ip }}</td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

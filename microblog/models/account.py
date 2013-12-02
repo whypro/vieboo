@@ -114,6 +114,12 @@ class People(db.Model):
         return unicode(self.id)
     # flask.ext.login
 
+    def is_admin(self):
+        for role in self.roles:
+            if 'admin' in role:
+                return True
+        return False
+
     def get_nickname(self):
         return self.nickname
 

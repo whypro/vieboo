@@ -6,7 +6,7 @@ from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 from microblog.extensions import db, photos
 from microblog.models import People, LoginLog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, ModifyProfileForm, AvatarForm
-from microblog.helpers import render_template
+from microblog.helpers import render_template, get_client_ip
 
 account = Module(__name__, url_prefix='/account')
 
@@ -20,7 +20,7 @@ def register():
 
     register_form = RegisterForm()
     if register_form.validate_on_submit():
-        ip = get_client_ip(request)
+        ip = get_client_ip()
         people = People(
             email=register_form.email.data,
             password=register_form.password.data,
@@ -36,15 +36,6 @@ def register():
         flash(u'注册成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('register.html', register_form=register_form)
-
-
-def get_client_ip(request):
-    # 获取 ip 地址
-    if 'x-forwarded-for' in request.headers:
-        ip = request.headers['x-forwarded-for'].split(', ')[0]
-    else:
-        ip = request.remote_addr
-    return ip
 
 
 @account.route('/login/', methods=['GET', 'POST'])
@@ -65,7 +56,7 @@ def login():
             # Flask-Principal 发送信号
             identity_changed.send(current_app._get_current_object(), identity=Identity(people.id))
             print 'sent by login'
-            ip = get_client_ip(request)
+            ip = get_client_ip()
             login_log = LoginLog(people.id, ip)
             db.session.add(login_log)
             db.session.commit()

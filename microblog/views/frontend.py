@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, url_for, redirect, flash, send_from_directory, current_app, abort
+from flask import Module, g, url_for, redirect, flash, send_from_directory, current_app, abort, request
 from microblog.models import People, Microblog
 from microblog.helpers import render_template
 from microblog.forms import PostForm

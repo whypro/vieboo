@@ -38,6 +38,9 @@
                     <li><a href="{{ url_for('friendship.show_blocking') }}">黑名单</a></li>
                 </ul>
             </li>
+            {% if g.user.is_admin %}
+            <li><a href="{{ url_for('admin.index') }}">管理中心</a></li>
+            {% endif %}
             {% endif %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
