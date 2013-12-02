@@ -3,8 +3,6 @@ import os
 import sys
 # 将依赖模块文件夹加入系统路径
 import datetime
-from microblog.helpers import get_client_ip
-
 deps_path = os.path.join(os.path.split(os.path.realpath(__file__))[0],'deps')
 sys.path.insert(0, deps_path)
 
@@ -18,6 +16,7 @@ from flask.ext.principal import Principal, identity_loaded, RoleNeed, UserNeed, 
 from microblog import views
 from microblog.extensions import db, photos
 from microblog.models import People, VisitLog
+from microblog.helpers import get_client_ip
 
 
 def create_app(config=None):

@@ -40,7 +40,7 @@
                         <td>{{ visit_log.version }}</td>
                         <td>{{ visit_log.client_ip }}</td>
                         <td>{{ visit_log.visit_time }}</td>
-                        <td>{{ visit_log.people.nickname }}</td>
+                        <td>{{ visit_log.people.nickname if visit_log.people_id else 'N/A'}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

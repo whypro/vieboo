@@ -58,39 +58,3 @@
 </div>
 {% endblock %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table>
-    <tr>
-        <th>微博 ID</th>
-        <th>发布人</th>
-        <th style="width: 50%;">内容</th>
-        <th>发布时间</th>
-        <th>父微博 ID</th>
-        <tn></th>
-    </tr>
-    {% for microblog in microblogs %}
-    <tr>
-        <td>{{ microblog.id }}</td>
-        <td>{{ microblog.people.nickname }}</td>
-        <td>{{ microblog.content }}</td>
-        <td>{{ microblog.post_time }}</td>
-        <td>{{ microblog.parent_microblog_id }}</td>
-        <td>
-            <a href="{{ url_for('delete_microblog', id=microblog.id) }}">删除</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>

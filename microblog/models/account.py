@@ -7,6 +7,7 @@ from microblog.models.friendship import Friendship, Blackship, Chatting
 
 
 class PeopleQuery(BaseQuery):
+
     def authenticate(self, login, password):
         _password = hashlib.md5(password).hexdigest()
         people = People.query.filter(
@@ -240,7 +241,7 @@ class PeopleInfo(db.Model):
     people = db.relationship('People', backref=db.backref('info', uselist=False), uselist=False)
 
     def __init__(self, id, fullname, gender, sexual_orientation, birthday,
-                 blood_type, profession, school, homepage, hometown, location,
+                 blood_type, profession, education, school, homepage, hometown, location,
                  address, zip_code, qq, introduction):
         self.id = id
         self.fullname = fullname
@@ -249,6 +250,7 @@ class PeopleInfo(db.Model):
         self.birthday = birthday
         self.blood_type = blood_type
         self.profession = profession
+        self.education = education
         self.school = school
         self.homepage = homepage
         self.hometown = hometown
@@ -259,7 +261,7 @@ class PeopleInfo(db.Model):
         self.introduction = introduction
 
     def change_info(self, fullname, gender, sexual_orientation, birthday,
-                    blood_type, profession, school, homepage, hometown, location,
+                    blood_type, profession, education, school, homepage, hometown, location,
                     address, zip_code, qq, introduction):
         self.fullname = fullname
         self.gender = gender
@@ -267,6 +269,7 @@ class PeopleInfo(db.Model):
         self.birthday = birthday
         self.blood_type = blood_type
         self.profession = profession
+        self.education = education
         self.school = school
         self.homepage = homepage
         self.hometown = hometown
