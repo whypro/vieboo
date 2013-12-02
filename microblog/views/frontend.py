@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, url_for, redirect, flash, send_from_directory, current_app, abort, request
+from flask import Module, g, url_for, redirect, send_from_directory, current_app, abort
 from microblog.models import People, Microblog
 from microblog.helpers import render_template
 from microblog.forms import PostForm
@@ -8,7 +8,11 @@ frontend = Module(__name__)
 
 @frontend.route('/favicon.ico')
 def favicon():
-    return send_from_directory('static', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(
+        'static',
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon'
+    )
 
 
 @frontend.route('/')

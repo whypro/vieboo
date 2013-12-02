@@ -1,0 +1,178 @@
+{% extends theme('layout.html') %}
+{% set active = 'profile' %}
+{% block title %}个人资料 | {{ title }}{% endblock %}
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            {{ img_avatar(g.user) }}
+            <hr />
+            <div class="divider"></div>
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ url_for('account.profile') }}">基本资料</a></li>
+                <li class="active"><a href="{{ url_for('account.profile_detail') }}">详细资料</a></li>
+                <li><a href="{{ url_for('account.password') }}">修改密码</a></li>
+                <li><a href="{{ url_for('account.avatar') }}">修改头像</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <form class="form-horizontal" role="form" action="" method="POST">
+                <div class="form-group">
+                    {{ form.fullname.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.fullname(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.fullname.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.gender.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {% for subfield in form.gender %}
+                        <label class="radio-inline">
+                            {{ subfield }}
+                            {{ subfield.data }}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.gender.errors) }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.sexual_orientation.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.sexual_orientation(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.sexual_orientation.errors) }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.birthday.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.birthday(class_="form-control", type="date") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.birthday.errors) }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.blood_type.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.blood_type(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.blood_type.errors) }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.profession.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.profession(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.profession.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.education.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.education(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.education.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.school.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.school(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.school.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.homepage.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.homepage(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.homepage.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.hometown.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.hometown(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.hometown.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.location.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.location(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.location.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.address.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.address(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.address.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.zip_code.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.zip_code(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.zip_code.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.qq.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.qq(class_="form-control") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.qq.errors) }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form.introduction.label(class_="col-lg-2 control-label") }}
+                    <div class="col-lg-6">
+                        {{ form.introduction(class_="form-control", rows="6") }}
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="text-danger">{{ ', '.join(form.introduction.errors) }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-6">
+                        {{ form.submit(class_="btn btn-primary") }}
+                    </div>
+                </div>
+                {{ form.hidden_tag() }}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

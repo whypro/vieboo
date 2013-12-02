@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Module, g, redirect, url_for, request, flash
+from flask import Module, redirect, url_for, flash
 from flask.ext.login import login_required
 from microblog.extensions import db
 from microblog.models import People, Microblog, LoginLog, VisitLog
@@ -17,12 +17,18 @@ def index():
     return render_template('admin/index.html')
 
 
-@admin.route('/people/')
+@admin.route('/people/', defaults={'page': 1})
+@admin.route('/people/page/<int:page>/')
 @login_required
 @admin_permission.require(401)
-def show_people():
-    people = People.query.all()
-    return render_template('admin/people.html', people=people)
+def show_people(page):
+    pagination = People.query.paginate(page, per_page=50)
+    people = pagination.items
+    return render_template(
+        'admin/people.html',
+        people=people,
+        pagination=pagination
+    )
 
 
 @admin.route('/people/block/<int:id>/')
@@ -61,12 +67,19 @@ def delete_people(id):
     return redirect(url_for('show_people'))
 
 
-@admin.route('/microblog/')
+@admin.route('/microblog/', defaults={'page': 1})
+@admin.route('/microblog/page/<int:page>/')
 @login_required
 @admin_permission.require(401)
-def show_microblog():
-    microblogs = Microblog.query.all()
-    return render_template('admin/microblog.html', microblogs=microblogs)
+def show_microblog(page):
+    pagination = Microblog.query.order_by(Microblog.post_time.desc()).\
+        paginate(page, per_page=50)
+    microblogs = pagination.items
+    return render_template(
+        'admin/microblog.html',
+        microblogs=microblogs,
+        pagination=pagination
+    )
 
 
 @admin.route('/microblog/delete/<int:id>/')
@@ -80,20 +93,34 @@ def delete_microblog(id):
     return redirect(url_for('show_microblog'))
 
 
-@admin.route('/login-log/')
+@admin.route('/login-log/', defaults={'page': 1})
+@admin.route('/login-log/page/<int:page>/')
 @login_required
 @admin_permission.require(401)
-def show_login_log():
-    login_logs = LoginLog.query.all()
-    return render_template('admin/login-log.html', login_logs=login_logs)
+def show_login_log(page):
+    pagination = LoginLog.query.order_by(LoginLog.login_time.desc()).\
+        paginate(page, per_page=50)
+    login_logs = pagination.items
+    return render_template(
+        'admin/login-log.html',
+        login_logs=login_logs,
+        pagination=pagination
+    )
 
 
-@admin.route('/visit-log/')
+@admin.route('/visit-log/', defaults={'page': 1})
+@admin.route('/visit-log/page/<int:page>/')
 @login_required
 @admin_permission.require(401)
-def show_visit_log():
-    visit_logs = VisitLog.query.all()
-    return render_template('admin/visit-log.html', visit_logs=visit_logs)
+def show_visit_log(page):
+    pagination = VisitLog.query.order_by(VisitLog.visit_time.desc()).\
+        paginate(page, per_page=50)
+    visit_logs = pagination.items
+    return render_template(
+        'admin/visit-log.html',
+        visit_logs=visit_logs,
+        pagination=pagination
+    )
 
 
 @admin.route('/install/')

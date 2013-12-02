@@ -4,9 +4,11 @@ from flask import Module, g, request, url_for, redirect, flash, current_app, ses
 from flask.ext.login import login_user, login_required, logout_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 from microblog.extensions import db, photos
+from microblog.forms.account import ModifyProfileDetailForm
 from microblog.models import People, LoginLog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, ModifyProfileForm, AvatarForm
 from microblog.helpers import render_template, get_client_ip
+from microblog.models.account import PeopleInfo
 
 account = Module(__name__, url_prefix='/account')
 
@@ -130,6 +132,55 @@ def profile():
     return render_template('profile.html', form=profile_form, title=u'修改资料')
 
 
+# 显示与修改详细资料
+@account.route('/profile/detail/', methods=['GET', 'POST'])
+@login_required
+def profile_detail():
+    people_info = PeopleInfo.query.get(g.user.id)
+    profile_detail_form = ModifyProfileDetailForm(obj=people_info)
+    if profile_detail_form.validate_on_submit():
+        if people_info:
+            people_info.change_info(
+                fullname=profile_detail_form.fullname.data,
+                gender=profile_detail_form.gender.data,
+                sexual_orientation=profile_detail_form.sexual_orientation.data,
+                birthday=profile_detail_form.birthday.data,
+                blood_type=profile_detail_form.blood_type.data,
+                profession=profile_detail_form.profession.data,
+                school=profile_detail_form.school.data,
+                homepage=profile_detail_form.homepage.data,
+                hometown=profile_detail_form.hometown.data,
+                location=profile_detail_form.location.data,
+                address=profile_detail_form.address.data,
+                zip_code=profile_detail_form.zip_code.data,
+                qq=profile_detail_form.qq.data,
+                introduction=profile_detail_form.introduction.data
+            )
+        else:
+            people_info = PeopleInfo(
+                id=g.user.id,
+                fullname=profile_detail_form.fullname.data,
+                gender=profile_detail_form.gender.data,
+                sexual_orientation=profile_detail_form.sexual_orientation.data,
+                birthday=profile_detail_form.birthday.data,
+                blood_type=profile_detail_form.blood_type.data,
+                profession=profile_detail_form.profession.data,
+                school=profile_detail_form.school.data,
+                homepage=profile_detail_form.homepage.data,
+                hometown=profile_detail_form.hometown.data,
+                location=profile_detail_form.location.data,
+                address=profile_detail_form.address.data,
+                zip_code=profile_detail_form.zip_code.data,
+                qq=profile_detail_form.qq.data,
+                introduction=profile_detail_form.introduction.data
+            )
+        db.session.add(people_info)
+        db.session.commit()
+        flash(u'详细资料修改成功', 'success')
+        return redirect(url_for('account.profile_detail'))
+    return render_template('profile-detail.html', form=profile_detail_form, title=u'详细资料')
+
+
 @account.route('/avatar/', methods=['GET', 'POST'])
 @login_required
 def avatar():
@@ -143,7 +194,9 @@ def avatar():
             avatar_filename = photos.save(avatar_data)
             print avatar_filename
             url = photos.url(avatar_filename)
-            print url
+            # print url
+            # old_avatar = photos.url(people.avatar)
+            # os.remove(old_avatar)   # 删除旧头像
             people.change_avatar(avatar_filename)
             db.session.add(people)
             db.session.commit()

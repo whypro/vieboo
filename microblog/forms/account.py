@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from flask import g
 from flask_wtf import Form
-from wtforms import TextField, PasswordField, BooleanField, HiddenField, SubmitField, FileField
+from wtforms import TextField, PasswordField, BooleanField, HiddenField, SubmitField, FileField, RadioField, DateField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, EqualTo, Email
 from microblog.models import People
+
+from microblog.models.account import gender_enum, sexual_orientation_enum, blood_type_enum, profession_enum, education_enum
 
 
 class LoginForm(Form):
@@ -88,6 +89,32 @@ class ModifyProfileForm(Form):
     # def validate_email(self, field):
     #    if g.user.get_email() != field.data:
     #        raise ValidationError(u'邮箱不能修改')
+
+
+class ModifyProfileDetailForm(Form):
+
+    _gender_choices = [(item, item) for item in gender_enum]
+    _sexual_orientation_choices = [(item, item) for item in sexual_orientation_enum]
+    _blood_type_choices = [(item, item) for item in blood_type_enum]
+    _profession_choices = [(item, item) for item in profession_enum]
+    _education_choices = [(item, item) for item in education_enum]
+
+    fullname = TextField(u'姓名')
+    gender = RadioField(u'性别', choices=_gender_choices)
+    sexual_orientation = SelectField(u'性取向', choices=_sexual_orientation_choices)
+    birthday = DateField(u'生日')
+    blood_type = SelectField(u'血型', choices=_blood_type_choices)    # 血型
+    profession = SelectField(u'职业', choices=_profession_choices)
+    education = SelectField(u'学历', choices=_education_choices)
+    school = TextField(u'毕业院校')
+    homepage = TextField(u'个人网站')
+    hometown = TextField(u'故乡')
+    location = TextField(u'所在地')
+    address = TextField(u'地址')
+    zip_code = TextField(u'邮编')
+    qq = TextField('QQ')
+    introduction = TextAreaField(u'个人简介')
+    submit = SubmitField(u'修改')
 
 
 class AvatarForm(Form):

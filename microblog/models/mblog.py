@@ -20,6 +20,11 @@ class Microblog(db.Model):
         'Comment', backref='microblog', lazy='dynamic',
         passive_deletes=True)
 
+    reposts = db.relationship(
+        'Microblog', backref=db.backref('parent_microblog', remote_side=id),
+        lazy='dynamic'
+    )
+
     def __init__(self, people_id, content, parent_microblog_id=None):
         self.people_id = people_id
 

@@ -40,11 +40,12 @@
                         <td>{{ visit_log.version }}</td>
                         <td>{{ visit_log.client_ip }}</td>
                         <td>{{ visit_log.visit_time }}</td>
-                        <td>{{ visit_log.people_id }}</td>
+                        <td>{{ visit_log.people.nickname }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            {{ render_pagination(pagination, 'admin.show_visit_log' ) }}
         </div>
     </div>
 </div>

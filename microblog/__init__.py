@@ -74,25 +74,28 @@ def config_before_request(app):
     def before_request():
         g.user = current_user
 
-        url = request.url
-        # TODO: 需要过滤 URL
-        method = request.method
-        user_agent = request.user_agent
-        referrer = request.referrer
-        platform = user_agent.platform
-        browser = user_agent.browser
-        version = user_agent.version
-        client_ip = get_client_ip()
-        visit_time = datetime.datetime.now()
-        people_id = getattr(g.user, 'id', None)
+        if g.user.is_authenticated() and g.user.is_admin():
+            # TODO: 管理员不记录行为，？
+            pass
+        else:
+            url = request.url
+            method = request.method
+            user_agent = request.user_agent
+            referrer = request.referrer
+            platform = user_agent.platform
+            browser = user_agent.browser
+            version = user_agent.version
+            client_ip = get_client_ip()
+            visit_time = datetime.datetime.now()
+            people_id = getattr(g.user, 'id', None)
 
-        visit_log = VisitLog(
-            url, method, referrer,
-            platform, browser, version,
-            client_ip, visit_time, people_id)
+            visit_log = VisitLog(
+                url, method, referrer,
+                platform, browser, version,
+                client_ip, visit_time, people_id)
 
-        db.session.add(visit_log)
-        db.session.commit()
+            db.session.add(visit_log)
+            db.session.commit()
 
 
 def config_error_handlers(app):

@@ -35,7 +35,7 @@
                         <td>{{ microblog.content }}</td>
                         <td>{{ microblog.post_time }}</td>
                         <td>{{ microblog.comments.count() }}</td>
-                        <td>0</td>
+                        <td>{{ microblog.reposts.count() }}</td>
                         <td>0</td>
                         <td>
                             {% if microblog.parent_microblog_id %}
@@ -52,6 +52,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {{ render_pagination(pagination, 'admin.show_microblog' ) }}
         </div>
     </div>
 </div>

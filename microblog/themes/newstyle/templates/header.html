@@ -21,7 +21,8 @@
                         个人资料 <b class="caret"></b>
                     </a>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ url_for('account.profile') }}">修改资料</a></li>
+                    <li><a href="{{ url_for('account.profile') }}">基本资料</a></li>
+                    <li><a href="{{ url_for('account.profile_detail') }}">详细资料</a></li>
                     <li><a href="{{ url_for('account.password') }}">修改密码</a></li>
                     <li><a href="{{ url_for('account.avatar') }}">修改头像</a></li>
                 </ul>
