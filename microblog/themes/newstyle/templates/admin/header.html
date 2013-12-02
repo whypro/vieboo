@@ -1,0 +1,37 @@
+<header>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
+            <span class="sr-only">导航</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('frontend.index') }}">Vieboo</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navigation">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('frontend.index') }}">首页</a></li>
+            <li{%- if active == 'index' %} class="active"{% endif -%}><a href="{{ url_for('admin.index') }}">管理中心</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if g.user.is_authenticated() %}
+            <li class="dropdown">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                    账号 <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="">设置</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{ url_for('account.logout') }}">注销</a></li>
+                </ul>
+            </li>
+            {% else %}
+            <li><a href="{{ url_for('account.register') }}">注册</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+</header>

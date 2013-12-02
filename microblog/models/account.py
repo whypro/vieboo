@@ -33,6 +33,7 @@ class People(db.Model):
     mobile = db.Column(db.String(20))
     reg_time = db.Column(db.DateTime, default=datetime.datetime.now)
     reg_ip = db.Column(db.String(20))
+    status = db.Column(db.String(10), default='active')
     avatar = db.Column(db.String(255))
 
     microblogs = db.relationship('Microblog', backref='people', lazy='dynamic', order_by='Microblog.post_time.desc()')
@@ -60,7 +61,12 @@ class People(db.Model):
         lazy='dynamic'
     )
 
-    groups = db.relationship('Group', backref='people', lazy='dynamic', passive_deletes=True)
+    groups = db.relationship(
+        'Group',
+        backref='people',
+        lazy='dynamic',
+        passive_deletes=True
+    )
 
     sent_chattings = db.relationship(
         'Chatting', backref='from_people',
@@ -71,6 +77,15 @@ class People(db.Model):
         backref='to_people',
         primaryjoin=id==Chatting.to_id,
         lazy='dynamic')
+
+    login_logs = db.relationship(
+        'LoginLog',
+        backref='people',
+        lazy='dynamic',
+        passive_deletes=True,
+    )
+
+    roles = db.relationship('Role', secondary='people_roles')
 
     def __init__(self, email, password,
                  nickname=None, mobile=None,
@@ -98,6 +113,12 @@ class People(db.Model):
     def get_id(self):
         return unicode(self.id)
     # flask.ext.login
+
+    def is_admin(self):
+        for role in self.roles:
+            if 'admin' in role:
+                return True
+        return False
 
     def get_nickname(self):
         return self.nickname
@@ -148,10 +169,27 @@ class People(db.Model):
 class LoginLog(db.Model):
     __tablename__ = 'login_log'
     id = db.Column(db.Integer, primary_key=True)
-    people_id = db.Column(db.Integer, nullable=True)
+    people_id = db.Column(
+        db.Integer,
+        db.ForeignKey(People.id, ondelete='CASCADE'),
+        nullable=True
+    )
     login_time = db.Column(db.DateTime, default=datetime.datetime.now)
     login_ip = db.Column(db.String(20))
 
     def __init__(self, people_id, login_ip):
         self.people_id = people_id
         self.login_ip = login_ip
+
+
+class Role(db.Model):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(10))
+
+
+people_roles = db.Table(
+    'people_roles',
+    db.Column('people_id', db.Integer, db.ForeignKey('people.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id', ondelete='CASCADE'), primary_key=True),
+)

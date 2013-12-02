@@ -41,3 +41,5 @@ UPLOADS_DEFAULT_URL = 'D:/uploads/'
 
 DEBUG = True
 SECRET_KEY = 'hello world'
+
+PER_PAGE = 5

@@ -128,13 +128,44 @@ form: 评论框 Form，前置条件：show_comment_box=True
     {% if pagination.pages < 2 %}
     {% else %}
     <ul class="pagination pull-right">
-        <li><a href="{{ url_for(endpoint, page=pagination.page-1) if pagination.page > 1 }}">&laquo;</a></li>
-        {% for page in pagination.iter_pages() %}
+        <li><a{%- if pagination.page > 1 %} href="{{ url_for(endpoint, page=pagination.page-1) }}"{% endif -%}>&laquo;</a></li>
+        {% for page in pagination.iter_pages(2, 2, 2, 2) %}
+        {% if page %}
         <li{%- if page == pagination.page %} class="active"{% endif -%}><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+        {% else %}
+        <li><a>...</a></li>
+        {% endif %}
         {% endfor %}
-        <li><a href="{{ url_for(endpoint, page=pagination.page+1) if pagination.page < pagination.pages }}">&raquo;</a></li>
+        <li><a{%- if pagination.page < pagination.pages %} href="{{ url_for(endpoint, page=pagination.page+1) }}"{% endif -%}>&raquo;</a></li>
     </ul>
     {% endif %}
 {% endmacro %}
 
 
+{% macro render_table(headers, rows) %}
+<table class="table table-hover table-responsive">
+    <thead>
+        <tr>
+            {% for header in headers %}
+            <th>{{ header }}</th>
+            {% endfor %}
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            {% for a in row.items() %}
+            <td>{{ a }}</td>
+            {% endfor %}
+            <td>
+                <a class="btn btn-primary btn-xs">查看</a> |
+                <a class="btn btn-primary btn-xs">禁言</a> |
+                <a class="btn btn-info btn-xs">删除</a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}

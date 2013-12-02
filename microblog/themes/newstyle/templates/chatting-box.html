@@ -6,7 +6,6 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
-
             <div class="input-group">
                 <input type="text" class="form-control" />
                 <span class="input-group-btn">
@@ -45,11 +44,14 @@
                                 <div style="padding-top: 5px; padding-bottom: 5px;">
                                     <a href="{{ url_for('frontend.people', id=people.id) }}"><span class="media-heading">{{ people.nickname }}</span></a>
                                 </div>
-                                <p{%- if chatting.has_read %} class="text-muted"{% endif -%}>
-                                    {{ chatting.content }} &emsp;
-                                    <a href="{{ url_for('friendship.show_chatting_detail', id=chatting.id, box=box) }}" class="text-primary"><small>[详情]</small></a>
-                                </p>
-                                <p class="{{ 'text-muted' if chatting.has_read }} text-right">{{ chatting.chat_time }}</p>
+                                <div class="well well-lg">
+                                    <p{%- if chatting.has_read %} class="text-muted"{% endif -%}>
+                                        {{ chatting.content }} &emsp;
+                                        <a href="{{ url_for('friendship.show_chatting_detail', id=chatting.id, box=box) }}" class="text-primary"><small>[详情]</small></a>
+                                    </p>
+                                    <span class="text-muted pull-left"><small>{{ chatting.chat_time }}</small></span>
+                                </div>
+
                             </div>
                         </div>
                     </li>

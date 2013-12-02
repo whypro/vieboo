@@ -12,7 +12,8 @@
 
     <div class="collapse navbar-collapse" id="navigation">
         <ul class="nav navbar-nav">
-            <li{%- if active == 'index' %} class="active"{% endif -%}><a href="{{ url_for('frontend.index') }}">微博广场</a></li>
+            <li{%- if active == 'index' %} class="active"{% endif -%}><a href="{{ url_for('frontend.index') }}">首页</a></li>
+            <li{%- if active == 'square' %} class="active"{% endif -%}><a href="{{ url_for('frontend.square') }}">微博广场</a></li>
             {% if g.user.is_authenticated() -%}
             <li{%- if active == 'people' %} class="active"{% endif -%}><a href="{{ url_for('frontend.people', id=g.user.id) }}">个人主页</a></li>
             <li class="dropdown{%- if active == 'profile' %} active{% endif -%}">
@@ -37,6 +38,9 @@
                     <li><a href="{{ url_for('friendship.show_blocking') }}">黑名单</a></li>
                 </ul>
             </li>
+            {% if g.user.is_admin %}
+            <li><a href="{{ url_for('admin.index') }}">管理中心</a></li>
+            {% endif %}
             {% endif %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -46,7 +50,7 @@
                 <a href="{{ url_for('friendship.show_inbox') }}">
                     私信
                     {% if g.user.received_chattings.filter_by(has_read=False).count() %}
-                    <span class="glyphicon glyphicon-certificate" style="color: #CC3333;"></span>
+                    <span class="glyphicon glyphicon-star" style="color: #CC3333;"></span>
                     {% endif %}
                 </a>
             </li>

@@ -1,0 +1,26 @@
+{% extends theme('admin/layout.html') %}
+{% set active = 'index' %}
+{% block title %}首页{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ url_for('admin.show_people') }}">用户管理</a></li>
+                <li><a href="{{ url_for('admin.show_microblog') }}">微博管理</a></li>
+                <li><a href="{{ url_for('admin.show_login_log') }}">登陆管理</a></li>
+                <li><a href="{{ url_for('admin.show_visit_log') }}">访问管理</a></li>
+                <li><a href="{{ url_for('admin.install') }}">初始化数据库</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            <div class="jumbotron">
+                <h1 class="text-center">管理中心</h1>
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

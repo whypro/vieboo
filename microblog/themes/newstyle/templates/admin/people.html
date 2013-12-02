@@ -1,0 +1,54 @@
+{% extends theme('admin/layout.html') %}
+{% set active = 'index' %}
+{% block title %}用户管理{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="{{ url_for('admin.show_people') }}">用户管理</a></li>
+                <li><a href="{{ url_for('admin.show_microblog') }}">微博管理</a></li>
+                <li><a href="{{ url_for('admin.show_login_log') }}">登陆管理</a></li>
+                <li><a href="{{ url_for('admin.show_visit_log') }}">访问管理</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-9">
+            {% set headers = ('ID', '用户名', '邮箱', '手机', '注册时间', '注册 IP', ' ') %}
+
+            <table class="table table-hover table-responsive">
+                <thead>
+                    <tr>
+                        {% for header in headers %}
+                        <th>{{ header }}</th>
+                        {% endfor %}
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in people %}
+                    <tr id="{{ p.id }}">
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.email }}</td>
+                        <td>{{ p.nickname }}</td>
+                        <td>{{ p.mobile }}</td>
+                        <td>{{ p.reg_time }}</td>
+                        <td>{{ p.reg_ip }}</td>
+                        <td>
+                            {% if p.status == 'active' %}
+                            <a class="btn btn-primary btn-xs" href="{{ url_for('admin.block_people', id=p.id) }}">禁言</a>
+                            {% elif p.status == 'blocked' %}
+                            <a class="btn btn-primary btn-xs" href="{{ url_for('admin.unblock_people', id=p.id) }}">取消</a>
+                            {% endif %}
+                            <a class="btn btn-primary btn-xs" href="{{ url_for('admin.delete_people', id=p.id) }}">删除</a>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

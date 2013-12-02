@@ -26,7 +26,7 @@ def post():
 @mblog.route('/delete/<int:id>/')
 @login_required
 def delete(id):
-    microblog = Microblog.query.get(id)
+    microblog = Microblog.query.get_or_404(id)
     if microblog.people_id == g.user.id:
         db.session.delete(microblog)
         db.session.commit()
@@ -42,14 +42,12 @@ def delete(id):
 @mblog.route('/comment/<int:mid>/<int:cid>/', methods=['GET', 'POST'])
 @login_required
 def comment(mid, cid=None):
-    microblog = Microblog.query.get(mid)
+    microblog = Microblog.query.get_or_404(mid)
 
     # 如果是对评论的评论，则在表单中显示回复的目标（字符串）
     # 并在提交时使用切片运算忽略该字符串
     if cid:
-        parent_comment = Comment.query.get(cid)
-        if not parent_comment:
-            abort(404)
+        parent_comment = Comment.query.get_or_404(cid)
         # 不能回复自己
         if g.user.id == parent_comment.people.id:
             flash(u'不能回复自己', 'warning')
@@ -76,7 +74,7 @@ def comment(mid, cid=None):
 @mblog.route('/comment/delete/<int:id>/')
 @login_required
 def delete_comment(id):
-    comment = Comment.query.get(id)
+    comment = Comment.query.get_or_404(id)
     mid = comment.microblog_id
     if comment.people_id == g.user.id:
         db.session.delete(comment)
@@ -92,7 +90,7 @@ def delete_comment(id):
 @mblog.route('/repost/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def repost(id):
-    microblog = Microblog.query.get(id)
+    microblog = Microblog.query.get_or_404(id)
     repost_form = RepostForm()
     if repost_form.validate_on_submit():
         rp_microblog = Microblog(g.user.id, repost_form.content.data, parent_microblog_id=id)
