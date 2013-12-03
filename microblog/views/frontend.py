@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, url_for, redirect, send_from_directory, current_app, abort
+from flask import Module, g, url_for, redirect, send_from_directory, current_app, abort, request
 from microblog.models import People, Microblog
 from microblog.helpers import render_template
 from microblog.forms import PostForm
@@ -47,6 +47,12 @@ def uploads(filename):
         current_app.config['UPLOADED_PHOTOS_DEST'],
         filename
     )
+
+
+@frontend.route('/remote/photo/')
+def remote_photo():
+    uri = request.args.get('uri', None)
+    return redirect(uri)
 
 
 @frontend.route('/test/<int:error>/')

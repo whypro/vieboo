@@ -44,6 +44,8 @@ def configure_modules(app):
     app.register_module(views.mblog)
     app.register_module(views.friendship)
     app.register_module(views.admin)
+    app.register_module(views.oauth2)
+    app.register_module(views.photo)
 
 
 def configure_theme(app):

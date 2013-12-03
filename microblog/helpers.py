@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import current_app, request
+from flask import current_app, request, url_for
 from flask.ext.themes import render_theme_template
 
 
@@ -18,3 +18,10 @@ def get_client_ip():
     else:
         ip = request.remote_addr
     return ip
+
+
+def render_uri(uri):
+    if uri.startswith('http'):
+        return url_for('frontend.remote_photo') + '?uri=' + uri
+    else:
+        return url_for('frontend.uploads', filename=uri)

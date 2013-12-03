@@ -14,7 +14,7 @@ class PhotoAlbum(db.Model):
 class Photo(db.Model):
     __tablename__ = 'photo'
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(255), nullable=False)
+    uri = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     create_time = db.Column(db.DateTime, default=datetime.datetime.now)
     album_id = db.Column(db.Integer)
@@ -32,7 +32,7 @@ class VoiceAlbum(db.Model):
 class Voice(db.Model):
     __tablename__ = 'photo'
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(255))
+    uri = db.Column(db.String(255))
     description = db.Column(db.Text)
     create_time = db.Column(db.DateTime, default=datetime.datetime.now)
     album_id = db.Column(db.Integer)

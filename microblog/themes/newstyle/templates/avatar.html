@@ -30,7 +30,7 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <input name="avatar-type" type="radio" checked>
+                                <input id="avatar-type-0" name="avatar-type" type="radio" value="0" checked>
                             </span>
                             {{ avatar_form.avatar(class_="form-control") }}
                         </div>
@@ -42,9 +42,9 @@
                     <div class="col-lg-6">
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <input name="avatar-type" type="radio">
+                                <input id="avatar-type-1" name="avatar-type" type="radio" value="1">
                             </span>
-                            <input type="text" class="form-control" id="avatar-url">
+                            {{ avatar_form.avatar_uri(class_="form-control") }}
                         </div>
                     </div>
                 </div>
@@ -60,5 +60,17 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#avatar_uri").focusin(function(){
+    $("#avatar-type-1").attr("checked",true);
+  });
+  $("#avatar").focusin(function(){
+    $("#avatar-type-0").attr("checked",true);
+  });
+});
+</script>
 {% endblock %}

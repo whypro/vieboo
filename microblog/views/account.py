@@ -187,22 +187,30 @@ def profile_detail():
 @login_required
 def avatar():
     avatar_form = AvatarForm()
-    people = g.user
-    avatar_filename = people.get_avatar()
     if avatar_form.validate_on_submit():
-        if avatar_form.avatar.data:
+        avatar_type = request.form.get('avatar-type', None)
+        if avatar_type == '0' and avatar_form.avatar.data:
             # 上传头像
+            avatar_filename = g.user.get_avatar()
             avatar_data = request.files[avatar_form.avatar.name]
             avatar_filename = photos.save(avatar_data)
-            print avatar_filename
-            url = photos.url(avatar_filename)
+            # url = photos.url(avatar_filename)
             # print url
             # old_avatar = photos.url(people.avatar)
             # os.remove(old_avatar)   # 删除旧头像
-            people.change_avatar(avatar_filename)
-            db.session.add(people)
+            print avatar_filename
+            g.user.change_avatar(avatar_filename)
+            db.session.add(g.user)
             db.session.commit()
             flash(u'上传成功', 'success')
             return redirect(url_for('account.avatar'))
+
+        elif avatar_type == '1' and avatar_form.avatar_uri.data:
+            g.user.change_avatar(avatar_form.avatar_uri.data)
+            db.session.add(g.user)
+            db.session.commit()
+            flash(u'修改成功', 'success')
+            return redirect(url_for('account.avatar'))
+
     return render_template('avatar.html', avatar_form=avatar_form, title=u'修改头像')
 

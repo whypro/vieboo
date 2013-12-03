@@ -3,6 +3,7 @@ from flask.ext.sqlalchemy import BaseQuery
 from microblog.extensions import db
 import datetime
 import hashlib
+from microblog.helpers import render_uri
 from microblog.models.friendship import Friendship, Blackship, Chatting
 
 
@@ -128,7 +129,7 @@ class People(db.Model):
         return self.email
 
     def get_avatar(self):
-        return self.avatar
+        return render_uri(self.avatar)
 
     def change_password(self, password):
         self._password = hashlib.md5(password).hexdigest()

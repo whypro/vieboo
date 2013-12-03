@@ -36,10 +36,11 @@ def show_people(page):
 @admin_permission.require(401)
 def block_people(id):
     people = People.query.get_or_404(id)
-    people.status = 'blocked'
-    db.session.add(people)
-    db.session.commit()
-    flash(u'已禁言', 'success')
+    if people.status != 'blocked':
+        people.status = 'blocked'
+        db.session.add(people)
+        db.session.commit()
+        flash(u'禁言成功', 'success')
     return redirect(url_for('show_people'))
 
 
@@ -48,10 +49,11 @@ def block_people(id):
 @admin_permission.require(401)
 def unblock_people(id):
     people = People.query.get_or_404(id)
-    people.status = 'active'
-    db.session.add(people)
-    db.session.commit()
-    flash(u'已取消禁言', 'success')
+    if people.status != 'active':
+        people.status = 'active'
+        db.session.add(people)
+        db.session.commit()
+        flash(u'取消禁言成功', 'success')
     return redirect(url_for('show_people'))
 
 
