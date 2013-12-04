@@ -1,0 +1,37 @@
+{% extends theme('layout.html') %}
+{% set active = 'profile' %}
+{% block title %}相册 | {{ title }}{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            {{ img_avatar(g.user) }}
+            <hr />
+        </div>
+        <div class="col-lg-9">
+            <form class="form-horizontal" role="form" action="" method="POST" enctype="multipart/form-data">
+
+                {% for field in form %}
+                {% if 'photo' in field.name %}
+                <div class="form-group">
+                    {{ field.label(class_='col-lg-2 control-label') }}
+                    <div class="col-lg-6">
+                        {{ field(class_='form-control', accept='image/*') }}
+                    </div>
+                </div>
+                {% elif 'submit' in field.name %}
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-6">
+                        {{ field(class_='btn btn-primary') }}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {{ form.hidden_tag() }}
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -17,9 +17,5 @@ class AddGroupForm(Form):
     submit = SubmitField(u'新建')
 
 
-class RenameGroupForm(Form):
-    name = TextField(
-        u'名称',
-        validators=[DataRequired(message=u'请输入分组名称')],
-    )
+class RenameGroupForm(AddGroupForm):
     submit = SubmitField(u'修改')

@@ -111,7 +111,7 @@ def config_error_handlers(app):
         return redirect(url_for('frontend.index'))
 
     @app.errorhandler(500)
-    def page_not_found(e):
+    def internal_server_error(e):
         flash(u'服务器开小差了', 'danger')
         return redirect(url_for('frontend.index'))
 

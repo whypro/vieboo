@@ -41,6 +41,11 @@ def people(id):
     return render_template('people.html', people=people)
 
 
+@frontend.route('/people/<int:id>/album/')
+def people_album(id):
+    pass
+
+
 @frontend.route('/uploads/photos/<filename>')
 def uploads(filename):
     return send_from_directory(
