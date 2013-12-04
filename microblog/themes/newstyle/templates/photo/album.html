@@ -1,0 +1,33 @@
+{% extends theme('layout.html') %}
+{% set active = 'profile' %}
+{% block title %}相册 | {{ title }}{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            {{ img_avatar(g.user) }}
+            <hr />
+        </div>
+        <div class="col-lg-9">
+            <h2>{{ album.title }}</h2>
+            <hr />
+            {% for photo in photos %}
+            {% if loop.index0 % 4 == 0 %}
+            <div class="row">
+            {% endif %}
+                <div class="col-lg-3">
+                    <a href="{{ url_for('photo.show_photo', id=photo.id) }}" class="thumbnail">
+                        <img data-src="holder.js/180x180" alt="{{ photo.title }}" src="{{ photo.get_uri() }}" style="height: 180px; width: 180px%; display: block;">
+                    </a>
+                </div>
+            {% if loop.index0 % 4 == 3 or loop.last %}
+            </div>
+            {% endif %}
+            {% endfor %}
+            <hr />
+            <a href="{{ url_for('photo.upload_photo', id=album.id) }}" class="btn btn-primary">上传</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

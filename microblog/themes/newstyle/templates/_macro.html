@@ -1,5 +1,5 @@
 {%- macro img_avatar(user) %}
-<img src="{{ url_for('frontend.uploads', filename=user.avatar) if user.avatar else theme_static('image/default-avatar.jpg') }}" alt="{{ user.nickname }}" class="img-thumbnail img-responsive">
+<img src="{{ user.get_avatar() }}" alt="{{ user.nickname }}" class="img-thumbnail img-responsive">
 {% endmacro -%}
 
 

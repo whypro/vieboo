@@ -119,4 +119,5 @@ class ModifyProfileDetailForm(Form):
 
 class AvatarForm(Form):
     avatar = FileField(u'头像')
+    avatar_uri = TextField(u'头像网络地址')
     submit = SubmitField(u'上传')

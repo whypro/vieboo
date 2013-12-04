@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, url_for, redirect, send_from_directory, current_app, abort
+from flask import Module, g, url_for, redirect, send_from_directory, current_app, abort, request
 from microblog.models import People, Microblog
 from microblog.helpers import render_template
 from microblog.forms import PostForm
@@ -41,12 +41,23 @@ def people(id):
     return render_template('people.html', people=people)
 
 
+@frontend.route('/people/<int:id>/album/')
+def people_album(id):
+    pass
+
+
 @frontend.route('/uploads/photos/<filename>')
 def uploads(filename):
     return send_from_directory(
         current_app.config['UPLOADED_PHOTOS_DEST'],
         filename
     )
+
+
+@frontend.route('/remote/photo/')
+def remote_photo():
+    uri = request.args.get('uri', None)
+    return redirect(uri)
 
 
 @frontend.route('/test/<int:error>/')
