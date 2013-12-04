@@ -1,5 +1,5 @@
 {% extends theme('layout.html') %}
-{% set active = 'profile' %}
+{% set active = 'album' %}
 {% block title %}相册 | {{ title }}{% endblock %}
 {% block content %}
 
@@ -11,11 +11,18 @@
         </div>
         <div class="col-lg-9">
             <h2>{{ photo.title }}</h2>
+            {% if photo.description %}
+            <p class="text-muted">{{ photo.description }}</p>
+            {% endif %}
             <hr />
             <div class="text-center">
             <img src="{{ photo.get_uri() }}" alt="{{ photo.title }}" class="img-thumbnail">
             </div>
             <hr />
+            <div class="btn-group">
+                <a href="{{ url_for('photo.modify_photo', id=photo.id) }}" class="btn btn-primary">修改属性</a>
+                <a href="{{ url_for('photo.delete_photo', id=photo.id) }}" class="btn btn-primary">删除照片</a>
+            </div>
         </div>
     </div>
 </div>
