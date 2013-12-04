@@ -1,0 +1,22 @@
+{% extends theme('layout.html') %}
+{% set active = 'profile' %}
+{% block title %}相册 | {{ title }}{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            {{ img_avatar(g.user) }}
+            <hr />
+        </div>
+        <div class="col-lg-9">
+            <h2>{{ photo.title }}</h2>
+            <hr />
+            <div class="text-center">
+            <img src="{{ photo.get_uri() }}" alt="{{ photo.title }}" class="img-thumbnail">
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>
+{% endblock %}

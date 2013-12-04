@@ -25,8 +25,8 @@ def add_album():
         db.session.add(album)
         db.session.commit()
         flash(u'相册新建成功', 'success')
-        # return redirect(url_for('show_album', id=album.id))
-        return u'添加成功'
+        return redirect(url_for('show_album', id=album.id))
+        # return u'添加成功'
 
     return render_template(
         'photo/add-album.html',
@@ -36,9 +36,15 @@ def add_album():
 
 
 @photo.route('/album/<int:id>/')
+@login_required
 def show_album(id):
-    """显示相册里的所有照片"""
-    pass
+    """显示相册里的所有照片，只能查看自己的相册"""
+    album = PhotoAlbum.query.get_or_404(id)
+    if album.people_id != g.user.id:
+        flash(u'权限不足', 'warning')
+        return redirect('frontend.index')
+    photos = Photo.query.filter_by(album_id=id).all()
+    return render_template('photo/album.html', photos=photos, album=album)
 
 
 @photo.route('/album/<int:id>/modify/')
@@ -64,7 +70,12 @@ def delete_album(id):
 
 
 @photo.route('/album/<int:id>/upload/', methods=['GET', 'POST'])
+@login_required
 def upload_photo(id):
+    album = PhotoAlbum.query.get_or_404(id)
+    if album.people_id != g.user.id:
+        flash(u'权限不足', 'warning')
+        return redirect('frontend.index')
     upload_form = UploadForm()
     # print upload_form.submit.name
     if upload_form.validate_on_submit():
@@ -78,13 +89,14 @@ def upload_photo(id):
                 db.session.add(photo)
                 db.session.commit()
         flash(u'上传成功', 'success')
-        return redirect(url_for('photo.upload_photo', id=id))
+        return redirect(url_for('photo.show_album', id=id))
     return render_template('photo/upload.html', form=upload_form)
 
 
 @photo.route('/photo/<int:id>/')
 def show_photo(id):
-    pass
+    photo = Photo.query.get_or_404(id)
+    return render_template('photo/photo.html', photo=photo)
 
 
 @photo.route('/photo/<int:id>/modify/')

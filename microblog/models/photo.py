@@ -1,5 +1,6 @@
 import datetime
 from microblog.extensions import db
+from microblog.helpers import render_uri
 
 
 class PhotoAlbum(db.Model):
@@ -23,6 +24,9 @@ class Photo(db.Model):
         self.uri = uri
         self.description = description
         self.album_id = album_id
+
+    def get_uri(self):
+        return render_uri(self.uri)
 
 #
 #class VoiceAlbum(db.Model):
