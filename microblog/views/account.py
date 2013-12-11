@@ -192,10 +192,13 @@ def avatar():
         avatar_type = request.form.get('avatar-type', None)
         if avatar_type == '0' and avatar_form.avatar.data:
             # 上传头像
-            avatar_filename = g.user.get_avatar()
+            avatar_filename = g.user.get_avatar_uri()
             avatar_data = request.files[avatar_form.avatar.name]
             uploader = get_uploader()
             avatar_filename = uploader.save(avatar_data)
+            if not avatar_filename:
+                flash(u'上传失败', 'danger')
+                return redirect(url_for('account.avatar'))
             # url = photos.url(avatar_filename)
             # print url
             # old_avatar = photos.url(people.avatar)

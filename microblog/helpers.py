@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
 from flask import current_app, request, url_for
 from flask.ext.themes import render_theme_template
-from microblog.uploader import BCSUploader, LocalUploader
+
 
 
 def get_default_theme():
@@ -22,15 +23,20 @@ def get_client_ip():
 
 
 def render_uri(uri):
-    if uri.startswith('http'):
-        return url_for('frontend.remote_photo') + '?uri=' + uri
-    else:
-        return url_for('frontend.uploads', filename=uri)
+    #if uri.startswith('http'):
+    #    return url_for('frontend.remote_photo') + '?uri=' + uri
+    #else:
+    return url_for('frontend.uploads', filename=uri)
 
 
 def get_uploader():
     if not current_app.config['USE_BCS_BUCKET']:
+        from microblog.uploader import LocalUploader
         uploader = LocalUploader()
+    elif 'SERVER_SOFTWARE' in os.environ:
+        from microblog.uploader import BCSAPIUploader
+        uploader = BCSAPIUploader()
     else:
-        uploader = BCSUploader()
+        from microblog.uploader import BCSSDKUploader
+        uploader = BCSSDKUploader()
     return uploader

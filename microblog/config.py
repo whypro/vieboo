@@ -4,7 +4,7 @@ import os
 # FLASK
 DEBUG = True
 SECRET_KEY = 'I love you.'
-
+MAX_CONTENT_LENGTH = 4 * 1024 *1024   # 上传文件大小：4MB
 
 # 生产服务器配置
 if 'SERVER_SOFTWARE' in os.environ:

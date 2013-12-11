@@ -128,7 +128,7 @@ class People(db.Model):
     def get_email(self):
         return self.email
 
-    def get_avatar(self):
+    def get_avatar_uri(self):
         return render_uri(self.avatar)
 
     def change_password(self, password):

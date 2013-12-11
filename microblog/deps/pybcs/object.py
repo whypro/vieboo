@@ -195,15 +195,15 @@ class Object:
     @network
     def make_public(self):
         """
-        设置object的访问权限为public
+        设置object的访问权限为公开读（public-read）
         """
-        acl = '{"statements":[{"action":["*"],"effect":"allow","resource":["%s%s"],"user":["*"]}]}' % (self.bucket.bucket_name, self.object_name)
+        acl = '{"statements":[{"action":["get_object"],"effect":"allow","resource":["%s%s"],"user":["*"]}]}' % (self.bucket.bucket_name, self.object_name)
         self.set_acl(acl)
 
     @network
     def make_private_to_user(self, user):
         """
-        设置object的访问权限为private
+        设置object的访问权限为私有（private）
         """
         acl = '{"statements":[{"action":["*"],"effect":"allow","resource":["%s%s"],"user":["%s"]}]}' % (self.bucket.bucket_name,self.object_name, user)
         self.set_acl(acl)

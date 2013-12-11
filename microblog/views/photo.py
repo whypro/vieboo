@@ -110,6 +110,9 @@ def upload_photo(id):
                 photo_data = request.files[field.name]
                 uploader = get_uploader()
                 filename = uploader.save(photo_data)
+                if not filename:
+                    flash(u'上传失败', 'danger')
+                    return redirect(url_for('photo.show_album', id=id))
                 photo = Photo(uri=filename, album_id=id, people_id=g.user.id)
                 db.session.add(photo)
                 db.session.commit()

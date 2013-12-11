@@ -16,7 +16,6 @@ except:
 class Bucket:
     ''' 
      bucket.create/ bucket.delete / bucket.setacl 
-     建议到yun.baidu.com 操作，create 后还需要设置quota等才能使用.
     '''
     def __init__(self, bcs, bucket_name):
         self.bcs = bcs
@@ -49,7 +48,7 @@ class Bucket:
         构造superfile对象
         参数：
             object_name:  需要创建的superfile object名称
-            sub_object_list: 指定该superfile 由哪些子文件构成.
+            sub_object_list: 指定该superfile由哪些子文件构成.
         """
         return Superfile(self, object_name, sub_object_list)
 
@@ -119,15 +118,15 @@ class Bucket:
     @network
     def make_public(self):
         """
-        设置bucket的访问权限为public
+        设置bucket的访问权限为公开读（public-read）
         """
-        acl = '{"statements":[{"action":["*"],"effect":"allow","resource":["%s\\/"],"user":["*"]}]}' % (self.bucket_name)
+        acl = '{"statements":[{"action":["get_object"],"effect":"allow","resource":["%s\\/"],"user":["*"]}]}' % (self.bucket_name)
         self.set_acl(acl)
 
     @network
     def make_private_to_user(self, user):
         """
-        设置bucket的访问权限为private
+        设置bucket的访问权限为私有（private）
         """
         acl = '{"statements":[{"action":["*"],"effect":"allow","resource":["%s\\/"],"user":["%s"]}]}' % (self.bucket_name, user)
         self.set_acl(acl)
