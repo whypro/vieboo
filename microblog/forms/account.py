@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask_wtf import Form
+from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField, BooleanField, HiddenField, SubmitField, FileField, RadioField, DateField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, EqualTo, Email
 from microblog.models import People

@@ -11,6 +11,13 @@ class PhotoAlbum(db.Model):
     description = db.Column(db.Text)
     people_id = db.Column(db.Integer, db.ForeignKey('people.id', ondelete='CASCADE'))
 
+    photos = db.relationship('Photo', backref=db.backref('album'), lazy='dynamic')
+
+    def __init__(self, title, people_id, description=None):
+        self.title = title
+        self.people_id = people_id
+        self.description = description
+
 
 class Photo(db.Model):
     __tablename__ = 'photo'
@@ -18,12 +25,14 @@ class Photo(db.Model):
     uri = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     create_time = db.Column(db.DateTime, default=datetime.datetime.now)
-    album_id = db.Column(db.Integer)
+    album_id = db.Column(db.Integer, db.ForeignKey('photo_album.id', ondelete='SET NULL'))
+    people_id = db.Column(db.Integer, db.ForeignKey('people.id', ondelete='CASCADE'))
 
-    def __init__(self, uri, description=None, album_id=None):
+    def __init__(self, uri, people_id, description=None, album_id=None):
         self.uri = uri
         self.description = description
         self.album_id = album_id
+        self.people_id = people_id
 
     def get_uri(self):
         return render_uri(self.uri)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask_wtf import Form
+from flask.ext.wtf import Form
 from wtforms import TextAreaField, SubmitField, FileField, TextField
 from wtforms.validators import DataRequired
 
@@ -25,3 +25,7 @@ class AddAlbumForm(Form):
 class ModifyAlbumForm(AddAlbumForm):
     submit = SubmitField(u'修改')
 
+
+class PhotoForm(Form):
+    description = TextAreaField(u'照片描述')
+    submit = SubmitField(u'修改')

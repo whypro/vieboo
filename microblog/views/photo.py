@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Module, flash, redirect, url_for, request, g
+from flask import Module, flash, redirect, url_for, request, g, current_app
 from flask.ext.login import login_required
+from microblog.forms.photo import PhotoForm
 from microblog.models import PhotoAlbum
-from microblog.extensions import photos, db
+from microblog.extensions import db
 from microblog.forms import UploadForm, ModifyAlbumForm, AddAlbumForm
-from microblog.helpers import render_template
+from microblog.helpers import render_template, get_uploader
 from microblog.models import Photo
+
 
 photo = Module(__name__, url_prefix='')
 
@@ -43,10 +45,8 @@ def show_album(id):
     if album.people_id != g.user.id:
         flash(u'权限不足', 'warning')
         return redirect('frontend.index')
-    photos = Photo.query.filter_by(album_id=id).all()
     return render_template(
         'photo/album.html',
-        photos=photos,
         album=album,
         title=u'查看相册'
     )
@@ -57,6 +57,10 @@ def show_album(id):
 def modify_album(id):
     """修改相册属性"""
     album = PhotoAlbum.query.get_or_404(id)
+    if album.people_id != g.user.id:
+        flash(u'权限不足', 'warning')
+        return redirect(url_for('show_album', id=album.id))
+
     modify_album_form = ModifyAlbumForm(obj=album)
     if modify_album_form.validate_on_submit():
         album.title = modify_album_form.title.data
@@ -70,7 +74,7 @@ def modify_album(id):
     return render_template(
         'photo/album-info.html',
         form=modify_album_form,
-        title=u'修改相册'
+        title=u'修改相册属性'
     )
 
 
@@ -103,9 +107,10 @@ def upload_photo(id):
         for field in upload_form:
             print field.name
             if 'photo' in field.name and field.data:
-                avatar_data = request.files[field.name]
-                avatar_filename = photos.save(avatar_data)
-                photo = Photo(uri=avatar_filename, album_id=id)
+                photo_data = request.files[field.name]
+                uploader = get_uploader()
+                filename = uploader.save(photo_data)
+                photo = Photo(uri=filename, album_id=id, people_id=g.user.id)
                 db.session.add(photo)
                 db.session.commit()
         flash(u'上传成功', 'success')
@@ -127,22 +132,37 @@ def show_photo(id):
     )
 
 
-@photo.route('/photo/<int:id>/modify/')
+@photo.route('/photo/<int:id>/modify/', methods=['GET', 'POST'])
 def modify_photo(id):
-    return u'未完成'
+    photo = Photo.query.get_or_404(id)
+    if photo.people_id != g.user.id:
+        flash(u'权限不足', 'warning')
+        return redirect(url_for('frontend.index'))
+    photo_form = PhotoForm(obj=photo)
+    if photo_form.validate_on_submit():
+        photo.description = photo_form.description.data
+        db.session.add(photo)
+        db.session.commit()
+        flash(u'修改成功', 'success')
+        return redirect(url_for('show_photo', id=id))
+    return render_template(
+        'photo/photo-info.html',
+        form=photo_form,
+        title=u'修改照片属性'
+    )
 
 
 @photo.route('/photo/<int:id>/delete/')
 def delete_photo(id):
     """删除照片"""
     photo = Photo.query.get_or_404(id)
-    #if photo.people_id != g.user.id:
-    #    flash(u'删除失败', 'warning')
-    #    return redirect(url_for('show_photo', id=id))
-    try:
-        os.remove(photos.url(photo.uri))
-    except OSError as e:
-        pass
+    if photo.people_id != g.user.id:
+        flash(u'删除失败', 'warning')
+        return redirect(url_for('show_photo', id=id))
+    print photo.uri
+    uploader = get_uploader()
+    uploader.remove(photo.uri)
+
     db.session.delete(photo)
     db.session.commit()
     flash(u'删除成功', 'success')

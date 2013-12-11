@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Module, g, url_for, redirect, send_from_directory, current_app, abort, request
-from microblog.models import People, Microblog, PhotoAlbum
+from microblog.models import People, Microblog, PhotoAlbum, Photo
 from microblog.helpers import render_template
 from microblog.forms import PostForm
 
@@ -48,10 +48,20 @@ def album(id):
     return render_template('photo/all-albums.html', albums=albums, title=u'所有相册')
 
 
+@frontend.route('/people/<int:id>/album/default/')
+def default_album(id):
+    default_album_photos = Photo.query.filter_by(people_id=id, album_id=None).all()
+    return render_template(
+        'photo/default-album.html',
+        photos=default_album_photos,
+        title=u'默认相册'
+    )
+
+
 @frontend.route('/uploads/photos/<filename>')
 def uploads(filename):
     return send_from_directory(
-        current_app.config['UPLOADED_PHOTOS_DEST'],
+        current_app.config['UPLOADS_DIR'],
         filename
     )
 

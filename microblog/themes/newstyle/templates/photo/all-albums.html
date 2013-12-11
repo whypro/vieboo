@@ -10,21 +10,31 @@
             <hr />
         </div>
         <div class="col-lg-9">
+            {% set i = 0 %}
             {% for album in albums %}
-            {% if loop.index0 % 4 == 0 %}
+            {% if i % 4 == 0 %}
             <div class="row">
+            {% endif %}
+            {% if loop.first %}
+                <div class="col-lg-3">
+                    <a href="{{ url_for('frontend.default_album', id=album.people_id) }}" class="thumbnail">
+                        <img data-src="holder.js/180x180" alt="默认相册" src="{{ theme_static('image/default-cover.png') }}" style="height: 180px; width: 180px%; display: block;">
+                    </a>
+                </div>
+                {% set i = i + 1 %}
             {% endif %}
                 <div class="col-lg-3">
                     <a href="{{ url_for('photo.show_album', id=album.id) }}" class="thumbnail">
-                        <img data-src="holder.js/180x180" alt="{{ album.title }}" src="" style="height: 180px; width: 180px%; display: block;">
+                        <img data-src="holder.js/180x180" alt="{{ album.title }}" src="{{ album.photos.first().get_uri() if album.photos.count() else theme_static('image/default-cover.png') }}" style="height: 180px; width: 180px%; display: block;">
                     </a>
                 </div>
-            {% if loop.index0 % 4 == 3 or loop.last %}
+                {% set i = i + 1 %}
+            {% if i % 4 == 0 or loop.last %}
             </div>
             {% endif %}
             {% endfor %}
             <hr />
-            <a href="{{ url_for('photo.add_album') }}" class="btn btn-primary">新建</a>
+            <a href="{{ url_for('photo.add_album') }}" class="btn btn-primary">新建相册</a>
         </div>
     </div>
 </div>

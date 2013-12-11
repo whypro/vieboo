@@ -3,12 +3,13 @@ import datetime
 from flask import Module, g, request, url_for, redirect, flash, current_app, session
 from flask.ext.login import login_user, login_required, logout_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
-from microblog.extensions import db, photos
+from microblog.extensions import db
 from microblog.forms.account import ModifyProfileDetailForm
 from microblog.models import People, LoginLog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, ModifyProfileForm, AvatarForm
-from microblog.helpers import render_template, get_client_ip
+from microblog.helpers import render_template, get_client_ip, get_uploader
 from microblog.models.account import PeopleInfo
+
 
 account = Module(__name__, url_prefix='/account')
 
@@ -193,7 +194,8 @@ def avatar():
             # 上传头像
             avatar_filename = g.user.get_avatar()
             avatar_data = request.files[avatar_form.avatar.name]
-            avatar_filename = photos.save(avatar_data)
+            uploader = get_uploader()
+            avatar_filename = uploader.save(avatar_data)
             # url = photos.url(avatar_filename)
             # print url
             # old_avatar = photos.url(people.avatar)

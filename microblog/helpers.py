@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import current_app, request, url_for
 from flask.ext.themes import render_theme_template
+from microblog.uploader import BCSUploader, LocalUploader
 
 
 def get_default_theme():
@@ -25,3 +26,11 @@ def render_uri(uri):
         return url_for('frontend.remote_photo') + '?uri=' + uri
     else:
         return url_for('frontend.uploads', filename=uri)
+
+
+def get_uploader():
+    if not current_app.config['USE_BCS_BUCKET']:
+        uploader = LocalUploader()
+    else:
+        uploader = BCSUploader()
+    return uploader

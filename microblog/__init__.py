@@ -14,7 +14,7 @@ from flask_wtf import CsrfProtect
 from flask.ext.principal import Principal, identity_loaded, RoleNeed, UserNeed, identity_changed
 
 from microblog import views
-from microblog.extensions import db, photos
+from microblog.extensions import db
 from microblog.models import People, VisitLog
 from microblog.helpers import get_client_ip
 
@@ -29,7 +29,7 @@ def create_app(config=None):
     configure_theme(app)
     configure_flasklogin(app)
     config_before_request(app)
-    configure_uploads(app, (photos, ))
+    # configure_uploads(app, (photos, ))
     patch_request_class(app)    # 16M limit
 
     CsrfProtect(app)

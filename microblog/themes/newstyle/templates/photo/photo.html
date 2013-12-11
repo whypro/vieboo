@@ -10,16 +10,18 @@
             <hr />
         </div>
         <div class="col-lg-9">
-            <h2>{{ photo.title }}</h2>
-            {% if photo.description %}
-            <p class="text-muted">{{ photo.description }}</p>
-            {% endif %}
-            <hr />
             <div class="text-center">
             <img src="{{ photo.get_uri() }}" alt="{{ photo.title }}" class="img-thumbnail">
             </div>
+            {% if photo.description %}
+            <hr />
+            <p class="text-muted">{{ photo.description }}</p>
+            {% endif %}
             <hr />
             <div class="btn-group">
+                {% if photo.album_id %}
+                <a href="{{ url_for('photo.show_album', id=photo.album_id) }}" class="btn btn-primary">返回相册</a>
+                {% endif %}
                 <a href="{{ url_for('photo.modify_photo', id=photo.id) }}" class="btn btn-primary">修改属性</a>
                 <a href="{{ url_for('photo.delete_photo', id=photo.id) }}" class="btn btn-primary">删除照片</a>
             </div>

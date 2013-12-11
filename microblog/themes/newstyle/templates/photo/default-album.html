@@ -10,12 +10,9 @@
             <hr />
         </div>
         <div class="col-lg-9">
-            <h2>{{ album.title }}</h2>
-            {% if album.description %}
-            <p class="text-muted">{{ album.description }}</p>
-            {% endif %}
+            <h2>默认相册</h2>
             <hr />
-            {% for photo in album.photos %}
+            {% for photo in photos %}
             {% if loop.index0 % 4 == 0 %}
             <div class="row">
             {% endif %}
@@ -29,11 +26,11 @@
             {% endif %}
             {% endfor %}
             <hr />
+            {#
             <div class="btn-group">
                 <a href="{{ url_for('photo.upload_photo', id=album.id) }}" class="btn btn-primary">上传照片</a>
-                <a href="{{ url_for('photo.modify_album', id=album.id) }}" class="btn btn-primary">修改属性</a>
-                <a href="{{ url_for('photo.delete_album', id=album.id) }}" class="btn btn-primary">删除相册</a>
             </div>
+            #}
 
         </div>
     </div>
