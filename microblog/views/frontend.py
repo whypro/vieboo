@@ -60,10 +60,17 @@ def default_album(id):
 
 @frontend.route('/uploads/photos/<filename>')
 def uploads(filename):
-    return send_from_directory(
-        current_app.config['UPLOADS_DIR'],
-        filename
-    )
+    if not current_app.config['USE_BCS_BUCKET']:
+        return send_from_directory(
+            current_app.config['UPLOADS_DIR'],
+            filename
+        )
+    else:
+        return redirect(
+            'http://bcs.duapp.com/' +
+            current_app.config['BCS_BUCKET_NAME'] +
+            '/' + filename
+        )
 
 
 @frontend.route('/remote/photo/')
