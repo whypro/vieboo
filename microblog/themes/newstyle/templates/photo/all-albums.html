@@ -6,18 +6,19 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
-            {{ img_avatar(g.user) }}
+            {{ img_avatar(people) }}
+            <h4 class="text-center">{{ people.nickname }}</h4>
             <hr />
         </div>
         <div class="col-lg-9">
             {% set i = 0 %}
-            {% for album in albums %}
+            {% for album in people.albums %}
             {% if i % 4 == 0 %}
             <div class="row">
             {% endif %}
             {% if loop.first %}
                 <div class="col-lg-3">
-                    <a href="{{ url_for('frontend.default_album', id=album.people_id) }}" class="thumbnail">
+                    <a href="{{ url_for('frontend.default_album', id=people.id) }}" class="thumbnail">
                         <img data-src="holder.js/180x180" alt="默认相册" src="{{ theme_static('image/default-cover.png') }}" style="height: 180px; width: 180px%; display: block;">
                     </a>
                 </div>
@@ -33,8 +34,10 @@
             </div>
             {% endif %}
             {% endfor %}
+            {% if people.id == g.user.id %}
             <hr />
             <a href="{{ url_for('photo.add_album') }}" class="btn btn-primary">新建相册</a>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -43,16 +43,19 @@ def people(id):
 
 @frontend.route('/people/<int:id>/album/')
 def album(id):
+    people = People.query.get_or_404(id)
     albums = PhotoAlbum.query.filter_by(people_id=id).all()
     # default_album_photos = Photo.query.filter_by(people_id=id).all()
-    return render_template('photo/all-albums.html', albums=albums, title=u'所有相册')
+    return render_template('photo/all-albums.html', albums=albums, people=people, title=u'所有相册')
 
 
 @frontend.route('/people/<int:id>/album/default/')
 def default_album(id):
+    people = People.query.get_or_404(id)
     default_album_photos = Photo.query.filter_by(people_id=id, album_id=None).all()
     return render_template(
         'photo/default-album.html',
+        people=people,
         photos=default_album_photos,
         title=u'默认相册'
     )

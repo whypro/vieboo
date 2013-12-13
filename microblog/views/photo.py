@@ -42,9 +42,9 @@ def add_album():
 def show_album(id):
     """显示相册里的所有照片，只能查看自己的相册"""
     album = PhotoAlbum.query.get_or_404(id)
-    if album.people_id != g.user.id:
-        flash(u'权限不足', 'warning')
-        return redirect('frontend.index')
+    #if album.people_id != g.user.id:
+    #    flash(u'权限不足', 'warning')
+    #    return redirect(url_for('frontend.index'))
     return render_template(
         'photo/album.html',
         album=album,
@@ -92,16 +92,31 @@ def delete_album(id):
         flash(u'删除失败', 'warning')
     return redirect(url_for('frontend.album', id=g.user.id))
 
-
+@photo.route('/album/upload/', methods=['GET', 'POST'])
 @photo.route('/album/<int:id>/upload/', methods=['GET', 'POST'])
 @login_required
-def upload_photo(id):
-    album = PhotoAlbum.query.get_or_404(id)
-    if album.people_id != g.user.id:
-        flash(u'权限不足', 'warning')
-        return redirect('frontend.index')
+def upload_photo(id=None):
+    if not id:
+        # 在页面选择要上传到的相册
+        pass
+    else:
+        album = PhotoAlbum.query.get_or_404(id)
+        if album.people_id != g.user.id:
+            flash(u'权限不足', 'warning')
+            return redirect('frontend.index')
+    # 列出所有相册
+    album_choices = [(a.id, a.title) for a in g.user.albums]
+    if not album_choices:
+        # 如果没有任何相册，则新建一个默认相册
+        default_album = PhotoAlbum(
+            title=u'默认相册',
+            people_id=g.user.id
+        )
+        db.session.add(default_album)
+        db.session.commit()
+        album_choices.append((default_album.id, default_album.title))
     upload_form = UploadForm()
-    # print upload_form.submit.name
+    upload_form.album.choices = album_choices
     if upload_form.validate_on_submit():
          # 循环上传照片
         for field in upload_form:
@@ -136,6 +151,7 @@ def show_photo(id):
 
 
 @photo.route('/photo/<int:id>/modify/', methods=['GET', 'POST'])
+@login_required
 def modify_photo(id):
     photo = Photo.query.get_or_404(id)
     if photo.people_id != g.user.id:
@@ -156,6 +172,7 @@ def modify_photo(id):
 
 
 @photo.route('/photo/<int:id>/delete/')
+@login_required
 def delete_photo(id):
     """删除照片"""
     photo = Photo.query.get_or_404(id)
@@ -169,22 +186,28 @@ def delete_photo(id):
     db.session.delete(photo)
     db.session.commit()
     flash(u'删除成功', 'success')
-    return redirect(url_for('frontend.album', id=g.user.id))
+    if photo.album_id:
+        return redirect(url_for('photo.show_album', id=photo.album_id))
+    else:
+        return redirect(url_for('frontend.album', id=g.user.id))
 
 
 
 @photo.route('/photo/<int:pid>/move/<int:aid>/')
+@login_required
 def move_to_album(pid, aid):
     pass
 
 
 @photo.route('/photo/<int:pid>/comment/')
 @photo.route('/photo/<int:pid>/comment/<int:cid>/')
+@login_required
 def comment_photo(pid, cid):
     pass
 
 
 @photo.route('/photo/comment/<int:id>/delete/')
+@login_required
 def delete_comment(id):
     pass
 

@@ -6,6 +6,13 @@ DEBUG = True
 SECRET_KEY = 'I love you.'
 MAX_CONTENT_LENGTH = 4 * 1024 *1024   # 上传文件大小：4MB
 
+
+# 自定义
+UPLOADS_DIR = 'D:/uploads'  # 绝对路径
+USE_BCS_BUCKET = False
+PER_PAGE = 10
+
+
 # 生产服务器配置
 if 'SERVER_SOFTWARE' in os.environ:
     from bae.core import const
@@ -22,6 +29,8 @@ if 'SERVER_SOFTWARE' in os.environ:
     BCS_ACCESS_KEY = const.ACCESS_KEY
     BCS_SECRET_KEY = const.SECRET_KEY
     BCS_BUCKET_NAME = 'vieboo'
+
+    USE_BCS_BUCKET = True
 
 # 本地服务器配置
 else:
@@ -62,9 +71,6 @@ UPLOADS_DEFAULT_DEST = 'D:/uploads'
 UPLOADS_DEFAULT_URL = 'D:/uploads/'
 
 
-# 自定义
-UPLOADS_DIR = 'D:/uploads'  # 绝对路径
-USE_BCS_BUCKET = False
-PER_PAGE = 10
+
 
 

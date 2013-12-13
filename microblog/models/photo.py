@@ -12,6 +12,7 @@ class PhotoAlbum(db.Model):
     people_id = db.Column(db.Integer, db.ForeignKey('people.id', ondelete='CASCADE'))
 
     photos = db.relationship('Photo', backref=db.backref('album'), lazy='dynamic')
+    people = db.relationship('People', backref=db.backref('albums', lazy='dynamic'))
 
     def __init__(self, title, people_id, description=None):
         self.title = title
@@ -27,6 +28,8 @@ class Photo(db.Model):
     create_time = db.Column(db.DateTime, default=datetime.datetime.now)
     album_id = db.Column(db.Integer, db.ForeignKey('photo_album.id', ondelete='SET NULL'))
     people_id = db.Column(db.Integer, db.ForeignKey('people.id', ondelete='CASCADE'))
+
+    people = db.relationship('People')
 
     def __init__(self, uri, people_id, description=None, album_id=None):
         self.uri = uri

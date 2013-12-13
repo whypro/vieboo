@@ -129,7 +129,10 @@ class People(db.Model):
         return self.email
 
     def get_avatar_uri(self):
-        return render_uri(self.avatar)
+        if self.avatar:
+            return render_uri(self.avatar)
+        else:
+            return None
 
     def change_password(self, password):
         self._password = hashlib.md5(password).hexdigest()

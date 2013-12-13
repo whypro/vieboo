@@ -102,7 +102,7 @@ class ModifyProfileDetailForm(Form):
     fullname = TextField(u'姓名')
     gender = RadioField(u'性别', choices=_gender_choices)
     sexual_orientation = SelectField(u'性取向', choices=_sexual_orientation_choices)
-    birthday = DateField(u'生日')
+    birthday = DateField(u'生日', validators=[DataRequired(message=u'请输入生日')],)
     blood_type = SelectField(u'血型', choices=_blood_type_choices)    # 血型
     profession = SelectField(u'职业', choices=_profession_choices)
     education = SelectField(u'学历', choices=_education_choices)

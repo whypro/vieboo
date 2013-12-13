@@ -6,7 +6,8 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-3">
-            {{ img_avatar(g.user) }}
+            {{ img_avatar(photo.people) }}
+            <h4 class="text-center">{{ photo.people.nickname }}</h4>
             <hr />
         </div>
         <div class="col-lg-9">
@@ -19,11 +20,13 @@
             {% endif %}
             <hr />
             <div class="btn-group">
-                {% if photo.album_id %}
-                <a href="{{ url_for('photo.show_album', id=photo.album_id) }}" class="btn btn-primary">返回相册</a>
-                {% endif %}
+                {% if photo.people_id == g.user.id %}
                 <a href="{{ url_for('photo.modify_photo', id=photo.id) }}" class="btn btn-primary">修改属性</a>
                 <a href="{{ url_for('photo.delete_photo', id=photo.id) }}" class="btn btn-primary">删除照片</a>
+                {% endif %}
+                {% if photo.album_id %}
+                <a href="{{ url_for('photo.show_album', id=photo.album_id) }}" class="btn btn-primary">返回</a>
+                {% endif %}
             </div>
         </div>
     </div>

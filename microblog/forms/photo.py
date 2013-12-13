@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from flask.ext.wtf import Form
-from wtforms import TextAreaField, SubmitField, FileField, TextField
+from wtforms import TextAreaField, SubmitField, FileField, TextField, SelectField
 from wtforms.validators import DataRequired
 
 
 class UploadForm(Form):
+    album = SelectField(u'相册')
     photo_1 = FileField(u'图片1')
     photo_2 = FileField(u'图片2')
     photo_3 = FileField(u'图片3')
