@@ -8,6 +8,7 @@ from microblog.models.account import gender_enum, sexual_orientation_enum, blood
 _mobile_regexp = '((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)'
 _zip_regexp = '\d{6}'
 
+
 class LoginForm(Form):
     login = TextField(
         u'邮箱',

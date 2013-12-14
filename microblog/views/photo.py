@@ -92,20 +92,18 @@ def delete_album(id):
         flash(u'删除失败', 'warning')
     return redirect(url_for('frontend.album', id=g.user.id))
 
+
 @photo.route('/album/upload/', methods=['GET', 'POST'])
 @photo.route('/album/<int:id>/upload/', methods=['GET', 'POST'])
 @login_required
 def upload_photo(id=None):
-    if not id:
-        # 在页面选择要上传到的相册
-        pass
-    else:
+    if id:
         album = PhotoAlbum.query.get_or_404(id)
         if album.people_id != g.user.id:
             flash(u'权限不足', 'warning')
             return redirect('frontend.index')
     # 列出所有相册
-    album_choices = [(a.id, a.title) for a in g.user.albums]
+    album_choices = [(str(a.id), a.title) for a in g.user.albums]
     if not album_choices:
         # 如果没有任何相册，则新建一个默认相册
         default_album = PhotoAlbum(
@@ -114,10 +112,17 @@ def upload_photo(id=None):
         )
         db.session.add(default_album)
         db.session.commit()
-        album_choices.append((default_album.id, default_album.title))
+        album_choices.append((str(default_album.id), default_album.title))
+
     upload_form = UploadForm()
     upload_form.album.choices = album_choices
+    upload_form.album.data = str(id)
+
     if upload_form.validate_on_submit():
+        album = PhotoAlbum.query.get_or_404(upload_form.album.data)
+        if album.people_id != g.user.id:
+            flash(u'权限不足', 'warning')
+            return redirect('frontend.index')
          # 循环上传照片
         for field in upload_form:
             print field.name
@@ -127,12 +132,14 @@ def upload_photo(id=None):
                 filename = uploader.save(photo_data)
                 if not filename:
                     flash(u'上传失败', 'danger')
-                    return redirect(url_for('photo.show_album', id=id))
-                photo = Photo(uri=filename, album_id=id, people_id=g.user.id)
+                    return redirect(url_for('frontend.album', id=g.user.id))
+                print upload_form.album.data
+                photo = Photo(uri=filename, album_id=upload_form.album.data, people_id=g.user.id)
                 db.session.add(photo)
                 db.session.commit()
         flash(u'上传成功', 'success')
-        return redirect(url_for('photo.show_album', id=id))
+        return redirect(url_for('frontend.album', id=g.user.id))
+
     return render_template(
         'photo/upload.html',
         form=upload_form,

@@ -117,6 +117,8 @@ def show_login_log(page):
 def show_visit_log(page):
     pagination = VisitLog.query.order_by(VisitLog.visit_time.desc()).\
         paginate(page, per_page=50)
+    # For BAE fucking MySQL
+    # pagination = VisitLog.query.paginate(page, per_page=50)
     visit_logs = pagination.items
     return render_template(
         'admin/visit-log.html',
