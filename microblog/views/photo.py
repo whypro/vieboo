@@ -60,7 +60,9 @@ def modify_album(id):
     if album.people_id != g.user.id:
         flash(u'权限不足', 'warning')
         return redirect(url_for('show_album', id=album.id))
-
+    if album.title == u'默认相册':
+        flash(u'无法修改属性', 'warning')
+        return redirect(url_for('show_album', id=album.id))
     modify_album_form = ModifyAlbumForm(obj=album)
     if modify_album_form.validate_on_submit():
         album.title = modify_album_form.title.data
@@ -82,14 +84,43 @@ def modify_album(id):
 @login_required
 def delete_album(id):
     """删除相册"""
+    clear_album = request.args.get('clear')
+    print clear_album
     album = PhotoAlbum.query.get_or_404(id)
-    if album.people_id == g.user.id:
-        db.session.delete(album)
-        # TODO: 删除相册内的照片
-        db.session.commit()
-        flash(u'删除成功', 'success')
-    else:
+
+    if album.people_id != g.user.id:
         flash(u'删除失败', 'warning')
+        return redirect(url_for('frontend.album', id=g.user.id))
+    if album.title == u'默认相册':
+        flash(u'无法删除默认相册', 'warning')
+        return redirect(url_for('frontend.album', id=g.user.id))
+
+    if clear_album == '1':
+        # 删除相册内的照片
+        print 'delete photos'
+        for photo in album.photos:
+            db.session.delete(photo)
+            db.session.commit()
+    else:
+        # 移入默认相册
+        # TODO: commit 需要重新考虑
+        default_album = PhotoAlbum.query.filter_by(title=u'默认相册').first()
+        if not default_album:
+            # 如果没有默认相册，则新建一个默认相册
+            default_album = PhotoAlbum(
+                title=u'默认相册',
+                people_id=g.user.id
+            )
+            db.session.add(default_album)
+            db.session.commit()
+        for photo in album.photos:
+            photo.album_id = default_album.id
+            db.session.add(photo)
+            db.session.commit()
+
+    db.session.delete(album)
+    db.session.commit()
+    flash(u'删除成功', 'success')
     return redirect(url_for('frontend.album', id=g.user.id))
 
 

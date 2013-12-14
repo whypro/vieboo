@@ -34,8 +34,10 @@
             <div class="btn-group">
                 {% if album.people_id == g.user.id %}
                 <a href="{{ url_for('photo.upload_photo', id=album.id) }}" class="btn btn-primary">上传照片</a>
+                {% if album.title != '默认相册' %}
                 <a href="{{ url_for('photo.modify_album', id=album.id) }}" class="btn btn-primary">修改属性</a>
                 <a href="{{ url_for('photo.delete_album', id=album.id) }}" class="btn btn-primary">删除相册</a>
+                {% endif %}
                 {% endif %}
                 <a href="{{ url_for('frontend.album', id=album.people_id) }}" class="btn btn-primary">返回</a>
             </div>

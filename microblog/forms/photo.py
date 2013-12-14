@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask.ext.wtf import Form
 from wtforms import TextAreaField, SubmitField, FileField, TextField, SelectField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NoneOf
 
 
 class UploadForm(Form):
@@ -17,7 +17,7 @@ class UploadForm(Form):
 class AddAlbumForm(Form):
     title = TextField(
         u'相册名称',
-        validators=[DataRequired(message=u'请输入相册名称')]
+        validators=[DataRequired(message=u'请输入相册名称'), NoneOf([u'默认相册'], message=u'相册名称不合法')]
     )
     description = TextAreaField(u'相册描述')
     submit = SubmitField(u'新建')
