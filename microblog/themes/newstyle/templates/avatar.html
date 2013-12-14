@@ -21,30 +21,10 @@
 
             <form class="form-horizontal" role="form" action="" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-6">
-                        {{ img_avatar(g.user) }}
-                    </div>
-                </div>
-                <div class="form-group">
                     {{ avatar_form.avatar.label(class_="col-lg-2 control-label") }}
                     <div class="col-lg-6">
                         <div class="input-group">
-                            <span class="input-group-addon">
-                                <input id="avatar-type-0" name="avatar-type" type="radio" value="0" checked>
-                            </span>
                             {{ avatar_form.avatar(class_="form-control", accept="image/*") }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-lg-2 control-label">头像网络地址</label>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input id="avatar-type-1" name="avatar-type" type="radio" value="1">
-                            </span>
-                            {{ avatar_form.avatar_uri(class_="form-control") }}
                         </div>
                     </div>
                 </div>

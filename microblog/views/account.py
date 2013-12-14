@@ -189,8 +189,7 @@ def profile_detail():
 def avatar():
     avatar_form = AvatarForm()
     if avatar_form.validate_on_submit():
-        avatar_type = request.form.get('avatar-type', None)
-        if avatar_type == '0' and avatar_form.avatar.data:
+        if avatar_form.avatar.data:
             # 上传头像
             avatar_filename = g.user.get_avatar_uri()
             avatar_data = request.files[avatar_form.avatar.name]
@@ -208,13 +207,6 @@ def avatar():
             db.session.add(g.user)
             db.session.commit()
             flash(u'上传成功', 'success')
-            return redirect(url_for('account.avatar'))
-
-        elif avatar_type == '1' and avatar_form.avatar_uri.data:
-            g.user.change_avatar(avatar_form.avatar_uri.data)
-            db.session.add(g.user)
-            db.session.commit()
-            flash(u'修改成功', 'success')
             return redirect(url_for('account.avatar'))
 
     return render_template('avatar.html', avatar_form=avatar_form, title=u'修改头像')
