@@ -68,7 +68,12 @@ def comment(mid, cid=None):
         db.session.commit()
         flash(u'评论成功', 'success')
         return redirect(url_for('mblog.comment', mid=mid))
-    return render_template('comment.html', form=comment_form, microblog=microblog, parent_comment=parent_comment)
+    return render_template(
+        'comment.html',
+        form=comment_form,
+        microblog=microblog,
+        parent_comment=parent_comment
+    )
 
 
 @mblog.route('/comment/delete/<int:id>/')

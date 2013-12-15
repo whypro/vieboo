@@ -11,7 +11,8 @@
             <hr />
             <div class="divider"></div>
             <ul class="nav nav-pills nav-stacked">
-                <li><a href="{{ url_for('account.profile') }}">修改资料</a></li>
+                <li><a href="{{ url_for('account.profile') }}">基本资料</a></li>
+                <li><a href="{{ url_for('account.profile_detail') }}">详细资料</a></li>
                 <li><a href="{{ url_for('account.password') }}">修改密码</a></li>
                 <li class="active"><a href="{{ url_for('account.avatar') }}">修改头像</a></li>
             </ul>
@@ -20,30 +21,10 @@
 
             <form class="form-horizontal" role="form" action="" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-6">
-                        {{ img_avatar(g.user) }}
-                    </div>
-                </div>
-                <div class="form-group">
                     {{ avatar_form.avatar.label(class_="col-lg-2 control-label") }}
                     <div class="col-lg-6">
                         <div class="input-group">
-                            <span class="input-group-addon">
-                                <input name="avatar-type" type="radio" checked>
-                            </span>
-                            {{ avatar_form.avatar(class_="form-control") }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-lg-2 control-label">头像网络地址</label>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <input name="avatar-type" type="radio">
-                            </span>
-                            <input type="text" class="form-control" id="avatar-url">
+                            {{ avatar_form.avatar(class_="form-control", accept="image/*") }}
                         </div>
                     </div>
                 </div>
@@ -59,5 +40,17 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#avatar_uri").focusin(function(){
+    $("#avatar-type-1").attr("checked",true);
+  });
+  $("#avatar").focusin(function(){
+    $("#avatar-type-0").attr("checked",true);
+  });
+});
+</script>
 {% endblock %}

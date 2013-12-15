@@ -31,10 +31,9 @@
                         <td>{{ login_log.login_ip }}</td>
                     </tr>
                     {% endfor %}
-
                 </tbody>
-
             </table>
+            {{ render_pagination(pagination, 'admin.show_login_log' ) }}
         </div>
     </div>
 </div>

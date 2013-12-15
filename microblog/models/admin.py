@@ -18,6 +18,8 @@ class VisitLog(db.Model):
     visit_time = db.Column(db.DateTime, default=datetime.datetime.now)
     people_id = db.Column(db.Integer, db.ForeignKey('people.id', ondelete='SET NULL'))
 
+    people = db.relationship('People', uselist=False)
+
     def __init__(self, url, method, referrer, platform, browser, version, client_ip, visit_time, people_id):
         self.url = url
         self.referrer = referrer

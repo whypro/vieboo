@@ -13,12 +13,17 @@ class Microblog(db.Model):
         db.ForeignKey(People.id, ondelete='CASCADE'),
         nullable=False
     )
-    parent_microblog_id = db.Column(db.Integer, db.ForeignKey('microblog.id', ondelete='CASCADE'))
+    parent_microblog_id = db.Column(db.Integer, db.ForeignKey('microblog.id', ondelete='SET NULL'))
     content = db.Column(db.Text, nullable=False)
     post_time = db.Column(db.DateTime, default=datetime.datetime.now)
     comments = db.relationship(
         'Comment', backref='microblog', lazy='dynamic',
         passive_deletes=True)
+
+    reposts = db.relationship(
+        'Microblog', backref=db.backref('parent_microblog', remote_side=id),
+        lazy='dynamic'
+    )
 
     def __init__(self, people_id, content, parent_microblog_id=None):
         self.people_id = people_id

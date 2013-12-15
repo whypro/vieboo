@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.uploads import UploadSet, IMAGES
+# from flask.ext.uploads import UploadSet, IMAGES
 
 
 class nullpool_SQLAlchemy(SQLAlchemy):
@@ -12,4 +12,4 @@ class nullpool_SQLAlchemy(SQLAlchemy):
 
 # db = SQLAlchemy()
 db = nullpool_SQLAlchemy()
-photos = UploadSet('photos', IMAGES)
+# photos = UploadSet('photos', IMAGES)

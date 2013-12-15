@@ -1,0 +1,39 @@
+{% extends theme('layout.html') %}
+{% set active = 'album' %}
+{% block title %}相册 | {{ title }}{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            {{ img_avatar(people) }}
+            <h4 class="text-center">{{ people.nickname }}</h4>
+            <hr />
+        </div>
+        <div class="col-lg-9">
+            <h2>所有相册</h2>
+            <hr />
+            {% for album in people.albums %}
+            {% if loop.index0 % 4 == 0 %}
+            <div class="row">
+            {% endif %}
+                <div class="col-lg-3">
+                    <a href="{{ url_for('photo.show_album', id=album.id) }}" class="thumbnail">
+                        <img data-src="holder.js/180x180" alt="{{ album.title }}" src="{{ album.photos.first().get_uri() if album.photos.count() else theme_static('image/default-cover.png') }}" style="height: 180px; width: 180px%; display: block;">
+                    </a>
+                </div>
+            {% if loop.index0 % 4 == 3 or loop.last %}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% if people.id == g.user.id %}
+            <hr />
+            <div class="btn-group">
+                <a href="{{ url_for('photo.upload_photo') }}" class="btn btn-primary">上传照片</a>
+                <a href="{{ url_for('photo.add_album') }}" class="btn btn-primary">新建相册</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
