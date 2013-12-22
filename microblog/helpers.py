@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import current_app, request, url_for
+from urlparse import urlparse, urljoin
+from flask import current_app, request, url_for, redirect
 from flask.ext.themes import render_theme_template
-
 
 
 def get_default_theme():
@@ -40,3 +40,27 @@ def get_uploader():
         from microblog.uploader import BCSSDKUploader
         uploader = BCSSDKUploader()
     return uploader
+
+
+# redirect back
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and \
+        ref_url.netloc == test_url.netloc
+
+
+def get_redirect_target():
+    for target in request.values.get('next'), request.referrer:
+        if not target:
+            continue
+        elif is_safe_url(target):
+            return target
+
+
+def redirect_back(endpoint, **values):
+    target = request.form['next']
+    if not target or not is_safe_url(target):
+        target = url_for(endpoint, **values)
+    return redirect(target)
+# redirect back

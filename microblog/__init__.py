@@ -14,7 +14,7 @@ from flask.ext.themes import setup_themes
 from flask.ext.uploads import configure_uploads, patch_request_class
 from flask_wtf import CsrfProtect
 from flask.ext.principal import Principal, identity_loaded, RoleNeed, UserNeed, identity_changed
-
+from flask.ext.gemoji import Gemoji
 from microblog import views
 from microblog.extensions import db
 from microblog.models import People, VisitLog
@@ -25,6 +25,7 @@ def create_app(config=None):
     app = Flask(__name__)
     app.config.from_object(config)
     db.init_app(app)
+    Gemoji.init_app(app)
 
     configure_modules(app)
     config_error_handlers(app)
