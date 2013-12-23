@@ -144,12 +144,15 @@ def upload_photo(id=None):
         db.session.add(default_album)
         db.session.commit()
         album_choices.append((str(default_album.id), default_album.title))
-
+        
     upload_form = UploadForm()
     upload_form.album.choices = album_choices
+    if not id:
+        id = album_choices[0][0]    # 第一个相册的 id
     upload_form.album.data = str(id)
-
+    
     if upload_form.validate_on_submit():
+        print 'id:', upload_form.album.data
         album = PhotoAlbum.query.get_or_404(upload_form.album.data)
         if album.people_id != g.user.id:
             flash(u'权限不足', 'warning')
