@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from flask import session
 from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField, BooleanField, HiddenField, SubmitField, FileField, RadioField, DateField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, EqualTo, Email, Optional, Regexp, URL
@@ -47,6 +48,10 @@ class RegisterForm(Form):
     mobile = TextField(
         u'手机', validators=[Optional(), Regexp(_mobile_regexp, message=u'请输入一个合法的号码')]
     )
+    captcha = TextField(
+        u'验证码', 
+        validators=[DataRequired(message=u'请输入验证码')]
+    )
     next = HiddenField()
     submit = SubmitField(u'注册')
 
@@ -54,6 +59,10 @@ class RegisterForm(Form):
         people = People.query.filter(People.email.like(field.data)).first()
         if people:
             raise ValidationError(u'用户名已存在')
+    
+    def validate_captcha(self, field):
+        if field.data.upper() != session['captcha'].upper():
+            raise ValidationError(u'验证码不正确')
 
 
 class ChangePasswordForm(Form):

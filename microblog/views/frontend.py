@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, url_for, redirect, send_from_directory, current_app, abort, request
+import StringIO
+from flask import Module, g, url_for, redirect, send_from_directory, \
+    current_app, abort, request, session
 from microblog.models import People, Microblog, PhotoAlbum, Photo
 from microblog.helpers import render_template
 from microblog.forms import PostForm
+from microblog.captcha import create_captcha
 
 frontend = Module(__name__)
 
@@ -70,6 +73,26 @@ def remote_photo():
     return redirect(uri)
 
 
+@frontend.route('/captcha/')
+def get_captcha():
+    #把 strs 发给前端,或者在后台使用session保存
+    img, strs = create_captcha(
+        size=(100, 24), img_type="PNG", 
+        font_type="microblog/static/fonts/ALGER.TTF",
+    )
+    buf = StringIO.StringIO()
+    img.save(buf,'PNG')
+    session['captcha'] = strs
+    response = current_app.make_response(buf.getvalue())
+    response.headers['Content-Type'] = 'image/png'
+    return response
+
+
+@frontend.route('/about/')
+def show_about():
+    return render_template('about.html')
+    
+    
 @frontend.route('/test/<int:error>/')
 def test(error):
     """HTTP 错误测试"""

@@ -44,9 +44,9 @@
             <li><a href="{{ url_for('admin.index') }}">管理中心</a></li>
             {% endif %}
             {% endif %}
+            <li{%- if active == 'about' %} class="active"{% endif -%}><a href="{{ url_for('frontend.show_about') }}">关于</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-
             {% if g.user.is_authenticated() %}
             <li{%- if active == 'chatting' %} class="active"{% endif -%}>
                 <a href="{{ url_for('friendship.show_inbox') }}">
