@@ -77,7 +77,7 @@ def remote_photo():
 def get_captcha():
     #把 strs 发给前端,或者在后台使用session保存
     img, strs = create_captcha(
-        size=(100, 24), img_type="PNG", 
+        size=(90, 43), img_type="PNG", 
         font_type="microblog/static/fonts/ALGER.TTF",
     )
     buf = StringIO.StringIO()

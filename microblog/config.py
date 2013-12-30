@@ -14,7 +14,7 @@ if platform.system() == 'Windows':
     UPLOADS_DIR = 'D:/uploads'  # 绝对路径
 else:
 # elif platform.system() == 'Linux': 
-    UPLOADS_DIR = '/tmp/Vieboo/uploads'  # 绝对路径
+    UPLOADS_DIR = '/home/whypro/Workspace/Vieboo/uploads'  # 绝对路径
 USE_BCS_BUCKET = False
 PER_PAGE = 10
 

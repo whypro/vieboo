@@ -1,5 +1,10 @@
 /* @import url("//fonts.googleapis.com/css?family=Lato:400,700,900,400italic"); */
 
+@font-face {
+    font-family: Quando;
+    src: url('/static/fonts/Quando-Regular.ttf');
+}
+
 /*! normalize.css v2.1.3 | MIT License | git.io/normalize */
 
 article,
@@ -299,7 +304,7 @@ html {
 }
 
 body {
-  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Quando", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.428571429;
   color: #2c3e50;
@@ -393,7 +398,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Quando", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
