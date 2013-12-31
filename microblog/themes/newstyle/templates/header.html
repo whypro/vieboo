@@ -38,6 +38,8 @@
                     <li><a href="{{ url_for('friendship.show_mutual') }}">互相关注</a></li>
                     <li class="divider"></li>
                     <li><a href="{{ url_for('friendship.show_blocking') }}">黑名单</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{ url_for('friendship.show_inbox') }}">私信</a></li>
                 </ul>
             </li>
             {% if g.user.is_admin() %}
@@ -48,11 +50,13 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {% if g.user.is_authenticated() %}
-            <li{%- if active == 'chatting' %} class="active"{% endif -%}>
-                <a href="{{ url_for('friendship.show_inbox') }}">
-                    私信
-                    {% if g.user.received_chattings.filter_by(has_read=False).count() %}
-                    <span class="glyphicon glyphicon-star" style="color: #CC3333;"></span>
+            <li{%- if active == 'notification' %} class="active"{% endif -%}>
+                <a href="{{ url_for('notification.show_notification') }}">
+                    通知
+                    {% set new_notification_number = g.user.notifications.filter_by(has_read=False).count() %}
+                    {% if new_notification_number %}
+                    <span class="text-danger">({{ new_notification_number }})</span>
+                    {# <span class="glyphicon glyphicon-star" style="color: #CC3333;"></span> #}
                     {% endif %}
                 </a>
             </li>

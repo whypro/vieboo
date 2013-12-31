@@ -49,6 +49,7 @@ def configure_modules(app):
     app.register_module(views.admin)
     # app.register_module(views.oauth2)
     app.register_module(views.photo)
+    app.register_module(views.notification)
 
 
 def configure_theme(app):

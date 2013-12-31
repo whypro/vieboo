@@ -3,7 +3,7 @@ from flask import Module, g, redirect, url_for, flash, abort, current_app
 from flask.ext.login import login_required
 from sqlalchemy import and_
 from microblog.forms import ChatForm, AddGroupForm, RenameGroupForm
-from microblog.models import People, Friendship, Chatting, Group, Blackship
+from microblog.models import People, Friendship, Chatting, Group, Blackship, Notification
 from microblog.extensions import db
 from microblog.helpers import render_template
 
@@ -28,6 +28,8 @@ def follow(id):
         else:
             g.user.following.append(people)
             db.session.add(g.user)
+            notification = Notification(from_id=g.user.id, to_id=id, object_table='friendship')
+            db.session.add(notification)
             db.session.commit()
             flash(u'关注成功', 'success')
     return redirect(url_for('frontend.index'))
@@ -165,6 +167,9 @@ def send_chatting(id):
     if chat_form.validate_on_submit():
         chatting = Chatting(from_people.id, to_people.id, content=chat_form.content.data)
         db.session.add(chatting)
+        db.session.commit()
+        notification = Notification(from_id=g.user.id, to_id=id, object_table='chatting', object_id=chatting.id)
+        db.session.add(notification)
         db.session.commit()
         flash(u'发送成功', 'success')
         return redirect(url_for('frontend.index'))

@@ -5,6 +5,7 @@ from microblog.extensions import db
 from microblog.models import Microblog, Comment
 from microblog.forms import PostForm, CommentForm, RepostForm
 from microblog.helpers import render_template
+from microblog.models.notification import Notification
 
 mblog = Module(__name__, url_prefix='/microblog')
 
@@ -66,6 +67,20 @@ def comment(mid, cid=None):
         )
         db.session.add(comment)
         db.session.commit()
+        if cid and g.user.id != parent_comment.people_id:
+            notification = Notification(
+                from_id=g.user.id, to_id=parent_comment.people_id,
+                object_table='comment', object_id=comment.id
+            )
+            db.session.add(notification)
+            db.session.commit()
+        elif g.user.id != microblog.people_id:
+            notification = Notification(
+                from_id=g.user.id, to_id=microblog.people_id,
+                object_table='microblog', object_id=mid
+            )
+            db.session.add(notification)
+            db.session.commit()
         flash(u'评论成功', 'success')
         return redirect(url_for('mblog.comment', mid=mid))
     return render_template(
@@ -100,6 +115,12 @@ def repost(id):
     if repost_form.validate_on_submit():
         rp_microblog = Microblog(g.user.id, repost_form.content.data, parent_microblog_id=id)
         db.session.add(rp_microblog)
+        if g.user.id != microblog.people_id:
+            notification = Notification(
+                from_id=g.user.id, to_id=microblog.people_id,
+                object_table='microblog', object_id=id
+            )
+            db.session.add(notification)
         db.session.commit()
         flash(u'转发成功', 'success')
         return redirect(url_for('frontend.index'))
