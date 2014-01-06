@@ -105,7 +105,6 @@ def config_before_request(app):
                 print 'never mind.'
 
 
-
 def config_error_handlers(app):
     @app.errorhandler(404)
     def page_not_found(e):
