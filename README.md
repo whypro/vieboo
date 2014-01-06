@@ -15,7 +15,7 @@
 	或者(Linux)
 	
 		source virtualenv/bin/activate
-	然后安装第三方库
+	然后在虚拟环境中安装第三方库
 	
 		pip install -r requirements.txt
 
@@ -28,7 +28,7 @@
 		CREAT DATABASE microblog;
 4. 修改项目配置文件
 
-	打开 config.py，将 DB_PASSWORD = 'whypro' 中的 'whypro' 修改为您的 **root 密码**
+	打开 config.py，将 DB_PASSWORD = 'whypro' 中的 'whypro' 修改为您的数据库 **root 密码**
 4. 运行 http://localhost:5000/admin/install/ 自动初始化数据库，成功后将跳转至首页
 
 5. 注册一个账号体验吧！
