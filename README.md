@@ -28,10 +28,15 @@
 		CREAT DATABASE microblog;
 4. 修改项目配置文件
 
-	打开 config.py，将 DB_PASSWORD = 'whypro' 中的 'whypro' 修改为您的数据库 **root 密码**
-4. 运行 http://localhost:5000/admin/install/ 自动初始化数据库，成功后将跳转至首页
+	打开 microblog/config.py，将 DB_PASSWORD = 'whypro' 中的 'whypro' 修改为您的数据库 **root 密码**
+5. 运行服务器
 
-5. 注册一个账号体验吧！
+		python runserver.py
+7. 初始化数据库
+
+	打开 http://localhost:5000/admin/install/ 自动初始化数据库，成功后将跳转至首页
+
+8. 注册一个账号体验吧！
 
 
 ------
