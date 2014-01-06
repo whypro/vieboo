@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 import os
+import platform
+
 
 # FLASK
 DEBUG = True
@@ -8,7 +10,11 @@ MAX_CONTENT_LENGTH = 4 * 1024 *1024   # 上传文件大小：4MB
 
 
 # 自定义
-UPLOADS_DIR = 'D:/uploads'  # 绝对路径
+if platform.system() == 'Windows':
+    UPLOADS_DIR = 'D:/uploads'  # 绝对路径
+else:
+# elif platform.system() == 'Linux': 
+    UPLOADS_DIR = '/home/whypro/Workspace/Vieboo/uploads'  # 绝对路径
 USE_BCS_BUCKET = False
 PER_PAGE = 10
 

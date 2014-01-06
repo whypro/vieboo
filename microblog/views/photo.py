@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Module, flash, redirect, url_for, request, g, current_app
+from flask import Module, flash, redirect, url_for, request, g, current_app, \
+    abort
 from flask.ext.login import login_required
+from sqlalchemy import and_
 from microblog.forms.photo import PhotoForm
 from microblog.models import PhotoAlbum
 from microblog.extensions import db
@@ -144,12 +146,15 @@ def upload_photo(id=None):
         db.session.add(default_album)
         db.session.commit()
         album_choices.append((str(default_album.id), default_album.title))
-
+        
     upload_form = UploadForm()
     upload_form.album.choices = album_choices
+    if not id:
+        id = album_choices[0][0]    # 第一个相册的 id
     upload_form.album.data = str(id)
-
+    
     if upload_form.validate_on_submit():
+        print 'id:', upload_form.album.data
         album = PhotoAlbum.query.get_or_404(upload_form.album.data)
         if album.people_id != g.user.id:
             flash(u'权限不足', 'warning')
@@ -178,12 +183,28 @@ def upload_photo(id=None):
     )
 
 
-@photo.route('/photo/<int:id>/')
-def show_photo(id):
-    photo = Photo.query.get_or_404(id)
+@photo.route('/photo/<int:pid>/')
+@photo.route('/album/<int:aid>/photo/<int:pid>/')
+def show_photo(pid, aid=None):
+    photo = Photo.query.get_or_404(pid)
+    prev_id = next_id = None
+    if aid:
+        if photo.album_id != aid:
+            abort(404)
+        else:
+            # 获取 prev_id & next_id
+            # 上一张和下一张
+            prev_photo = Photo.query.filter(and_(Photo.id<pid, Photo.album_id==aid)).order_by(Photo.id.desc()).first()
+            if prev_photo:
+                prev_id = prev_photo.id
+            next_photo = Photo.query.filter(and_(Photo.id>pid, Photo.album_id==aid)).first()
+            if next_photo:
+                next_id = next_photo.id
     return render_template(
         'photo/photo.html',
         photo=photo,
+        prev_id=prev_id,
+        next_id=next_id,
         title=u'查看照片'
     )
 

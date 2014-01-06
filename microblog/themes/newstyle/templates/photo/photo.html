@@ -28,6 +28,14 @@
                 <a href="{{ url_for('photo.show_album', id=photo.album_id) }}" class="btn btn-primary">返回</a>
                 {% endif %}
             </div>
+            <div class="btn-group">
+                {% if prev_id %}
+                <a href="{{ url_for('photo.show_photo', pid=prev_id, aid=photo.album_id) }}" class="btn btn-primary">上一张</a>
+                {% endif %}
+                {% if next_id %}
+                <a href="{{ url_for('photo.show_photo', pid=next_id, aid=photo.album_id) }}" class="btn btn-primary">下一张</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

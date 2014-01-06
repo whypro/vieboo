@@ -5,6 +5,7 @@ from microblog.extensions import db
 from microblog.models import Microblog, Comment
 from microblog.forms import PostForm, CommentForm, RepostForm
 from microblog.helpers import render_template
+from microblog.models.notification import Notification
 
 mblog = Module(__name__, url_prefix='/microblog')
 
@@ -23,7 +24,7 @@ def post():
     return render_template('post.html', form=post_form)
 
 
-@mblog.route('/delete/<int:id>/')
+@mblog.route('/<int:id>/delete/')
 @login_required
 def delete(id):
     microblog = Microblog.query.get_or_404(id)
@@ -38,8 +39,8 @@ def delete(id):
     return redirect(url_for('frontend.index'))
 
 
-@mblog.route('/comment/<int:mid>/', methods=['GET', 'POST'])
-@mblog.route('/comment/<int:mid>/<int:cid>/', methods=['GET', 'POST'])
+@mblog.route('/<int:mid>/comment/', methods=['GET', 'POST'])
+@mblog.route('/<int:mid>/comment/<int:cid>/', methods=['GET', 'POST'])
 @login_required
 def comment(mid, cid=None):
     microblog = Microblog.query.get_or_404(mid)
@@ -66,6 +67,20 @@ def comment(mid, cid=None):
         )
         db.session.add(comment)
         db.session.commit()
+        if cid and g.user.id != parent_comment.people_id:
+            notification = Notification(
+                from_id=g.user.id, to_id=parent_comment.people_id,
+                object_table='comment', object_id=comment.id
+            )
+            db.session.add(notification)
+            db.session.commit()
+        elif g.user.id != microblog.people_id:
+            notification = Notification(
+                from_id=g.user.id, to_id=microblog.people_id,
+                object_table='microblog', object_id=mid
+            )
+            db.session.add(notification)
+            db.session.commit()
         flash(u'评论成功', 'success')
         return redirect(url_for('mblog.comment', mid=mid))
     return render_template(
@@ -76,7 +91,7 @@ def comment(mid, cid=None):
     )
 
 
-@mblog.route('/comment/delete/<int:id>/')
+@mblog.route('/comment/<int:id>/delete/')
 @login_required
 def delete_comment(id):
     comment = Comment.query.get_or_404(id)
@@ -92,7 +107,7 @@ def delete_comment(id):
     return redirect(url_for('mblog.comment', mid=mid))
 
 
-@mblog.route('/repost/<int:id>/', methods=['GET', 'POST'])
+@mblog.route('/<int:id>/repost/', methods=['GET', 'POST'])
 @login_required
 def repost(id):
     microblog = Microblog.query.get_or_404(id)
@@ -100,6 +115,12 @@ def repost(id):
     if repost_form.validate_on_submit():
         rp_microblog = Microblog(g.user.id, repost_form.content.data, parent_microblog_id=id)
         db.session.add(rp_microblog)
+        if g.user.id != microblog.people_id:
+            notification = Notification(
+                from_id=g.user.id, to_id=microblog.people_id,
+                object_table='microblog', object_id=id
+            )
+            db.session.add(notification)
         db.session.commit()
         flash(u'转发成功', 'success')
         return redirect(url_for('frontend.index'))

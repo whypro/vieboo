@@ -1,0 +1,28 @@
+{% extends theme('layout.html') %}
+{% set active = 'notification' %}
+{% block title %}通知{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <ul>
+                {% for notification in notifications %}
+                {% if notification.__repr__() %}
+                <li class="list-group-item{{ ' text-muted' if notification.has_read }}">
+                    <span class="glyphicon glyphicon-arrow-right"></span>
+                    {{ notification | safe }}&emsp;&emsp;<span class="text-muted"><small>{{ notification.create_time }}</small></span>
+                    <a href="{{ url_for('notification.delete_notification', id=notification.id) }}" class="btn btn-xs btn-default pull-right">删除</a>
+                    <span class="pull-right">&nbsp;</span>
+                    {% if not notification.has_read %}
+                    <a href="{{ url_for('notification.set_read', id=notification.id) }}" class="btn btn-xs btn-danger pull-right">标记为已读</a>
+                    {% else %}
+                    <a href="{{ url_for('notification.set_unread', id=notification.id) }}" class="btn btn-xs btn-default pull-right">标记为未读</a>
+                    {% endif %}
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
