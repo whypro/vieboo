@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-import os
-import sys
-# 将依赖模块文件夹加入系统路径
 import datetime
 from sqlalchemy.exc import ProgrammingError
-
-deps_path = os.path.join(os.path.split(os.path.realpath(__file__))[0],'deps')
-sys.path.insert(0, deps_path)
 
 from flask import Flask, g, flash, redirect, url_for, request
 from flask.ext.login import LoginManager, current_user
@@ -93,16 +87,20 @@ def config_before_request(app):
             client_ip = get_client_ip()
             visit_time = datetime.datetime.now()
             people_id = getattr(g.user, 'id', None)
-            visit_log = VisitLog(
-                url, method, referrer,
-                platform, browser, version,
-                client_ip, visit_time, people_id
-            )
-            db.session.add(visit_log)
-            try:
-                db.session.commit()
-            except ProgrammingError:
-                print 'never mind.'
+            # 忽略静态文件的访问
+            if str(url)[-1] != '/':
+                pass
+            else:
+                visit_log = VisitLog(
+                    url, method, referrer,
+                    platform, browser, version,
+                    client_ip, visit_time, people_id
+                )
+                db.session.add(visit_log)
+                try:
+                    db.session.commit()
+                except ProgrammingError:
+                    print 'never mind.'
 
 
 def config_error_handlers(app):
