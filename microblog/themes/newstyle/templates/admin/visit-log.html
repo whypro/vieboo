@@ -26,6 +26,7 @@
                         <th>IP</th>
                         <th>访问时间</th>
                         <th>用户名</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,6 +42,7 @@
                         <td>{{ visit_log.client_ip }}</td>
                         <td>{{ visit_log.visit_time }}</td>
                         <td>{{ visit_log.people.nickname if visit_log.people_id else 'N/A'}}</td>
+                        <td><a class="btn btn-danger btn-xs" href="{{ url_for('delete_visit_log', id=visit_log.id) }}">删除</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -127,6 +127,16 @@ def show_visit_log(page):
     )
 
 
+@admin.route('/visit-log/<int:id>/delete/')
+@login_required
+@admin_permission.require(401)
+def delete_visit_log(id):
+    visit_log = VisitLog.query.get(id)
+    db.session.delete(visit_log)
+    db.session.commit()
+    return redirect(url_for('show_visit_log'))
+
+
 @admin.route('/install/')
 def install():
     db.create_all()

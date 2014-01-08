@@ -82,7 +82,7 @@ def get_captcha():
         font_type="microblog/static/fonts/ALGER.TTF",
     )
     buf = StringIO.StringIO()
-    img.save(buf,'PNG')
+    img.save(buf, 'PNG')
     session['captcha'] = strs
     response = current_app.make_response(buf.getvalue())
     response.headers['Content-Type'] = 'image/png'
