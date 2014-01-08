@@ -64,3 +64,27 @@ def redirect_back(endpoint, **values):
         target = url_for(endpoint, **values)
     return redirect(target)
 # redirect back
+
+
+from urllib import urlopen, urlencode
+import json
+def get_address(ip):
+    api = 'http://api.map.baidu.com/location/ip'
+    ak = 'AF28c466e7dd74686195abc876d4849b'
+    data = {
+        'ak': ak,
+        'ip': ip,
+        'coor': 'bd09ll'
+    }
+    encode_data = urlencode(data)
+    full_url = api + '?' + encode_data
+    u = urlopen(full_url)
+    resp = u.read()
+    # 将 json string 转换为 object
+    resp_dict = json.loads(resp)
+    if resp_dict['status'] != 0:
+        return None
+    else:
+        address = resp_dict['address']
+        # 返回格式如：“陕西西安”
+        return ''.join(address.split('|')[1:3])
