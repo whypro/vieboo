@@ -25,7 +25,7 @@ def index():
         # 只显示关注的人
         microblogs = Microblog.query.\
             filter(Microblog.people_id.in_([p.id for p in g.user.following]+[g.user.id])).\
-            order_by(Microblog.post_time.desc()).limit(10).all()
+            order_by(Microblog.post_time.desc()).all()
     else:
         microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
     # print microblogs
@@ -34,7 +34,7 @@ def index():
 
 @frontend.route('/square/')
 def square():
-    microblogs = Microblog.query.order_by(Microblog.post_time.desc()).limit(10).all()
+    microblogs = Microblog.query.order_by(Microblog.post_time.desc()).all()
     # print microblogs
     return render_template('square.html', microblogs=microblogs, post_form=PostForm())
 
