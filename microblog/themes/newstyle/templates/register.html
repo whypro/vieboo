@@ -54,12 +54,12 @@
                     {{ register_form.captcha.label(class_='col-lg-2 control-label') }}
                     <div class="col-lg-6">
                         <div class="row">
-	                        <div class="col-lg-7">
-	                        {{ register_form.captcha(class_='form-control', placeholder='请输入验证码') }}
-	                        </div>
-	                        <div class="col-lg-5">
-	                            <img src="{{ url_for('frontend.get_captcha') }}" />
-	                        </div>
+                            <div class="col-lg-7">
+                            {{ register_form.captcha(class_='form-control', placeholder='请输入验证码') }}
+                            </div>
+                            <div class="col-lg-5">
+                                <img src="{{ url_for('frontend.get_captcha') }}" onclick="this.src='{{ url_for('frontend.get_captcha') }}'" />
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
