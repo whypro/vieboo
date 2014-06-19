@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 from flask import Blueprint, redirect, url_for, flash
 from flask.ext.login import login_required
 from microblog.extensions import db
@@ -40,7 +40,7 @@ def block_people(id):
         people.status = 'blocked'
         db.session.add(people)
         db.session.commit()
-        flash(u'禁言成功', 'success')
+        flash('禁言成功', 'success')
     return redirect(url_for('show_people'))
 
 
@@ -53,7 +53,7 @@ def unblock_people(id):
         people.status = 'active'
         db.session.add(people)
         db.session.commit()
-        flash(u'取消禁言成功', 'success')
+        flash('取消禁言成功', 'success')
     return redirect(url_for('show_people'))
 
 
@@ -65,7 +65,7 @@ def delete_people(id):
     people.status = 'deleted'
     db.session.add(people)
     db.session.commit()
-    flash(u'用户已删除', 'success')
+    flash('用户已删除', 'success')
     return redirect(url_for('show_people'))
 
 
@@ -91,7 +91,7 @@ def delete_microblog(id):
     microblog = Microblog.query.get_or_404(id)
     db.session.delete(microblog)
     db.session.commit()
-    flash(u'微博已删除', 'success')
+    flash('微博已删除', 'success')
     return redirect(url_for('show_microblog'))
 
 
@@ -140,5 +140,5 @@ def delete_visit_log(id):
 @admin.route('/install/')
 def install():
     db.create_all()
-    flash(u'数据库初始化成功', 'success')
+    flash('数据库初始化成功', 'success')
     return redirect(url_for('index'))

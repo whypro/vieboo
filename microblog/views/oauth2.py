@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from flask import Blueprint, request, redirect, g, current_app, flash, url_for
 # from douban_client import DoubanClient
 # from douban_client.api.error import DoubanAPIError
@@ -21,7 +22,7 @@ oauth2 = Blueprint('oauth2', __name__, url_prefix='/oauth2')
 @oauth2.route('/sinaweibo/')
 def sinaweibo_callback():
     code = request.args.get('code')
-    flash(u'您的授权码是：{0}'.format(code), 'info')
+    flash('您的授权码是：{0}'.format(code), 'info')
     return redirect(url_for('frontend.index'))
 
 
@@ -46,7 +47,7 @@ def sinaweibo_callback():
 #     login_log = LoginLog(people.id, ip)
 
 
-#     flash(u'登录成功', 'success')
+#     flash('登录成功', 'success')
 #     return redirect(url_for('frontend.index'))
 
 

@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from __future__ import unicode_literals
 import os
 import platform
 
@@ -8,7 +9,7 @@ class Config(object):
 
     MAX_CONTENT_LENGTH = 4 * 1024 *1024   # 上传文件大小：4MB
     PER_PAGE = 10
-    IMAGES_EXT = tuple('jpg jpe jpeg png gif svg bmp'.split())
+    IMAGE_EXT = tuple('jpg jpe jpeg png gif svg bmp'.split())
     USE_BCS_BUCKET = False
     SQLALCHEMY_POOL_RECYCLE = 10
     # FLASK-THEMES
@@ -36,6 +37,17 @@ class DevelopmentConfig(Config):
 
     TEMP_DIR = 'temp'
     UPLOADS_DIR = 'uploads'
+
+
+class DevelopmentBCSConfig(DevelopmentConfig):
+    API_KEY = 'IBWv1TZbjHGeC3euOCWCKQBE'
+    SECRET_KEY = '0QuvWjERsuDrwf6NntSe962SWPgGGj3o'
+    # BAE BCS 配置
+    USE_BCS_BUCKET = True
+    BCS_ADDR = 'bcs.duapp.com'
+    BCS_ACCESS_KEY = API_KEY
+    BCS_SECRET_KEY = SECRET_KEY
+    BCS_BUCKET_NAME = 'vieboo'
 
 
 class BAEConfig(Config):

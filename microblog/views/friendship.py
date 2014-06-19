@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from flask import Blueprint, g, redirect, url_for, flash, abort, current_app
 from flask.ext.login import login_required
 from sqlalchemy import and_
@@ -16,22 +17,22 @@ friendship = Blueprint('friendship', __name__, url_prefix='/friendship')
 def follow(id):
     """关注"""
     if g.user.id == id:
-        flash(u'不能关注自己', 'warning')
+        flash('不能关注自己', 'warning')
     else:
         people = People.query.get_or_404(id)
         if g.user.is_following(id):
-            flash(u'不能重复关注', 'warning')
+            flash('不能重复关注', 'warning')
         elif g.user.is_blocking(id):
-            flash(u'不能关注黑名单中的人，请先移出黑名单', 'warning')
+            flash('不能关注黑名单中的人，请先移出黑名单', 'warning')
         elif people.is_blocking(g.user.id):
-            flash(u'对方拒绝了您的关注请求', 'warning')
+            flash('对方拒绝了您的关注请求', 'warning')
         else:
             g.user.following.append(people)
             db.session.add(g.user)
             notification = Notification(from_id=g.user.id, to_id=id, object_table='friendship')
             db.session.add(notification)
             db.session.commit()
-            flash(u'关注成功', 'success')
+            flash('关注成功', 'success')
     return redirect(url_for('frontend.index'))
 
 
@@ -44,7 +45,7 @@ def unfollow(id):
         g.user.following.remove(people)
         db.session.add(g.user)
         db.session.commit()
-        flash(u'取消成功', 'success')
+        flash('取消成功', 'success')
     return redirect(url_for('frontend.index'))
 
 
@@ -73,7 +74,7 @@ def show_following(page, gid=None):
                            active_gid=gid,
                            add_group_form=add_group_form,
                            rename_group_form=rename_group_form,
-                           title=u'我关注的')
+                           title='我关注的')
 
 
 @friendship.route('/followed/', defaults={'page': 1})
@@ -87,7 +88,7 @@ def show_followed(page):
                            people=followed,
                            pagination=pagination,
                            active_page='show_followed',
-                           title=u'关注我的')
+                           title='关注我的')
 
 
 @friendship.route('/mutual/', defaults={'page': 1})
@@ -103,18 +104,18 @@ def show_mutual(page):
                            people=mutual,
                            pagination=pagination,
                            active_page='show_mutual',
-                           title=u'互相关注')
+                           title='互相关注')
 
 
 @friendship.route('/block/<int:id>/')
 @login_required
 def block(id):
     if g.user.id == id:
-        flash(u'不能将自己加入黑名单', 'warning')
+        flash('不能将自己加入黑名单', 'warning')
     else:
         people = People.query.get_or_404(id)
         if g.user.is_blocking(id):
-            flash(u'不能重复加入黑名单', 'warning')
+            flash('不能重复加入黑名单', 'warning')
         else:
             g.user.blocking.append(people)
             # 取消关注
@@ -124,7 +125,7 @@ def block(id):
                 g.user.followed.remove(people)
             db.session.add(g.user)
             db.session.commit()
-            flash(u'加入黑名单成功', 'success')
+            flash('加入黑名单成功', 'success')
     return redirect(url_for('frontend.index'))
 
 
@@ -136,7 +137,7 @@ def unblock(id):
         g.user.blocking.remove(people)
         db.session.add(g.user)
         db.session.commit()
-        flash(u'取消黑名单成功', 'success')
+        flash('取消黑名单成功', 'success')
     return redirect(url_for('frontend.index'))
 
 
@@ -151,14 +152,14 @@ def show_blocking(page):
                            people=blocking,
                            pagination=pagination,
                            active_page='show_blocking',
-                           title=u'黑名单')
+                           title='黑名单')
 
 
 @friendship.route('/chat/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def send_chatting(id):
     if g.user.id == id:
-        flash(u'不能给自己发送私信', 'warning')
+        flash('不能给自己发送私信', 'warning')
         return redirect(url_for('frontend.index'))
     chat_form = ChatForm()
     from_people = g.user
@@ -171,7 +172,7 @@ def send_chatting(id):
         notification = Notification(from_id=g.user.id, to_id=id, object_table='chatting', object_id=chatting.id)
         db.session.add(notification)
         db.session.commit()
-        flash(u'发送成功', 'success')
+        flash('发送成功', 'success')
         return redirect(url_for('frontend.index'))
 
     return render_template(
@@ -238,7 +239,7 @@ def add_group():
         group = Group(name=group_form.name.data, people_id=g.user.id)
         db.session.add(group)
         db.session.commit()
-        flash(u'新建成功', 'success')
+        flash('新建成功', 'success')
         return redirect(url_for('friendship.show_following'))
     return render_template('group.html', form=group_form)
 
@@ -250,7 +251,7 @@ def delete_group(id):
     if group in g.user.groups:
         db.session.delete(group)
         db.session.commit()
-        flash(u'删除成功', 'success')
+        flash('删除成功', 'success')
     return redirect(url_for('friendship.show_following'))
 
 
@@ -264,10 +265,10 @@ def rename_group(id):
             group.name = group_form.name.data
             db.session.add(group)
             db.session.commit()
-            flash(u'重命名成功', 'success')
+            flash('重命名成功', 'success')
             return redirect(url_for('friendship.show_following', gid=id))
     else:
-        flash(u'权限不足', 'warning')
+        flash('权限不足', 'warning')
     return render_template('group.html', form=group_form)
 
 
@@ -285,7 +286,7 @@ def move_to_group(pid, gid=None):
                 values(group_id=gid))
             db.session.commit()
         else:
-            flash(u'分组不存在', 'info')
+            flash('分组不存在', 'info')
     else:
-        flash(u'没有关注此好友', 'info')
+        flash('没有关注此好友', 'info')
     return redirect(url_for('friendship.show_following', gid=gid))

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import datetime
 from flask import Blueprint, g, request, url_for, redirect, flash, current_app, session
 from flask.ext.login import login_user, login_required, logout_user
@@ -36,7 +37,7 @@ def register():
         db.session.add(people)
         db.session.commit()
         db.session.close()
-        flash(u'注册成功', 'success')
+        flash('注册成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('register.html', register_form=register_form)
 
@@ -64,10 +65,10 @@ def login():
             db.session.add(login_log)
             db.session.commit()
 
-            flash(u'登录成功', 'success')
+            flash('登录成功', 'success')
             return redirect(url_for('frontend.index'))
         else:
-            flash(u'登录失败', 'warning')
+            flash('登录失败', 'warning')
 
     return render_template('login.html', form=login_form)
 
@@ -83,7 +84,7 @@ def logout():
     # Tell Flask-Principal the user is anonymous
     identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
     print 'sent by logout'
-    flash(u'已注销', 'success')
+    flash('已注销', 'success')
     return redirect(url_for('frontend.index'))
 
 
@@ -102,11 +103,11 @@ def password():
             db.session.add(people)
             db.session.commit()
             db.session.close()
-            flash(u'密码修改成功', 'success')
+            flash('密码修改成功', 'success')
             return redirect(url_for('account.password'))
         else:
-            flash(u'原密码不正确', 'warning')
-    return render_template('password.html', form=change_password_form, title=u'修改密码')
+            flash('原密码不正确', 'warning')
+    return render_template('password.html', form=change_password_form, title='修改密码')
 
 
 # 显示与修改个人资料
@@ -128,9 +129,9 @@ def profile():
         db.session.add(people)
         db.session.commit()
         db.session.close()
-        flash(u'个人资料修改成功', 'success')
+        flash('个人资料修改成功', 'success')
         return redirect(url_for('account.profile'))
-    return render_template('profile.html', form=profile_form, title=u'修改资料')
+    return render_template('profile.html', form=profile_form, title='修改资料')
 
 
 # 显示与修改详细资料
@@ -179,9 +180,9 @@ def profile_detail():
             )
         db.session.add(people_info)
         db.session.commit()
-        flash(u'详细资料修改成功', 'success')
+        flash('详细资料修改成功', 'success')
         return redirect(url_for('account.profile_detail'))
-    return render_template('profile-detail.html', form=profile_detail_form, title=u'详细资料')
+    return render_template('profile-detail.html', form=profile_detail_form, title='详细资料')
 
 
 @account.route('/avatar/', methods=['GET', 'POST'])
@@ -196,7 +197,7 @@ def avatar():
             uploader = get_uploader()
             avatar_filename = uploader.save(avatar_data)
             if not avatar_filename:
-                flash(u'上传失败', 'danger')
+                flash('上传失败', 'danger')
                 return redirect(url_for('account.avatar'))
             # url = photos.url(avatar_filename)
             # print url
@@ -206,8 +207,8 @@ def avatar():
             g.user.change_avatar(avatar_filename)
             db.session.add(g.user)
             db.session.commit()
-            flash(u'上传成功', 'success')
+            flash('上传成功', 'success')
             return redirect(url_for('account.avatar'))
 
-    return render_template('avatar.html', avatar_form=avatar_form, title=u'修改头像')
+    return render_template('avatar.html', avatar_form=avatar_form, title='修改头像')
 

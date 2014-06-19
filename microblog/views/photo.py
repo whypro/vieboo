@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import os
 from flask import Blueprint, flash, redirect, url_for, request, g, current_app, \
     abort
@@ -28,14 +29,14 @@ def add_album():
         )
         db.session.add(album)
         db.session.commit()
-        flash(u'相册新建成功', 'success')
+        flash('相册新建成功', 'success')
         return redirect(url_for('show_album', id=album.id))
-        # return u'添加成功'
+        # return '添加成功'
 
     return render_template(
         'photo/album-info.html',
         form=add_album_form,
-        title=u'新建相册'
+        title='新建相册'
     )
 
 
@@ -45,12 +46,12 @@ def show_album(id):
     """显示相册里的所有照片，只能查看自己的相册"""
     album = PhotoAlbum.query.get_or_404(id)
     #if album.people_id != g.user.id:
-    #    flash(u'权限不足', 'warning')
+    #    flash('权限不足', 'warning')
     #    return redirect(url_for('frontend.index'))
     return render_template(
         'photo/album.html',
         album=album,
-        title=u'查看相册'
+        title='查看相册'
     )
 
 
@@ -60,10 +61,10 @@ def modify_album(id):
     """修改相册属性"""
     album = PhotoAlbum.query.get_or_404(id)
     if album.people_id != g.user.id:
-        flash(u'权限不足', 'warning')
+        flash('权限不足', 'warning')
         return redirect(url_for('show_album', id=album.id))
-    if album.title == u'默认相册':
-        flash(u'无法修改属性', 'warning')
+    if album.title == '默认相册':
+        flash('无法修改属性', 'warning')
         return redirect(url_for('show_album', id=album.id))
     modify_album_form = ModifyAlbumForm(obj=album)
     if modify_album_form.validate_on_submit():
@@ -72,13 +73,13 @@ def modify_album(id):
 
         db.session.add(album)
         db.session.commit()
-        flash(u'相册修改成功', 'success')
+        flash('相册修改成功', 'success')
         return redirect(url_for('show_album', id=album.id))
 
     return render_template(
         'photo/album-info.html',
         form=modify_album_form,
-        title=u'修改相册属性'
+        title='修改相册属性'
     )
 
 
@@ -91,10 +92,10 @@ def delete_album(id):
     album = PhotoAlbum.query.get_or_404(id)
 
     if album.people_id != g.user.id:
-        flash(u'删除失败', 'warning')
+        flash('删除失败', 'warning')
         return redirect(url_for('frontend.album', id=g.user.id))
-    if album.title == u'默认相册':
-        flash(u'无法删除默认相册', 'warning')
+    if album.title == '默认相册':
+        flash('无法删除默认相册', 'warning')
         return redirect(url_for('frontend.album', id=g.user.id))
 
     if clear_album == '1':
@@ -106,11 +107,11 @@ def delete_album(id):
     else:
         # 移入默认相册
         # TODO: commit 需要重新考虑
-        default_album = PhotoAlbum.query.filter_by(title=u'默认相册').first()
+        default_album = PhotoAlbum.query.filter_by(title='默认相册').first()
         if not default_album:
             # 如果没有默认相册，则新建一个默认相册
             default_album = PhotoAlbum(
-                title=u'默认相册',
+                title='默认相册',
                 people_id=g.user.id
             )
             db.session.add(default_album)
@@ -122,7 +123,7 @@ def delete_album(id):
 
     db.session.delete(album)
     db.session.commit()
-    flash(u'删除成功', 'success')
+    flash('删除成功', 'success')
     return redirect(url_for('frontend.album', id=g.user.id))
 
 
@@ -133,14 +134,14 @@ def upload_photo(id=None):
     if id:
         album = PhotoAlbum.query.get_or_404(id)
         if album.people_id != g.user.id:
-            flash(u'权限不足', 'warning')
+            flash('权限不足', 'warning')
             return redirect('frontend.index')
     # 列出所有相册
     album_choices = [(str(a.id), a.title) for a in g.user.albums]
     if not album_choices:
         # 如果没有任何相册，则新建一个默认相册
         default_album = PhotoAlbum(
-            title=u'默认相册',
+            title='默认相册',
             people_id=g.user.id
         )
         db.session.add(default_album)
@@ -157,7 +158,7 @@ def upload_photo(id=None):
         print 'id:', upload_form.album.data
         album = PhotoAlbum.query.get_or_404(upload_form.album.data)
         if album.people_id != g.user.id:
-            flash(u'权限不足', 'warning')
+            flash('权限不足', 'warning')
             return redirect('frontend.index')
          # 循环上传照片
         for field in upload_form:
@@ -167,19 +168,19 @@ def upload_photo(id=None):
                 uploader = get_uploader()
                 filename = uploader.save(photo_data)
                 if not filename:
-                    flash(u'上传失败', 'danger')
+                    flash('上传失败', 'danger')
                     return redirect(url_for('frontend.album', id=g.user.id))
                 print upload_form.album.data
                 photo = Photo(uri=filename, album_id=upload_form.album.data, people_id=g.user.id)
                 db.session.add(photo)
                 db.session.commit()
-        flash(u'上传成功', 'success')
+        flash('上传成功', 'success')
         return redirect(url_for('frontend.album', id=g.user.id))
 
     return render_template(
         'photo/upload.html',
         form=upload_form,
-        title=u'上传照片'
+        title='上传照片'
     )
 
 
@@ -205,7 +206,7 @@ def show_photo(pid, aid=None):
         photo=photo,
         prev_id=prev_id,
         next_id=next_id,
-        title=u'查看照片'
+        title='查看照片'
     )
 
 
@@ -214,19 +215,19 @@ def show_photo(pid, aid=None):
 def modify_photo(id):
     photo = Photo.query.get_or_404(id)
     if photo.people_id != g.user.id:
-        flash(u'权限不足', 'warning')
+        flash('权限不足', 'warning')
         return redirect(url_for('frontend.index'))
     photo_form = PhotoForm(obj=photo)
     if photo_form.validate_on_submit():
         photo.description = photo_form.description.data
         db.session.add(photo)
         db.session.commit()
-        flash(u'修改成功', 'success')
+        flash('修改成功', 'success')
         return redirect(url_for('show_photo', id=id))
     return render_template(
         'photo/photo-info.html',
         form=photo_form,
-        title=u'修改照片属性'
+        title='修改照片属性'
     )
 
 
@@ -236,7 +237,7 @@ def delete_photo(id):
     """删除照片"""
     photo = Photo.query.get_or_404(id)
     if photo.people_id != g.user.id:
-        flash(u'删除失败', 'warning')
+        flash('删除失败', 'warning')
         return redirect(url_for('show_photo', id=id))
     print photo.uri
     uploader = get_uploader()
@@ -244,7 +245,7 @@ def delete_photo(id):
 
     db.session.delete(photo)
     db.session.commit()
-    flash(u'删除成功', 'success')
+    flash('删除成功', 'success')
     if photo.album_id:
         return redirect(url_for('photo.show_album', id=photo.album_id))
     else:

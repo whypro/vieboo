@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import datetime
 from sqlalchemy.exc import ProgrammingError
 
@@ -64,7 +65,7 @@ def configure_flasklogin(app):
 
     @login_manager.unauthorized_handler
     def unauthorized():
-        flash(u'请先登录', 'warning')
+        flash('请先登录', 'warning')
         return redirect(url_for('account.login'))
 
 
@@ -106,17 +107,17 @@ def config_before_request(app):
 def config_error_handlers(app):
     @app.errorhandler(404)
     def page_not_found(e):
-        flash(u'页面未找到', 'danger')
+        flash('页面未找到', 'danger')
         return redirect(url_for('frontend.index'))
 
     @app.errorhandler(401)
     def unauthorized(e):
-        flash(u'未经授权', 'danger')
+        flash('未经授权', 'danger')
         return redirect(url_for('frontend.index'))
 
     @app.errorhandler(500)
     def internal_server_error(e):
-        flash(u'服务器开小差了', 'danger')
+        flash('服务器开小差了', 'danger')
         return redirect(url_for('frontend.index'))
 
 

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+import os
 import StringIO
 from flask import Blueprint, g, url_for, redirect, send_from_directory, \
     current_app, abort, request, session
@@ -50,14 +52,14 @@ def album(id):
     people = People.query.get_or_404(id)
     # albums = PhotoAlbum.query.filter_by(people_id=id).all()
     # default_album_photos = Photo.query.filter_by(people_id=id).all()
-    return render_template('photo/all-albums.html', people=people, title=u'所有相册')
+    return render_template('photo/all-albums.html', people=people, title='所有相册')
 
 
 @frontend.route('/uploads/photos/<filename>')
 def uploads(filename):
     if not current_app.config['USE_BCS_BUCKET']:
         return send_from_directory(
-            current_app.config['UPLOADS_DIR'],
+            os.path.abspath(current_app.config['UPLOADS_DIR']),
             filename
         )
     else:

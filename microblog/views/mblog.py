@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from flask import Blueprint, g, url_for, redirect, flash, abort, request
 from flask.ext.login import login_required
 from microblog.extensions import db
@@ -19,7 +20,7 @@ def post():
         microblog = Microblog(g.user.id, post_form.content.data)
         db.session.add(microblog)
         db.session.commit()
-        flash(u'发布成功', 'success')
+        flash('发布成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('post.html', form=post_form)
 
@@ -31,11 +32,11 @@ def delete(id):
     if microblog.people_id == g.user.id:
         db.session.delete(microblog)
         db.session.commit()
-        flash(u'删除成功', 'success')
-        # print u'删除成功'
+        flash('删除成功', 'success')
+        # print '删除成功'
     else:
-        flash(u'删除失败', 'warning')
-        # print u'删除失败'
+        flash('删除失败', 'warning')
+        # print '删除失败'
     return redirect(url_for('frontend.index'))
 
 
@@ -51,9 +52,9 @@ def comment(mid, cid=None):
         parent_comment = Comment.query.get_or_404(cid)
         # 不能回复自己
         if g.user.id == parent_comment.people.id:
-            flash(u'不能回复自己', 'warning')
+            flash('不能回复自己', 'warning')
             return redirect(url_for('mblog.comment', mid=mid))
-        content = u'回复 ' + parent_comment.people.nickname + ': '
+        content = '回复 ' + parent_comment.people.nickname + ': '
     else:
         parent_comment = None
         content = ''
@@ -81,7 +82,7 @@ def comment(mid, cid=None):
             )
             db.session.add(notification)
             db.session.commit()
-        flash(u'评论成功', 'success')
+        flash('评论成功', 'success')
         return redirect(url_for('mblog.comment', mid=mid))
     return render_template(
         'comment.html',
@@ -99,11 +100,11 @@ def delete_comment(id):
     if comment.people_id == g.user.id:
         db.session.delete(comment)
         db.session.commit()
-        flash(u'删除成功', 'success')
-        # print u'删除成功'
+        flash('删除成功', 'success')
+        # print '删除成功'
     else:
-        flash(u'删除失败', 'warning')
-        # print u'删除失败'
+        flash('删除失败', 'warning')
+        # print '删除失败'
     return redirect(url_for('mblog.comment', mid=mid))
 
 
@@ -122,6 +123,6 @@ def repost(id):
             )
             db.session.add(notification)
         db.session.commit()
-        flash(u'转发成功', 'success')
+        flash('转发成功', 'success')
         return redirect(url_for('frontend.index'))
     return render_template('repost.html', form=repost_form, microblog=microblog)
