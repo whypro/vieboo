@@ -7,7 +7,7 @@ from microblog.helpers import render_template
 from microblog.forms import PostForm
 from microblog.captcha import create_captcha
 
-frontend = Blueprint(__name__)
+frontend = Blueprint('frontend', __name__)
 
 
 @frontend.route('/favicon.ico')

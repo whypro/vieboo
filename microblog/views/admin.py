@@ -7,7 +7,7 @@ from microblog.models import People, Microblog, LoginLog, VisitLog
 from microblog.helpers import render_template
 from microblog.permission import admin as admin_permission
 
-admin = Blueprint(__name__, url_prefix='/admin')
+admin = Blueprint('admin', __name__, url_prefix='/admin')
 
 
 @admin.route('/')

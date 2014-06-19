@@ -8,7 +8,7 @@ from microblog.extensions import db
 from microblog.helpers import render_template
 
 
-friendship = Blueprint(__name__, url_prefix='/friendship')
+friendship = Blueprint('friendship', __name__, url_prefix='/friendship')
 
 
 @friendship.route('/follow/<int:id>/')

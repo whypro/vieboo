@@ -6,7 +6,7 @@ from microblog.helpers import render_template
 from microblog.models import Notification
 
 
-notification = Blueprint(__name__, url_prefix='/notification')
+notification = Blueprint('notification', __name__, url_prefix='/notification')
 
 
 @notification.route('/')

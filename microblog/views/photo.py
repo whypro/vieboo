@@ -12,7 +12,7 @@ from microblog.helpers import render_template, get_uploader
 from microblog.models import Photo
 
 
-photo = Blueprint(__name__, url_prefix='')
+photo = Blueprint('photo', __name__, url_prefix='')
 
 
 @photo.route('/album/add/', methods=['GET', 'POST'])

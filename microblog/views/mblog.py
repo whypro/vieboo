@@ -7,7 +7,7 @@ from microblog.forms import PostForm, CommentForm, RepostForm
 from microblog.helpers import render_template
 from microblog.models.notification import Notification
 
-mblog = Blueprint(__name__, url_prefix='/microblog')
+mblog = Blueprint('mblog', __name__, url_prefix='/microblog')
 
 
 # 发布微博

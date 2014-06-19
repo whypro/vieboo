@@ -8,7 +8,7 @@ from microblog.helpers import get_client_ip
 from microblog.models import People, LoginLog
 
 
-oauth2 = Blueprint(__name__, url_prefix='/oauth2')
+oauth2 = Blueprint('oauth2', __name__, url_prefix='/oauth2')
 
 # KEY = '057e043485cf074a107a0c9d916d15de'
 # SECRET = 'a0d5b7822e03f8b2'

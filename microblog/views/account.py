@@ -11,7 +11,7 @@ from microblog.helpers import render_template, get_client_ip, get_uploader
 from microblog.models.account import PeopleInfo
 
 
-account = Blueprint(__name__, url_prefix='/account')
+account = Blueprint('account', __name__, url_prefix='/account')
 
 
 # 用户注册
