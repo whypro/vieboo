@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Module, flash, redirect, url_for, request, g, current_app, \
+from flask import Blueprint, flash, redirect, url_for, request, g, current_app, \
     abort
 from flask.ext.login import login_required
 from sqlalchemy import and_
@@ -12,7 +12,7 @@ from microblog.helpers import render_template, get_uploader
 from microblog.models import Photo
 
 
-photo = Module(__name__, url_prefix='')
+photo = Blueprint(__name__, url_prefix='')
 
 
 @photo.route('/album/add/', methods=['GET', 'POST'])
@@ -249,7 +249,6 @@ def delete_photo(id):
         return redirect(url_for('photo.show_album', id=photo.album_id))
     else:
         return redirect(url_for('frontend.album', id=g.user.id))
-
 
 
 @photo.route('/photo/<int:pid>/move/<int:aid>/')

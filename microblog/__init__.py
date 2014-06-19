@@ -36,14 +36,14 @@ def create_app(config=None):
 
 
 def configure_modules(app):
-    app.register_module(views.frontend)
-    app.register_module(views.account)
-    app.register_module(views.mblog)
-    app.register_module(views.friendship)
-    app.register_module(views.admin)
-    # app.register_module(views.oauth2)
-    app.register_module(views.photo)
-    app.register_module(views.notification)
+    app.register_blueprint(views.frontend)
+    app.register_blueprint(views.account)
+    app.register_blueprint(views.mblog)
+    app.register_blueprint(views.friendship)
+    app.register_blueprint(views.admin)
+    app.register_blueprint(views.oauth2)
+    app.register_blueprint(views.photo)
+    app.register_blueprint(views.notification)
 
 
 def configure_theme(app):

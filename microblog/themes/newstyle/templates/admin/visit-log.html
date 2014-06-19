@@ -40,7 +40,7 @@
 	                        <td>{{ visit_log.platform }}</td>
 	                        <td>{{ visit_log.browser }}</td>
 	                        <td>{{ visit_log.version }}</td>
-	                        <td>{{ visit_log.client_ip }}</td>
+	                        <td class="ip">{{ visit_log.client_ip }}</td>
 	                        <td>{{ visit_log.visit_time }}</td>
 	                        <td>{{ visit_log.people.nickname if visit_log.people_id else 'N/A'}}</td>
 	                        <td><a class="btn btn-primary btn-xs" href="{{ url_for('delete_visit_log', id=visit_log.id) }}">删除</a></td>
@@ -54,3 +54,32 @@
     </div>
 </div>
 {% endblock %}
+{#
+{% block script %}
+<script type="text/javascript">
+$(".ip").mouseover(
+    function() {
+        var address = get_address($(this).text());
+        $(this).attr("title", address);
+    }
+);
+
+function get_address(ip) {
+    var address;
+    $.getJSON(
+        "http://api.map.baidu.com/location/ip?ak=AF28c466e7dd74686195abc876d4849b&ip=" + ip,
+        function(data){
+            if (data["status"] == 0) {
+                address = data["address"];
+            }
+            else {
+                address = "未知";
+            }
+        }
+    )
+    alert(address);
+    return address;
+}
+</script>
+{% endblock %}
+#}

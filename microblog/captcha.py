@@ -7,7 +7,8 @@ _letter_cases = "abcdefghjkmnpqrstuvwxy" # 小写字母，去除可能干扰的i
 _upper_cases = _letter_cases.upper() # 大写字母
 _numbers = ''.join(map(str, range(3, 10))) # 数字
 init_chars = ''.join((_letter_cases, _upper_cases, _numbers))
- 
+
+
 def create_captcha(size=(120, 30),
                     chars=init_chars,
                     img_type="GIF",
@@ -21,7 +22,7 @@ def create_captcha(size=(120, 30),
                     n_line=(1, 2),
                     draw_points=True,
                     point_chance = 2):
-    '''
+    """
     @todo: 生成验证码图片
     @param size: 图片的大小，格式（宽，高），默认为(120, 30)
     @param chars: 允许的字符集合，格式字符串
@@ -38,18 +39,18 @@ def create_captcha(size=(120, 30),
     @param point_chance: 干扰点出现的概率，大小范围[0, 100]
     @return: [0]: PIL Image实例
     @return: [1]: 验证码图片中的字符串 
-    '''
+    """
  
     width, height = size # 宽， 高
     img = Image.new(mode, size, bg_color) # 创建图形
     draw = ImageDraw.Draw(img) # 创建画笔
  
     def get_chars():
-        '''生成给定长度的字符串，返回列表格式'''
+        """生成给定长度的字符串，返回列表格式"""
         return random.sample(chars, length)
  
     def create_lines():
-        '''绘制干扰线'''
+        """绘制干扰线"""
         line_num = random.randint(*n_line) # 干扰线条数
  
         for i in range(line_num):
@@ -60,7 +61,7 @@ def create_captcha(size=(120, 30),
             draw.line([begin, end], fill=(0, 0, 0))
  
     def create_points():
-        '''绘制干扰点'''
+        """绘制干扰点"""
         chance = min(100, max(0, int(point_chance))) # 大小限制在[0, 100]
          
         for w in xrange(width):
@@ -70,7 +71,7 @@ def create_captcha(size=(120, 30),
                     draw.point((w, h), fill=(0, 0, 0))
  
     def create_strs():
-        '''绘制验证码字符'''
+        """绘制验证码字符"""
         c_chars = get_chars()
         strs = ' %s ' % ' '.join(c_chars) # 每个字符前后以空格隔开
          
@@ -103,7 +104,8 @@ def create_captcha(size=(120, 30),
     img = img.filter(ImageFilter.EDGE_ENHANCE_MORE) # 滤镜，边界加强（阈值更大）
  
     return img, strs
- 
+
+
 if __name__ == "__main__":
     code_img, strs = create_captcha()
     code_img.save("validate.gif", "GIF")

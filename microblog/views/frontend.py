@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import StringIO
-from flask import Module, g, url_for, redirect, send_from_directory, \
+from flask import Blueprint, g, url_for, redirect, send_from_directory, \
     current_app, abort, request, session
 from microblog.models import People, Microblog
 from microblog.helpers import render_template
 from microblog.forms import PostForm
 from microblog.captcha import create_captcha
 
-frontend = Module(__name__)
+frontend = Blueprint(__name__)
 
 
 @frontend.route('/favicon.ico')

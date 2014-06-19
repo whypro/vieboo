@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, flash, redirect, url_for
+from flask import Blueprint, g, flash, redirect, url_for
 from flask.ext.login import login_required
 from microblog.extensions import db
 from microblog.helpers import render_template
 from microblog.models import Notification
 
 
-notification = Module(__name__, url_prefix='/notification')
+notification = Blueprint(__name__, url_prefix='/notification')
 
 
 @notification.route('/')

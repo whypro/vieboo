@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from flask import Module, g, request, url_for, redirect, flash, current_app, session
+from flask import Blueprint, g, request, url_for, redirect, flash, current_app, session
 from flask.ext.login import login_user, login_required, logout_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
 from microblog.extensions import db
@@ -11,7 +11,7 @@ from microblog.helpers import render_template, get_client_ip, get_uploader
 from microblog.models.account import PeopleInfo
 
 
-account = Module(__name__, url_prefix='/account')
+account = Blueprint(__name__, url_prefix='/account')
 
 
 # 用户注册

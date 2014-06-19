@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, redirect, url_for, flash, abort, current_app
+from flask import Blueprint, g, redirect, url_for, flash, abort, current_app
 from flask.ext.login import login_required
 from sqlalchemy import and_
 from microblog.forms import ChatForm, AddGroupForm, RenameGroupForm
@@ -8,7 +8,7 @@ from microblog.extensions import db
 from microblog.helpers import render_template
 
 
-friendship = Module(__name__, url_prefix='/friendship')
+friendship = Blueprint(__name__, url_prefix='/friendship')
 
 
 @friendship.route('/follow/<int:id>/')

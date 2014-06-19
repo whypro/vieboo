@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from flask import Module, redirect, url_for, flash
+from flask import Blueprint, redirect, url_for, flash
 from flask.ext.login import login_required
 from microblog.extensions import db
 from microblog.models import People, Microblog, LoginLog, VisitLog
 from microblog.helpers import render_template
 from microblog.permission import admin as admin_permission
 
-admin = Module(__name__, url_prefix='/admin')
+admin = Blueprint(__name__, url_prefix='/admin')
 
 
 @admin.route('/')

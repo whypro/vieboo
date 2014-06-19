@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Module, g, url_for, redirect, flash, abort, request
+from flask import Blueprint, g, url_for, redirect, flash, abort, request
 from flask.ext.login import login_required
 from microblog.extensions import db
 from microblog.models import Microblog, Comment
@@ -7,7 +7,7 @@ from microblog.forms import PostForm, CommentForm, RepostForm
 from microblog.helpers import render_template
 from microblog.models.notification import Notification
 
-mblog = Module(__name__, url_prefix='/microblog')
+mblog = Blueprint(__name__, url_prefix='/microblog')
 
 
 # 发布微博
