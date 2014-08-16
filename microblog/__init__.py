@@ -46,6 +46,8 @@ def configure_modules(app):
     app.register_blueprint(views.photo)
     app.register_blueprint(views.notification)
 
+    app.register_blueprint(views.mongodb)
+
 
 def configure_theme(app):
     setup_themes(app)

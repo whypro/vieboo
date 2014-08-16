@@ -7,3 +7,5 @@ from .admin import admin
 from .oauth2 import oauth2
 from .photo import photo
 from .notification import notification
+
+from .mongodb import mongodb
