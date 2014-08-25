@@ -41,7 +41,7 @@ def block_people(id):
         db.session.add(people)
         db.session.commit()
         flash('禁言成功', 'success')
-    return redirect(url_for('show_people'))
+    return redirect(url_for('admin.show_people'))
 
 
 @admin.route('/people/unblock/<int:id>/')
@@ -54,7 +54,7 @@ def unblock_people(id):
         db.session.add(people)
         db.session.commit()
         flash('取消禁言成功', 'success')
-    return redirect(url_for('show_people'))
+    return redirect(url_for('admin.show_people'))
 
 
 @admin.route('/people/delete/<int:id>/')
@@ -66,7 +66,7 @@ def delete_people(id):
     db.session.add(people)
     db.session.commit()
     flash('用户已删除', 'success')
-    return redirect(url_for('show_people'))
+    return redirect(url_for('admin.show_people'))
 
 
 @admin.route('/microblog/', defaults={'page': 1})
@@ -92,7 +92,7 @@ def delete_microblog(id):
     db.session.delete(microblog)
     db.session.commit()
     flash('微博已删除', 'success')
-    return redirect(url_for('show_microblog'))
+    return redirect(url_for('admin.show_microblog'))
 
 
 @admin.route('/login-log/', defaults={'page': 1})
@@ -134,11 +134,11 @@ def delete_visit_log(id):
     visit_log = VisitLog.query.get(id)
     db.session.delete(visit_log)
     db.session.commit()
-    return redirect(url_for('show_visit_log'))
+    return redirect(url_for('admin.show_visit_log'))
 
 
 @admin.route('/install/')
 def install():
     db.create_all()
     flash('数据库初始化成功', 'success')
-    return redirect(url_for('index'))
+    return redirect(url_for('frontend.index'))

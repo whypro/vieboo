@@ -1,0 +1,15 @@
+<ul>
+{% for status in statuses %}
+
+<li>
+    <img src="{{ status.user.avatar_large }}" height="60px" />
+    {{ status.user.name }} <br />
+    {{ status.text }}<br />
+    {#
+    {{ status.source|safe }}&emsp;
+    #}
+    {{ status.created_at }}
+    <hr />
+</li>
+{% endfor %}
+</ul>
