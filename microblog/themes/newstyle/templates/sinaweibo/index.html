@@ -13,3 +13,7 @@
 </li>
 {% endfor %}
 </ul>
+<div style="text-align: center;">
+<a {% if page > 1 %}href="{{ url_for('sinaweibo.index', page=page-1) }}"{% endif %}>上一页</a> |
+<a {% if page < max_page %}href="{{ url_for('sinaweibo.index', page=page+1) }}"{% endif %}>下一页</a>
+</div>
