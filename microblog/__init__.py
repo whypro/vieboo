@@ -22,7 +22,7 @@ def create_app(config=None):
     db.init_app(app)
     Gemoji.init_app(app)
 
-    configure_modules(app)
+    configure_blueprints(app)
     config_error_handlers(app)
     configure_theme(app)
     configure_flasklogin(app)
@@ -36,7 +36,7 @@ def create_app(config=None):
     return app
 
 
-def configure_modules(app):
+def configure_blueprints(app):
     app.register_blueprint(views.frontend)
     app.register_blueprint(views.account)
     app.register_blueprint(views.mblog)
@@ -45,8 +45,7 @@ def configure_modules(app):
     app.register_blueprint(views.oauth2)
     app.register_blueprint(views.photo)
     app.register_blueprint(views.notification)
-
-    app.register_blueprint(views.mongodb)
+    app.register_blueprint(views.sinaweibo)
 
 
 def configure_theme(app):

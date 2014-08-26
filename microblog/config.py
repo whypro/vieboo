@@ -15,7 +15,7 @@ class Config(object):
     # FLASK-THEMES
     DEFAULT_THEME = 'newstyle'
 
-    
+
 class LocalConfig(Config):
     # 本地服务器配置
     # 数据库配置
@@ -23,16 +23,19 @@ class LocalConfig(Config):
     DB_DATABASE = 'microblog'
     DB_USERNAME = 'root'
     DB_PASSWORD = 'whypro'
-    DB_PORT = int(3306)
+    DB_PORT = 3306
     # FLASK-SQLALCHEMY
     SQLALCHEMY_DATABASE_URI = 'mysql://{username}:{password}@{host}:{port}/{database}'.format(
         username=DB_USERNAME, password=DB_PASSWORD,
         host=DB_HOST, port=DB_PORT,
         database=DB_DATABASE
     )
-    
+
     TEMP_DIR = 'temp'
     UPLOADS_DIR = 'uploads'
+
+    MONGODB_HOST = 'localhost'
+    MONGODB_PORT = 27017
 
 
 
@@ -50,7 +53,7 @@ class BAEConfig(Config):
     DB_DATABASE = 'kHeMtkVTtzsGvfbmEtLU'
     DB_USERNAME = API_KEY
     DB_PASSWORD = SECRET_KEY
-    DB_PORT = int(4050)
+    DB_PORT = 4050
     # FLASK-SQLALCHEMY
     SQLALCHEMY_DATABASE_URI = 'mysql://{username}:{password}@{host}:{port}/{database}'.format(
         username=DB_USERNAME, password=DB_PASSWORD,
@@ -64,15 +67,15 @@ class BAEConfig(Config):
     BCS_ACCESS_KEY = API_KEY
     BCS_SECRET_KEY = SECRET_KEY
     BCS_BUCKET_NAME = 'vieboo'
-      
-    
+
+
 class LocalDevelopmentBCSConfig(LocalDevelopmentConfig, BAEConfig):
     pass
 
 
 
 
-    
+
 
 
 

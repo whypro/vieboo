@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from urlparse import urlparse, urljoin
-from flask import current_app, request, url_for, redirect
+from flask import current_app, request, url_for, redirect, g
 from flask.ext.themes import render_theme_template
 from microblog.uploader import LocalUploader, BCSUploader
 
@@ -61,6 +61,19 @@ def redirect_back(endpoint, **values):
     return redirect(target)
 # redirect back
 
+from mongokit import Connection
+def get_mongodb():
+    if g.get('_mongodb'):
+        db = g._mongodb
+    else:
+        db = g._mongodb = Connection(current_app.config['MONGODB_HOST'], current_app.config['MONGODB_PORT'])
+    return db
+
+# @app.teardown_appcontext
+# def teardown_mongodb(exception):
+#    db = g.get('_database')
+#    if db:
+#        db.close()
 
 from urllib import urlopen, urlencode
 import json

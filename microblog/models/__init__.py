@@ -4,3 +4,5 @@ from .friendship import Friendship, Chatting, Group, Blackship
 from .admin import VisitLog
 from .photo import Photo, PhotoAlbum
 from .notification import Notification
+
+from .sinaweibo import Status, User
