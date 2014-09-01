@@ -20,5 +20,6 @@ def index(page):
     if page < 1 or page > max_page:
         abort(404)
 
-    statuses = connection.Status.find().sort([('reposts_count', -1)]).skip(start).limit(page_count)
+    # statuses = connection.Status.find().sort([('reposts_count', -1)]).skip(start).limit(page_count)
+    statuses = connection.Status.find().sort([('_id', -1)]).skip(start).limit(page_count)
     return render_template('sinaweibo/index.html', statuses=statuses, page=page, max_page=max_page)

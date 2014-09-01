@@ -46,7 +46,10 @@
             <li><a href="{{ url_for('admin.index') }}">管理中心</a></li>
             {% endif %}
             {% endif %}
+            {#
             <li{%- if active == 'about' %} class="active"{% endif -%}><a href="{{ url_for('frontend.show_about') }}">关于</a></li>
+            #}
+            <li{%- if active == 'sinaweibo' %} class="active"{% endif -%}><a href="{{ url_for('sinaweibo.index') }}">新浪微博（体验入口）</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {% if g.user.is_authenticated() %}

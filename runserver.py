@@ -2,8 +2,9 @@
 import os
 import sys
 # 将依赖模块文件夹加入系统路径
-deps_path = os.path.join(os.path.split(os.path.realpath(__file__))[0], 'deps')
-sys.path.insert(0, deps_path)
+# deprecated because virtualenv is so cool
+# deps_path = os.path.join(os.path.split(os.path.realpath(__file__))[0], 'deps')
+# sys.path.insert(0, deps_path)
 
 from microblog import create_app
 

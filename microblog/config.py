@@ -31,8 +31,8 @@ class LocalConfig(Config):
         database=DB_DATABASE
     )
 
-    TEMP_DIR = 'temp'
-    UPLOADS_DIR = 'uploads'
+    TEMP_DIR = './temp'
+    UPLOADS_DIR = './uploads'
 
     MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017

@@ -30,7 +30,7 @@ def add_album():
         db.session.add(album)
         db.session.commit()
         flash('相册新建成功', 'success')
-        return redirect(url_for('show_album', id=album.id))
+        return redirect(url_for('photo.show_album', id=album.id))
         # return '添加成功'
 
     return render_template(
