@@ -141,4 +141,4 @@ def delete_visit_log(id):
 def install():
     db.create_all()
     flash('数据库初始化成功', 'success')
-    return redirect(url_for('index'))
+    return redirect(url_for('frontend.index'))

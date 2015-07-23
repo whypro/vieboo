@@ -3,7 +3,7 @@ import os
 from urlparse import urlparse, urljoin
 from flask import current_app, request, url_for, redirect
 from flask.ext.themes import render_theme_template
-from microblog.uploader import LocalUploader, BCSUploader
+from microblog.uploader import LocalUploader
 
 
 def get_default_theme():
@@ -31,10 +31,7 @@ def render_uri(uri):
 
 
 def get_uploader():
-    if not current_app.config['USE_BCS_BUCKET']:
-        uploader = LocalUploader()
-    else:
-        uploader = BCSUploader()
+    uploader = LocalUploader()
     return uploader
 
 

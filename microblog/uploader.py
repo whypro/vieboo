@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 import os
 import hashlib
-import pybcs
 from flask import current_app
 
 __author__ = 'whypro'
@@ -71,35 +70,3 @@ class LocalUploader(Uploader):
         f.write(data)
         f.close()
 
-
-class BCSUploader(Uploader):
-    def __init__(self):
-        self.bcs = self.create_bcs()
-        # 假设 bucket 已创建
-        # pybcs 存在 BUG，不支持 unicode，因此需要用 str() 转换一下
-        self.bucket = self.bcs.bucket(str(current_app.config['BCS_BUCKET_NAME']))
-        self.dirname = '/'
-
-    def create_bcs(self):
-        return pybcs.BCS(
-            str(current_app.config['BCS_ADDR']),
-            str(current_app.config['BCS_ACCESS_KEY']),
-            str(current_app.config['BCS_SECRET_KEY']),
-        )
-
-    def remove(self, basename):
-        fullname = os.path.join(self.dirname, basename)
-        obj = self.bucket.object(str(fullname))  # 此处一定要加 str()，否则会出现 UnicodeDecodeError
-        try:
-            obj.delete()
-        except pybcs.httpc.HTTPException as e:
-            raise e
-
-    def uri(self, basename):
-        fullname = os.path.join(self.dirname, basename)
-        return fullname
-
-    def _store(self, fullname, data):
-        # BAE BCS
-        obj = self.bucket.object(str(fullname))  # 此处要加 str()，否则会出现 UnicodeDecodeError
-        obj.put(data)
