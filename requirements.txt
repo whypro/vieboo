@@ -1,3 +1,0 @@
-flask>=0.10.1
-MySQL-python>=1.2.3
-SQLAlchemy>=0.7.9
