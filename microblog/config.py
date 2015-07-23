@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
 from __future__ import unicode_literals
-import os
-import platform
+try:
+    import sae
+except ImportError:
+    pass
 
 __all__ = ['LocalConfig', 'LocalDevelopmentConfig', 'BAEConfig', 'LocalDevelopmentBCSConfig']
 
@@ -64,6 +66,22 @@ class BAEConfig(Config):
     BCS_ACCESS_KEY = API_KEY
     BCS_SECRET_KEY = SECRET_KEY
     BCS_BUCKET_NAME = 'vieboo'
+
+
+class SAEConfig(Config):
+    # 生产服务器配置
+    # 数据库配置
+    DB_HOST = sae.const.MYSQL_HOST
+    DB_DATABASE = sae.const.MYSQL_DB
+    DB_USERNAME = sae.const.MYSQL_USER
+    DB_PASSWORD = sae.const.MYSQL_PASS
+    DB_PORT = sae.const.MYSQL_PORT
+    # FLASK-SQLALCHEMY
+    SQLALCHEMY_DATABASE_URI = 'mysql://{username}:{password}@{host}:{port}/{database}'.format(
+        username=DB_USERNAME, password=DB_PASSWORD,
+        host=DB_HOST, port=DB_PORT,
+        database=DB_DATABASE
+    )
       
     
 class LocalDevelopmentBCSConfig(LocalDevelopmentConfig, BAEConfig):
