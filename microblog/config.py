@@ -47,20 +47,3 @@ class HerokuConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     # TEMP_DIR = const.APP_TMPDIR
 
-    
-class LocalDevelopmentBCSConfig(LocalDevelopmentConfig, BAEConfig):
-    pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
