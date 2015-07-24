@@ -220,17 +220,17 @@ class PeopleInfo(db.Model):
 
     id = db.Column(db.Integer, db.ForeignKey('people.id'), primary_key=True)
     fullname = db.Column(db.String(20))
-    gender = db.Column(db.Enum(u'男', u'女'))    # 性别，False: Female, True: Male
-    sexual_orientation = db.Column(db.Enum(u'男', u'女'))    # 性取向
+    gender = db.Column(db.Enum(u'男', u'女', name='gender'))    # 性别，False: Female, True: Male
+    sexual_orientation = db.Column(db.Enum(u'男', u'女', name='gender'))    # 性取向
     birthday = db.Column(db.Date)   # 生日
     age = db.Column(db.SmallInteger)    # 年龄，触发器
     chinese_zodiac = db.Column(db.Enum(
         u'鼠', u'牛', u'虎', u'兔', u'龙', u'蛇',
-        u'马', u'羊', u'猴', u'鸡', u'狗', u'猪'))    # 生肖，触发器
+        u'马', u'羊', u'猴', u'鸡', u'狗', u'猪', name='chinese_zodiac'))    # 生肖，触发器
     star_sign = db.Column(db.Enum(
         u'白羊座', u'金牛座', u'双子座', u'巨蟹座', u'狮子座', u'处女座',
-        u'天秤座', u'天蝎座', u'射手座', u'摩羯座', u'水瓶座', u'双鱼座'))      # 星座，触发器
-    blood_type = db.Column(db.Enum(u'A型', u'B型', u'AB型', u'O型'))    # 血型
+        u'天秤座', u'天蝎座', u'射手座', u'摩羯座', u'水瓶座', u'双鱼座', name='star_sign'))      # 星座，触发器
+    blood_type = db.Column(db.Enum(u'A型', u'B型', u'AB型', u'O型', 'blood_type'))    # 血型
     profession = db.Column(db.String(20))   # 职业
     education = db.Column(db.String(20))    # 学历
     school = db.Column(db.String(80))       # 毕业院校
