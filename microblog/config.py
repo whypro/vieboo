@@ -45,5 +45,6 @@ class HerokuConfig(Config):
     # 数据库配置
     # FLASK-SQLALCHEMY
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    DEBUG = True
     # TEMP_DIR = const.APP_TMPDIR
 
