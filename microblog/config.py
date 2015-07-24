@@ -40,31 +40,13 @@ class LocalDevelopmentConfig(LocalConfig):
     DEBUG = True
 
 
-class BAEConfig(Config):
+class HerokuConfig(Config):
     # 生产服务器配置
     # 数据库配置
-    API_KEY = 'IBWv1TZbjHGeC3euOCWCKQBE'
-    SECRET_KEY = '0QuvWjERsuDrwf6NntSe962SWPgGGj3o'
-
-    DB_HOST = 'sqld.duapp.com'
-    DB_DATABASE = 'kHeMtkVTtzsGvfbmEtLU'
-    DB_USERNAME = API_KEY
-    DB_PASSWORD = SECRET_KEY
-    DB_PORT = int(4050)
     # FLASK-SQLALCHEMY
-    SQLALCHEMY_DATABASE_URI = 'mysql://{username}:{password}@{host}:{port}/{database}'.format(
-        username=DB_USERNAME, password=DB_PASSWORD,
-        host=DB_HOST, port=DB_PORT,
-        database=DB_DATABASE
-    )
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     # TEMP_DIR = const.APP_TMPDIR
-    USE_BCS_BUCKET = True
-    # BAE BCS 配置
-    BCS_ADDR = 'bcs.duapp.com'
-    BCS_ACCESS_KEY = API_KEY
-    BCS_SECRET_KEY = SECRET_KEY
-    BCS_BUCKET_NAME = 'vieboo'
-      
+
     
 class LocalDevelopmentBCSConfig(LocalDevelopmentConfig, BAEConfig):
     pass
