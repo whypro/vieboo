@@ -23,7 +23,7 @@ def create_app(config=None):
     Gemoji.init_app(app)
 
     configure_modules(app)
-    config_error_handlers(app)
+    # config_error_handlers(app)
     configure_theme(app)
     configure_flasklogin(app)
     config_before_request(app)
