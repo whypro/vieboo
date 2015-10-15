@@ -5,15 +5,16 @@ from sqlalchemy.exc import ProgrammingError
 
 from flask import Flask, g, flash, redirect, url_for, request
 from flask.ext.login import LoginManager, current_user
-from flask.ext.themes import setup_themes
 from flask.ext.uploads import configure_uploads, patch_request_class
 from flask_wtf import CsrfProtect
 from flask.ext.principal import Principal, identity_loaded, RoleNeed, UserNeed, identity_changed
 from flask.ext.gemoji import Gemoji
-from microblog import views
-from microblog.extensions import db
-from microblog.models import People, VisitLog
-from microblog.helpers import get_client_ip
+
+from . import views
+from .extensions import db
+from .models import People, VisitLog
+from .helpers import get_client_ip
+from .deps.flaskext.themes import setup_themes
 
 
 def create_app(config=None):

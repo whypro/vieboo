@@ -10,6 +10,6 @@ class nullpool_SQLAlchemy(SQLAlchemy):
         options['poolclass'] = NullPool
         del options['pool_size']
 
-# db = SQLAlchemy()
-db = nullpool_SQLAlchemy()
+db = SQLAlchemy()
+# db = nullpool_SQLAlchemy()
 # photos = UploadSet('photos', IMAGES)
