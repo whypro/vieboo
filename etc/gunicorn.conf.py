@@ -6,7 +6,7 @@ import multiprocessing
 
 # bind = 'unix:/var/run/ibati.sock'
 # bind = '127.0.0.1:10041'
-bind = '0.0.0.0:10041'
+bind = '0.0.0.0:10042'
 max_requests = 10
 keepalive = 5
 
