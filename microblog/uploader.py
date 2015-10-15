@@ -2,7 +2,9 @@
 from __future__ import unicode_literals
 import os
 import hashlib
+
 from flask import current_app
+
 
 __author__ = 'whypro'
 
