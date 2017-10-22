@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from flask import Blueprint, g, url_for, redirect, flash, abort, request
 from flask.ext.login import login_required
+
 from microblog.extensions import db
 from microblog.models import Microblog, Comment
 from microblog.forms import PostForm, CommentForm, RepostForm
-from microblog.helpers import render_template
 from microblog.models.notification import Notification
+from microblog.helpers import render_template
+
 
 mblog = Blueprint('mblog', __name__, url_prefix='/microblog')
 

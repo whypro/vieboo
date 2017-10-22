@@ -2,12 +2,14 @@
 from __future__ import unicode_literals
 import os
 import StringIO
+
 from flask import Blueprint, g, url_for, redirect, send_from_directory, \
     current_app, abort, request, session
+
 from microblog.models import People, Microblog
-from microblog.helpers import render_template
 from microblog.forms import PostForm
 from microblog.captcha import create_captcha
+from microblog.helpers import render_template
 
 frontend = Blueprint('frontend', __name__)
 
@@ -23,7 +25,7 @@ def favicon():
 
 @frontend.route('/')
 def index():
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         # 只显示关注的人
         microblogs = Microblog.query.\
             filter(Microblog.people_id.in_([p.id for p in g.user.following]+[g.user.id])).\

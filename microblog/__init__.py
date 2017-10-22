@@ -11,10 +11,9 @@ from flask.ext.principal import Principal, identity_loaded, RoleNeed, UserNeed, 
 from flask.ext.gemoji import Gemoji
 
 from . import views
-from .extensions import db
+from .extensions import db, themes
 from .models import People, VisitLog
 from .helpers import get_client_ip
-from .deps.flaskext.themes import setup_themes
 
 
 def create_app(config=None):
@@ -22,10 +21,10 @@ def create_app(config=None):
     app.config.from_object(config)
     db.init_app(app)
     Gemoji.init_app(app)
+    themes.init_themes(app)
 
     configure_modules(app)
     config_error_handlers(app)
-    configure_theme(app)
     configure_flasklogin(app)
     config_before_request(app)
     # configure_uploads(app, (photos, ))
@@ -46,10 +45,6 @@ def configure_modules(app):
     app.register_blueprint(views.oauth2)
     app.register_blueprint(views.photo)
     app.register_blueprint(views.notification)
-
-
-def configure_theme(app):
-    setup_themes(app)
 
 
 def configure_flasklogin(app):
@@ -75,7 +70,7 @@ def config_before_request(app):
     def before_request():
         g.user = current_user
 
-        if g.user.is_authenticated() and g.user.is_admin():
+        if g.user.is_authenticated and g.user.is_admin():
             # TODO: 管理员不记录行为，？
             pass
         else:

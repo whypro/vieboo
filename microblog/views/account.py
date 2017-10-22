@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import datetime
+
 from flask import Blueprint, g, request, url_for, redirect, flash, current_app, session
 from flask.ext.login import login_user, login_required, logout_user
 from flask.ext.principal import identity_changed, Identity, AnonymousIdentity
+
 from microblog.extensions import db
 from microblog.forms.account import ModifyProfileDetailForm
 from microblog.models import People, LoginLog
 from microblog.forms import LoginForm, RegisterForm, ChangePasswordForm, ModifyProfileForm, AvatarForm
-from microblog.helpers import render_template, get_client_ip, get_uploader
+from microblog.helpers import get_client_ip, get_uploader, render_template
 from microblog.models.account import PeopleInfo
 
 
@@ -19,7 +21,7 @@ account = Blueprint('account', __name__, url_prefix='/account')
 @account.route('/register/', methods=['GET', 'POST'])
 def register():
     # 已登录用户则返回首页
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         return redirect(url_for('frontend.index'))
 
     register_form = RegisterForm()
@@ -45,7 +47,7 @@ def register():
 @account.route('/login/', methods=['GET', 'POST'])
 def login():
     # 已登录用户则返回首页
-    if g.user.is_authenticated():
+    if g.user.is_authenticated:
         return redirect(url_for('frontend.index'))
 
     login_form = LoginForm()

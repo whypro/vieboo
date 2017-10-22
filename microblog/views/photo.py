@@ -9,7 +9,7 @@ from microblog.forms.photo import PhotoForm
 from microblog.models import PhotoAlbum
 from microblog.extensions import db
 from microblog.forms import UploadForm, ModifyAlbumForm, AddAlbumForm
-from microblog.helpers import render_template, get_uploader
+from microblog.helpers import get_uploader, render_template
 from microblog.models import Photo
 
 

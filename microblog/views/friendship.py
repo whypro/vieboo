@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from flask import Blueprint, g, redirect, url_for, flash, abort, current_app
+from flask import Blueprint, g, redirect, url_for, flash, abort, current_app, render_template
 from flask.ext.login import login_required
 from sqlalchemy import and_
 from microblog.forms import ChatForm, AddGroupForm, RenameGroupForm
 from microblog.models import People, Friendship, Chatting, Group, Blackship, Notification
 from microblog.extensions import db
-from microblog.helpers import render_template
 
 
 friendship = Blueprint('friendship', __name__, url_prefix='/friendship')

@@ -14,7 +14,7 @@
         <ul class="nav navbar-nav">
             <li{%- if active == 'index' %} class="active"{% endif -%}><a href="{{ url_for('frontend.index') }}">首页</a></li>
             <li{%- if active == 'square' %} class="active"{% endif -%}><a href="{{ url_for('frontend.square') }}">微博广场</a></li>
-            {% if g.user.is_authenticated() -%}
+            {% if g.user.is_authenticated -%}
             <li{%- if active == 'people' %} class="active"{% endif -%}><a href="{{ url_for('frontend.people', id=g.user.id) }}">个人主页</a></li>
             <li{%- if active == 'album' %} class="active"{% endif -%}><a href="{{ url_for('frontend.album', id=g.user.id) }}">相册</a></li>
             <li class="dropdown{%- if active == 'profile' %} active{% endif -%}">
@@ -49,7 +49,7 @@
             <li{%- if active == 'about' %} class="active"{% endif -%}><a href="{{ url_for('frontend.show_about') }}">关于</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            {% if g.user.is_authenticated() %}
+            {% if g.user.is_authenticated %}
             <li{%- if active == 'notification' %} class="active"{% endif -%}>
                 <a href="{{ url_for('notification.show_notification') }}">
                     通知
@@ -74,7 +74,7 @@
             <li><a href="{{ url_for('account.register') }}">注册</a></li>
             {% endif %}
         </ul>
-        {% if g.user.is_authenticated() %}
+        {% if g.user.is_authenticated %}
         <form class="navbar-form navbar-right" role="search">
             <div class="form-group">
             <input type="text" class="form-control" placeholder="请输入关键字……">

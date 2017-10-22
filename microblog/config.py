@@ -3,7 +3,9 @@ from __future__ import unicode_literals
 import os
 import platform
 
+
 __all__ = ['LocalConfig', 'LocalDevelopmentConfig', 'BAEConfig', 'LocalDevelopmentBCSConfig']
+
 
 class Config(object):
     SECRET_KEY = 'I love you.'
@@ -20,8 +22,8 @@ class LocalConfig(Config):
     # 本地服务器配置
     # 数据库配置
     DB_HOST = 'localhost'
-    DB_DATABASE = 'microblog'
-    DB_USERNAME = 'root'
+    DB_DATABASE = 'vieboo'
+    DB_USERNAME = 'whypro'
     DB_PASSWORD = 'whypro'
     DB_PORT = int(3306)
     # FLASK-SQLALCHEMY
@@ -33,7 +35,6 @@ class LocalConfig(Config):
     
     TEMP_DIR = 'temp'
     UPLOADS_DIR = 'uploads'
-
 
 
 class LocalDevelopmentConfig(LocalConfig):
@@ -68,17 +69,3 @@ class BAEConfig(Config):
     
 class LocalDevelopmentBCSConfig(LocalDevelopmentConfig, BAEConfig):
     pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-

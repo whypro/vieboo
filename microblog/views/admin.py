@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from flask import Blueprint, redirect, url_for, flash
 from flask.ext.login import login_required
+
 from microblog.extensions import db
 from microblog.models import People, Microblog, LoginLog, VisitLog
-from microblog.helpers import render_template
 from microblog.permission import admin as admin_permission
+from microblog.helpers import render_template
+
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 

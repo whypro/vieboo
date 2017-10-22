@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import os
 from urlparse import urlparse, urljoin
+from urllib import urlopen, urlencode
+import json
 
 from flask import current_app, request, url_for, redirect
+from flask.ext.themes2 import render_theme_template
 
 from .uploader import LocalUploader
-from .deps.flaskext.themes import render_theme_template
 
 
 def get_default_theme():
@@ -61,8 +62,6 @@ def redirect_back(endpoint, **values):
 # redirect back
 
 
-from urllib import urlopen, urlencode
-import json
 def get_address(ip):
     api = 'http://api.map.baidu.com/location/ip'
     ak = 'AF28c466e7dd74686195abc876d4849b'

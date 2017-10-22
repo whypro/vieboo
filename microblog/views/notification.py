@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 from flask import Blueprint, g, flash, redirect, url_for
 from flask.ext.login import login_required
+
 from microblog.extensions import db
-from microblog.helpers import render_template
 from microblog.models import Notification
+from microblog.helpers import render_template
 
 
 notification = Blueprint('notification', __name__, url_prefix='/notification')

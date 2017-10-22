@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask.ext.sqlalchemy import SQLAlchemy
 # from flask.ext.uploads import UploadSet, IMAGES
+from flask.ext.themes2 import Themes
 
 
 class nullpool_SQLAlchemy(SQLAlchemy):
@@ -13,3 +14,5 @@ class nullpool_SQLAlchemy(SQLAlchemy):
 db = SQLAlchemy()
 # db = nullpool_SQLAlchemy()
 # photos = UploadSet('photos', IMAGES)
+
+themes = Themes()
