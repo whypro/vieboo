@@ -21,11 +21,12 @@ class Config(object):
 class LocalConfig(Config):
     # 本地服务器配置
     # 数据库配置
-    DB_HOST = 'localhost'
-    DB_DATABASE = 'vieboo'
-    DB_USERNAME = 'whypro'
-    DB_PASSWORD = 'whypro'
-    DB_PORT = int(3306)
+    DB_HOST = os.getenv('DB_HOST', 'localhost')
+    DB_DATABASE = os.getenv('DB_DATABASE', 'vieboo')
+    DB_USERNAME = os.getenv('DB_USERNAME', 'whypro')
+    DB_PASSWORD = os.getenv('DB_PASSWORD', 'whypro')
+    DB_PORT = os.getenv('DB_PORT', 3306)
+
     # FLASK-SQLALCHEMY
     SQLALCHEMY_DATABASE_URI = 'mysql://{username}:{password}@{host}:{port}/{database}'.format(
         username=DB_USERNAME, password=DB_PASSWORD,

@@ -12,12 +12,14 @@ from flask.ext.migrate import  MigrateCommand
 from microblog import create_app, config
 from microblog.extensions import db
 
+current_config = config.LocalDevelopmentConfig
 
-app = create_app(config.LocalDevelopmentConfig)
+app = create_app(current_config)
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 # manager.add_command('debug', Server(host='127.0.0.1', port=8080, debug=True))
+
 
 @manager.command
 def debug():
@@ -28,12 +30,15 @@ def debug():
 @manager.command
 def init():
     # 创建数据库
-    create_db_sql = 'CREATE DATABASE IF NOT EXISTS {0} DEFAULT CHARACTER SET utf8'.format(config.Config.DB_DATABASE)
+    create_db_sql = 'CREATE DATABASE IF NOT EXISTS {0} DEFAULT CHARACTER SET utf8'.format(current_config.DB_DATABASE)
     # print create_db_sql
     ret = subprocess.call(
         [
-            'mysql', '-u', config.Config.DB_USERNAME,
-            '-p{0}'.format(config.Config.DB_PASSWORD),
+            'mysql',
+            '-h', current_config.DB_HOST,
+            '-P', str(current_config.DB_PORT),
+            '-u', current_config.DB_USERNAME,
+            '-p{0}'.format(current_config.DB_PASSWORD),
             '-e', create_db_sql,
         ]
     )
@@ -63,9 +68,12 @@ def backup():
     f = open(sql_file, 'w')
     ret = subprocess.call(
         [
-            'mysqldump', '-u', config.Config.DB_USERNAME,
-            '-p{0}'.format(config.Config.DB_PASSWORD),
-            config.Config.DB_DATABASE,
+            'mysqldump',
+            '-h', current_config.DB_HOST,
+            '-P', str(current_config.DB_PORT),
+            '-u', current_config.DB_USERNAME,
+            '-p{0}'.format(current_config.DB_PASSWORD),
+            current_config.DB_DATABASE,
         ],
         stdout=f
     )
@@ -89,9 +97,12 @@ def restore():
     f = open('backup/microblog-{date}.sql'.format(date=date_str), 'r')
     ret = subprocess.call(
         [
-            'mysql', '-u', config.Config.DB_USERNAME,
-            '-p{0}'.format(config.Config.DB_PASSWORD),
-            config.Config.DB_DATABASE,
+            'mysql',
+            '-h', current_config.DB_HOST,
+            '-P', str(current_config.DB_PORT),
+            '-u', current_config.DB_USERNAME,
+            '-p{0}'.format(current_config.DB_PASSWORD),
+            current_config.DB_DATABASE,
         ],
         stdin=f
     )
